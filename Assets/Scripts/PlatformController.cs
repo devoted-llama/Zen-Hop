@@ -39,7 +39,7 @@ public class PlatformController : MonoBehaviour {
 
 
 
-    void GeneratePlatforms(int start = 0, int leftPixels = leftMargin, int rightPixels = 0) {
+    void GeneratePlatforms(int start = 0, int leftPixels = 0, int rightPixels = 0) {
         float gap = 1.8f;
         if (rightPixels == 0) {
             rightPixels = Camera.main.pixelWidth;
@@ -73,7 +73,7 @@ public class PlatformController : MonoBehaviour {
         int reduction = leftPixels / (int)amount;
         leftPixels -=  reduction;
         rightPixels -= reduction;
-        GeneratePlatforms (1, leftPixels, rightPixels-leftMargin);
+        GeneratePlatforms (1, leftPixels, rightPixels);
     }
 
 
@@ -86,7 +86,7 @@ public class PlatformController : MonoBehaviour {
         Vector3 endPos = startPos;
         endPos.x += maxWidth - (maxWidth / amount);
         //Debug.LogFormat ("{0},{1}", startPos, endPos);
-        endPos.x -= 2f;
+        //endPos.x -= 2f;
         CameraController.instance.Move (endPos);
     }
 
