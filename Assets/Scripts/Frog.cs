@@ -11,6 +11,11 @@ public class Frog : MonoBehaviour {
     public GameObject aimer;
     public float powerForceMultiplier;
     float powerAmount = 0;
+    float powerWithMultiplier { get { return powerAmount * powerForceMultiplier; } }
+
+    int idleHash = Animator.StringToHash ("Idle");
+    int crouchHash = Animator.StringToHash ("Crouch");
+    int jumpHash = Animator.StringToHash ("Jump");
 
     public Button powerButton;
 
@@ -31,6 +36,7 @@ public class Frog : MonoBehaviour {
     }
 
     public void Jump() {
+        SetJump (true);
         GetComponent<Rigidbody2D> ().AddForce (GetForce());
         UpdateAmountText ();
     }
@@ -48,7 +54,6 @@ public class Frog : MonoBehaviour {
 
     Vector2 GetForce() {
         float angle = aimer.transform.localEulerAngles.z;
-        float div = 90f;
 
         float ratio = 0f;
         float forceX = 0f;
@@ -56,23 +61,23 @@ public class Frog : MonoBehaviour {
 
         if (angle >= 0 && angle <= 90) {
             ratio = aimer.transform.localEulerAngles.z / 90f;
-            forceX = ratio * powerAmount;
-            forceY = (1 - ratio) * powerAmount;
+            forceX = ratio * powerWithMultiplier;
+            forceY = (1 - ratio) * powerWithMultiplier;
         } else if (angle > 90 && angle <= 180) {
             ratio = (aimer.transform.localEulerAngles.z - 90) / 90f;
-            forceX = (1 - ratio)* powerAmount;
-            forceY = -(ratio) * powerAmount;
+            forceX = (1 - ratio)* powerWithMultiplier;
+            forceY = -(ratio) * powerWithMultiplier;
         } else if (angle > 180 && angle <= 270) {
             ratio = (aimer.transform.localEulerAngles.z - 180) / 90f;
-            forceX = -ratio * powerAmount;
-            forceY = -(1 - ratio) * powerAmount;
+            forceX = -ratio * powerWithMultiplier;
+            forceY = -(1 - ratio) * powerWithMultiplier;
         } else if (angle > 270 && angle <= 360) {
             ratio = (aimer.transform.localEulerAngles.z - 270) / 90f;
-            forceX = -(1-ratio) * powerAmount;
-            forceY = ratio * powerAmount;
+            forceX = -(1-ratio) * powerWithMultiplier;
+            forceY = ratio * powerWithMultiplier;
         }
 
-        Debug.LogFormat ("x: {0}, y: {1}", forceX, forceY);
+        //Debug.LogFormat ("x: {0}, y: {1}", forceX, forceY);
 
         Vector2 force = new Vector2 (forceX, forceY);
 
@@ -81,13 +86,13 @@ public class Frog : MonoBehaviour {
     }
 
     public void SetPower(float power) {
-        powerAmount = power * powerForceMultiplier;
-        powerAmount = powerAmount > 1000 ? 1000 : powerAmount;
+        power = power > 1 ? 1 : power;
+        powerAmount = 10 * Mathf.Round (power * 10);
         UpdateAmountText ();
     }
 
     void UpdateAmountText() {
-        powerAmountText.text = (powerAmount/10f).ToString ("F0");
+        powerAmountText.text = (powerAmount).ToString ("F0");
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
@@ -95,6 +100,25 @@ public class Frog : MonoBehaviour {
             collision.gameObject.tag = "Untagged";
             PlatformController.instance.EndPlatformAction ();
         }
+
+        SetJump (false);
+        SetCrouch (false);
+        /*if (collision.gameObject.CompareTag ("Platform") || collision.gameObject.CompareTag ("StartPlatform")) {
+            CameraController.instance.MoveTo (transform);
+        }*/
     }
+
+    public void SetCrouch(bool value) {
+        GetComponent<Animator> ().SetBool (crouchHash,value);
+    }
+
+    public void SetJump(bool value) {
+        GetComponent<Animator> ().SetBool (jumpHash,value);
+    }
+
+    public void SetIdle(bool value) {
+        GetComponent<Animator> ().SetBool (idleHash,value);
+    }
+
 
 }
