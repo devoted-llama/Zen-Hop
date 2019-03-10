@@ -54,4 +54,10 @@ public class CameraController : MonoBehaviour {
             collider.gameObject.transform.position = pos;
         }
     }
+
+    public void MoveTo(Transform t) {
+        Vector3 pos = transform.position;
+        pos.x = t.position.x;
+        Move (pos);
+    }
 }
