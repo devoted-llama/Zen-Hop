@@ -16,6 +16,8 @@ public class CameraController : MonoBehaviour {
     public delegate void moveEvent();
     public event moveEvent finishMoving;
 
+    RigidbodyConstraints2D frogConstraints;
+    Rigidbody2D frogRigidBody;
 
     void Awake() {
         if (instance == null) {
@@ -27,11 +29,17 @@ public class CameraController : MonoBehaviour {
         DontDestroyOnLoad (gameObject);
     }
 
+    void Start() {
+        frogRigidBody = Frog.instance.GetComponent<Rigidbody2D> ();
+        frogConstraints = frogRigidBody.constraints;
+    }
+
     public void Move(Vector3 end) {
         startMarker = transform.position;
         endMarker = end;
         startTime = Time.time;
         journeyLength = Vector3.Distance (startMarker, endMarker);
+        //frogRigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
         moving = true;
     }
 
@@ -42,6 +50,7 @@ public class CameraController : MonoBehaviour {
             transform.position = Vector3.Lerp (startMarker, endMarker, fracJourney);
             if (transform.position == endMarker) {
                 moving = false;
+                //frogRigidBody.constraints = frogConstraints;
             }
         }
     }

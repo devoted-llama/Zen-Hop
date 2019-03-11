@@ -7,7 +7,6 @@ using UnityEngine.EventSystems;
 public class Frog : MonoBehaviour {
     public static Frog instance = null;
 
-    public Text powerAmountText;
     public GameObject aimer;
     public float powerForceMultiplier;
     float powerAmount = 0;
@@ -18,6 +17,11 @@ public class Frog : MonoBehaviour {
     int jumpHash = Animator.StringToHash ("Jump");
 
     public Button powerButton;
+
+    public RectTransform powerBarOuter;
+    public RectTransform powerBarInner;
+
+    Vector3 powerBarRight;
 
     void Awake() {
         if (instance == null) {
@@ -36,9 +40,19 @@ public class Frog : MonoBehaviour {
     }
 
     public void Jump() {
+        if (GetComponent<Rigidbody2D>().velocity.x == 0 && GetComponent<Rigidbody2D>().velocity.y == 0) {
+            StartCoroutine (JumpCoroutine ());
+        }
+    }
+
+    IEnumerator JumpCoroutine() {
+        SetCrouch (true);
+        yield return new  WaitForSeconds (0.5f);
         SetJump (true);
-        GetComponent<Rigidbody2D> ().AddForce (GetForce());
-        UpdateAmountText ();
+        SetCrouch (false);
+        GetComponent<Rigidbody2D> ().AddForce (GetForce ());
+        SetPower (0);
+        UpdateAmountUI ();
     }
 
     public void SetAimerAngle(float angle, float modifier = 0) {
@@ -87,22 +101,25 @@ public class Frog : MonoBehaviour {
 
     public void SetPower(float power) {
         power = power > 1 ? 1 : power;
-        powerAmount = 10 * Mathf.Round (power * 10);
-        UpdateAmountText ();
+        powerAmount = power * 100;
+        UpdateAmountUI ();
     }
 
-    void UpdateAmountText() {
-        powerAmountText.text = (powerAmount).ToString ("F0");
+    void UpdateAmountUI() {
+        //powerAmountText.text = (powerAmount).ToString ("F0");
+        //powerBarInner.rectTransform.
+        float size = powerBarOuter.sizeDelta.x * (powerAmount / 100f);
+        powerBarInner.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left,0,size);
+
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.CompareTag ("EndPlatform")) {
-            collision.gameObject.tag = "Untagged";
             PlatformController.instance.EndPlatformAction ();
         }
 
         SetJump (false);
-        SetCrouch (false);
+        //SetCrouch (false);
         /*if (collision.gameObject.CompareTag ("Platform") || collision.gameObject.CompareTag ("StartPlatform")) {
             CameraController.instance.MoveTo (transform);
         }*/
