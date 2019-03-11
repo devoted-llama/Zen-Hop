@@ -11,6 +11,7 @@ public class PlatformController : MonoBehaviour {
     const int amount = 4;
     const int leftMargin = 100;
 
+    [SerializeField]
     int level = 0;
 
     GameObject[] platforms;
@@ -62,12 +63,20 @@ public class PlatformController : MonoBehaviour {
     }
 
     void RegeneratePlatforms() {
-
         GeneratePlatforms (platforms[platforms.Length-1].transform.position.x);
     }
 
 
     public void EndPlatformAction() {
+        StartCoroutine (EndPlatformActionCoroutine ());
+    }
+
+    IEnumerator EndPlatformActionCoroutine() {
+        yield return new WaitForSeconds (1);
+        Vector2 velocity = Frog.instance.GetComponent<Rigidbody2D> ().velocity;
+        if (velocity.x != 0 || velocity.y != 0) {
+            yield break;
+        }
         level++;
         RegeneratePlatforms ();
         Vector3 pos = Camera.main.transform.position;
