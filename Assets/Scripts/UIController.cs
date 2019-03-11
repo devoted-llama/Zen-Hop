@@ -29,7 +29,8 @@ public class UIController : MonoBehaviour {
                 foreach (RaycastResult result in results) {
                     //Debug.LogFormat ("centre: {0}, pos: {1}",result.gameObject.transform.position,Camera.main.ScreenToWorldPoint(result.screenPosition));
                     // Debug.Log(result.screenPosition);
-                    Vector3 buttonPos = result.gameObject.transform.position;
+                    Vector3 buttonPos = Camera.main.ScreenToWorldPoint(result.gameObject.GetComponent<RectTransform>().position);
+                    Debug.LogFormat("rect: {0}, worldpos: {1}",result.gameObject.GetComponent<RectTransform>().position,buttonPos);
                     Vector3 mousePos = Camera.main.ScreenToWorldPoint (result.screenPosition);
 
                     Vector3 rightSide = Camera.main.ScreenToWorldPoint (new Vector3 (Camera.main.pixelWidth, 0, 0));
