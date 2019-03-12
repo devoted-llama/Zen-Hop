@@ -13,15 +13,21 @@ public class Frog : MonoBehaviour {
     float powerWithMultiplier { get { return powerAmount * powerForceMultiplier; } }
 
     int idleHash = Animator.StringToHash ("Idle");
+    int aimHash = Animator.StringToHash ("Aim");
     int crouchHash = Animator.StringToHash ("Crouch");
     int jumpHash = Animator.StringToHash ("Jump");
 
     public Button powerButton;
 
-    public RectTransform powerBarOuter;
-    public RectTransform powerBarInner;
+    //public RectTransform powerBarOuter;
+    //public RectTransform powerBarInner;
+
+    public SpriteMask powerStickMask;
+    float powerStickMaskSize = 2.53f;
 
     Vector3 powerBarRight;
+
+    public Rigidbody2D rigidBody;
 
     void Awake() {
         if (instance == null) {
@@ -30,17 +36,19 @@ public class Frog : MonoBehaviour {
             Destroy (gameObject);
         }
 
-        DontDestroyOnLoad (gameObject);
+        //DontDestroyOnLoad (gameObject);
     }
 
 
 
     void Start() {
+        rigidBody = GetComponent<Rigidbody2D> ();
         SetPower (0);
+        RespawnNoDeath ();
     }
 
     public void Jump() {
-        if (GetComponent<Rigidbody2D>().velocity.x == 0 && GetComponent<Rigidbody2D>().velocity.y == 0) {
+        if (rigidBody.velocity.x == 0 && rigidBody.velocity.y == 0) {
             StartCoroutine (JumpCoroutine ());
         }
     }
@@ -48,9 +56,9 @@ public class Frog : MonoBehaviour {
     IEnumerator JumpCoroutine() {
         SetCrouch (true);
         yield return new  WaitForSeconds (0.5f);
-        SetJump (true);
         SetCrouch (false);
-        GetComponent<Rigidbody2D> ().AddForce (GetForce ());
+        SetJump (true);
+        rigidBody.AddForce (GetForce ());
         SetPower (0);
         UpdateAmountUI ();
     }
@@ -108,21 +116,36 @@ public class Frog : MonoBehaviour {
     void UpdateAmountUI() {
         //powerAmountText.text = (powerAmount).ToString ("F0");
         //powerBarInner.rectTransform.
-        float size = powerBarOuter.sizeDelta.x * (powerAmount / 100f);
-        powerBarInner.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left,0,size);
+        //float size = powerBarOuter.sizeDelta.x * (powerAmount / 100f);
+        //powerBarInner.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left,0,size);
 
+        float size = (powerStickMaskSize - 1) * (powerAmount / 100f);
+        Vector3 pos = powerStickMask.transform.localPosition;
+        pos.y = 1 + size;
+        powerStickMask.transform.localPosition = pos;
     }
 
-    void OnCollisionEnter2D(Collision2D collision) {
+    void OnCollisionStay2D(Collision2D collision) {
         if (collision.gameObject.CompareTag ("EndPlatform")) {
             PlatformController.instance.EndPlatformAction ();
         }
-
-        SetJump (false);
         //SetCrouch (false);
         /*if (collision.gameObject.CompareTag ("Platform") || collision.gameObject.CompareTag ("StartPlatform")) {
             CameraController.instance.MoveTo (transform);
         }*/
+    }
+
+    void OnCollisionEnter2D(Collision2D collision) {
+        if((collision.gameObject.CompareTag("Platform") || 
+            collision.gameObject.CompareTag("StartPlatform") || 
+            collision.gameObject.CompareTag("EndPlatform")) && 
+            GetJump() == true) {
+            SetJump (false);
+        }
+    }
+
+    public void SetAim(bool value) {
+        GetComponent<Animator> ().SetBool (aimHash,value);
     }
 
     public void SetCrouch(bool value) {
@@ -133,8 +156,36 @@ public class Frog : MonoBehaviour {
         GetComponent<Animator> ().SetBool (jumpHash,value);
     }
 
+    public bool GetJump() {
+        return GetComponent<Animator>().GetBool(jumpHash);
+    }
+
     public void SetIdle(bool value) {
         GetComponent<Animator> ().SetBool (idleHash,value);
+    }
+
+    void Respawn() {
+        StartCoroutine (RespawnCoroutine ());
+    }
+
+    IEnumerator RespawnCoroutine() {
+        yield return new WaitForSecondsRealtime(GameController.instance.respawnTime);
+        Vector3 pos = GameObject.FindGameObjectWithTag ("StartPlatform").transform.position;
+        pos.y = GameController.instance.respawnHeight;
+        Vector2 velocity = new Vector2 (0, -GameController.instance.fallSpeed);
+        rigidBody.velocity = velocity;
+        transform.position = pos;
+    }
+
+    public void RespawnNoDeath() {
+        Respawn ();
+    }
+
+    public void RespawnDeath() {
+        GameController.instance.Die ();
+        if (GameController.instance.lives > 0) {
+            Respawn ();
+        }
     }
 
 

@@ -7,19 +7,17 @@ public class UIController : MonoBehaviour {
     GraphicRaycaster m_Raycaster;
     PointerEventData m_PointerEventData;
     EventSystem m_EventSystem;
-    Rigidbody2D frogRigidBody;
 
     public Button powerButton;
 	// Use this for initialization
 	void Start () {
-        frogRigidBody = Frog.instance.GetComponent<Rigidbody2D> ();
         m_Raycaster = GetComponent<GraphicRaycaster>();
         m_EventSystem = GetComponent<EventSystem>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (frogRigidBody.velocity.x == 0 && frogRigidBody.velocity.y == 0) {
+        if (Frog.instance.rigidBody.velocity.x == 0 && Frog.instance.rigidBody.velocity.y == 0 && PlatformController.instance.transitioning == false) {
             powerButton.interactable = true;
         } else {
             powerButton.interactable = false;
@@ -34,9 +32,11 @@ public class UIController : MonoBehaviour {
             if (Input.GetButton ("Fire1")) {
                 if (results.Count == 0) {
                     Frog.instance.SetPower (0);
+                    Frog.instance.SetAim (false);
                 }
                 if(powerButton.IsInteractable()){
                     foreach (RaycastResult result in results) {
+                        Frog.instance.SetAim (true);
                         //Debug.LogFormat ("centre: {0}, pos: {1}",result.gameObject.transform.position,Camera.main.ScreenToWorldPoint(result.screenPosition));
                         // Debug.Log(result.screenPosition);
                         Vector3 buttonPos = Camera.main.ScreenToWorldPoint (result.gameObject.GetComponent<RectTransform> ().position);
@@ -80,6 +80,7 @@ public class UIController : MonoBehaviour {
 
             if (Input.GetButtonUp ("Fire1")) {
                 foreach (RaycastResult result in results) {
+                    Frog.instance.SetAim (false);
                     Frog.instance.Jump ();
                 }
             }
