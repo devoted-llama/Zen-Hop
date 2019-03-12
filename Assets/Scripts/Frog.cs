@@ -19,6 +19,9 @@ public class Frog : MonoBehaviour {
 
     public Button powerButton;
 
+    public AudioSource[] jumpSound;
+    public AudioSource deathSound;
+
     //public RectTransform powerBarOuter;
     //public RectTransform powerBarInner;
 
@@ -54,11 +57,13 @@ public class Frog : MonoBehaviour {
     }
 
     IEnumerator JumpCoroutine() {
+        jumpSound[Random.Range(0,jumpSound.Length)].Play ();
         SetCrouch (true);
         yield return new  WaitForSeconds (0.5f);
         SetCrouch (false);
         SetJump (true);
         rigidBody.AddForce (GetForce ());
+
         SetPower (0);
         UpdateAmountUI ();
     }
@@ -183,6 +188,7 @@ public class Frog : MonoBehaviour {
 
     public void RespawnDeath() {
         GameController.instance.Die ();
+        deathSound.Play ();
         if (GameController.instance.lives > 0) {
             Respawn ();
         }
