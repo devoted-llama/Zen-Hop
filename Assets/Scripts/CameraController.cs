@@ -14,7 +14,6 @@ public class CameraController : MonoBehaviour {
     bool moving = false;
 
     public delegate void moveEvent();
-    public event moveEvent finishMoving;
 
     RigidbodyConstraints2D frogConstraints;
     Rigidbody2D frogRigidBody;
@@ -26,7 +25,7 @@ public class CameraController : MonoBehaviour {
             Destroy (gameObject);
         }
 
-        DontDestroyOnLoad (gameObject);
+        //DontDestroyOnLoad (gameObject);
     }
 
     void Start() {
@@ -50,6 +49,7 @@ public class CameraController : MonoBehaviour {
             transform.position = Vector3.Lerp (startMarker, endMarker, fracJourney);
             if (transform.position == endMarker) {
                 moving = false;
+                PlatformController.instance.transitioning = false;
                 //frogRigidBody.constraints = frogConstraints;
             }
         }
@@ -57,10 +57,7 @@ public class CameraController : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D collider) {
         if (collider.gameObject.CompareTag ("Player")) {
-            Vector3 pos = GameObject.FindGameObjectWithTag ("StartPlatform").transform.position;
-            pos.y += 1f;
-            collider.gameObject.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, 0);
-            collider.gameObject.transform.position = pos;
+            Frog.instance.RespawnDeath ();
         }
     }
 

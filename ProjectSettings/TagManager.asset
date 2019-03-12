@@ -8,6 +8,7 @@ TagManager:
   - StartPlatform
   - Platform
   - PowerButton
+  - EndPlatformTransition
   layers:
   - Default
   - TransparentFX
