@@ -47,7 +47,6 @@ public class Frog : MonoBehaviour {
     void Start() {
         rigidBody = GetComponent<Rigidbody2D> ();
         SetPower (0);
-        RespawnNoDeath ();
     }
 
     public void Jump() {
@@ -131,8 +130,8 @@ public class Frog : MonoBehaviour {
     }
 
     void OnCollisionStay2D(Collision2D collision) {
-        if (collision.gameObject.CompareTag ("EndPlatform")) {
-            PlatformController.instance.EndPlatformAction ();
+        if (collision.gameObject.CompareTag ("TransitionPlatform")) {
+            PlatformController.instance.EndPlatformAction (collision.gameObject);
         }
         //SetCrouch (false);
         /*if (collision.gameObject.CompareTag ("Platform") || collision.gameObject.CompareTag ("StartPlatform")) {
@@ -143,7 +142,7 @@ public class Frog : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D collision) {
         if((collision.gameObject.CompareTag("Platform") || 
             collision.gameObject.CompareTag("StartPlatform") || 
-            collision.gameObject.CompareTag("EndPlatform")) && 
+            collision.gameObject.CompareTag("TransitionPlatform")) && 
             GetJump() == true) {
             SetJump (false);
         }
@@ -174,16 +173,12 @@ public class Frog : MonoBehaviour {
     }
 
     IEnumerator RespawnCoroutine() {
-        yield return new WaitForSecondsRealtime(GameController.instance.respawnTime);
         Vector3 pos = GameObject.FindGameObjectWithTag ("StartPlatform").transform.position;
+        yield return new WaitUntil (() => Camera.main.transform.position.x == pos.x);
         pos.y = GameController.instance.respawnHeight;
         Vector2 velocity = new Vector2 (0, -GameController.instance.fallSpeed);
         rigidBody.velocity = velocity;
         transform.position = pos;
-    }
-
-    public void RespawnNoDeath() {
-        Respawn ();
     }
 
     public void RespawnDeath() {

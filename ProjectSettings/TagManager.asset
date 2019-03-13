@@ -4,11 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - EndPlatform
   - StartPlatform
   - Platform
   - PowerButton
-  - EndPlatformTransition
+  - TransitionPlatform
+  - TransitionPlatform__
   layers:
   - Default
   - TransparentFX

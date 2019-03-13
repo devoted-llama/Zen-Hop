@@ -49,14 +49,18 @@ public class CameraController : MonoBehaviour {
             transform.position = Vector3.Lerp (startMarker, endMarker, fracJourney);
             if (transform.position == endMarker) {
                 moving = false;
-                PlatformController.instance.transitioning = false;
                 //frogRigidBody.constraints = frogConstraints;
             }
+        } else {
+            Vector3 pos = transform.position;
+            pos.x = Frog.instance.transform.position.x;
+            transform.position = pos;
         }
     }
 
     void OnTriggerExit2D(Collider2D collider) {
         if (collider.gameObject.CompareTag ("Player")) {
+            MoveTo (GameObject.FindGameObjectWithTag ("StartPlatform").transform);
             Frog.instance.RespawnDeath ();
         }
     }
