@@ -17,7 +17,7 @@ public class UIController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Frog.instance.rigidBody.velocity.x == 0 && Frog.instance.rigidBody.velocity.y == 0 && PlatformController.instance.transitioning == false) {
+        if (PlatformController.instance.transitioning == false && Frog.instance.rigidBody.velocity.x == 0 && Frog.instance.rigidBody.velocity.y == 0) {
             powerButton.interactable = true;
         } else {
             powerButton.interactable = false;
