@@ -449,7 +449,7 @@ MonoBehaviour:
   respawnHeight: 11
   fallSpeed: 9
   level: 0
-  lives: 3
+  lives: 99
   scoreText: {fileID: 1872119259}
   livesText: {fileID: 1977004946}
 --- !u!4 &481034368
@@ -893,7 +893,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1049838149}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -913,8 +913,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b25a41ab7ef1114c9acba4085aabbf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprite1: {fileID: 0}
-  sprite2: {fileID: 0}
+  sprite1: {fileID: 1968135352}
+  sprite2: {fileID: 256575488}
+  parallaxSpeed: 0.4
+  scrollSpeed: 0.06
+  count: 1
 --- !u!1 &1165024640
 GameObject:
   m_ObjectHideFlags: 0
