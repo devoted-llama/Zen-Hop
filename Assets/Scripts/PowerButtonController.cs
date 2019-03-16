@@ -17,8 +17,8 @@ public class PowerButtonController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Frog.instance.GetCrouch() == false && Frog.instance.GetJump() == false && 
-            PlatformController.instance.transitioning == false && 
+        if (Frog.instance.GetCrouch() == false && Frog.instance.GetJump() == false &&
+            PlatformController.instance.transitioning == false && Frog.instance.doingPlatformActions == false &&
             Frog.instance.rigidBody.velocity.x == 0 && Frog.instance.rigidBody.velocity.y == 0) {
             powerButton.interactable = true;
         } else {

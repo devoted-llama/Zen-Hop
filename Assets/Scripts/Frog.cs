@@ -26,6 +26,8 @@ public class Frog : MonoBehaviour {
 
     public int currentPlatformId = 0;
 
+    public bool doingPlatformActions = false;
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -135,6 +137,7 @@ public class Frog : MonoBehaviour {
     }
 
     void DoPlatformActions(Platform platform) {
+        doingPlatformActions = true;
         StartCoroutine(DoPlatformActionsCoroutine(platform));
     }
 
@@ -166,6 +169,8 @@ public class Frog : MonoBehaviour {
             }
             //CameraController.instance.MoveTo(transform, 5f);
         }
+
+        doingPlatformActions = false;
     }
 
 
