@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-public class UIController : MonoBehaviour {
+public class PowerButtonController : MonoBehaviour {
     GraphicRaycaster m_Raycaster;
     PointerEventData m_PointerEventData;
     EventSystem m_EventSystem;
@@ -17,7 +17,9 @@ public class UIController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (PlatformController.instance.transitioning == false && Frog.instance.rigidBody.velocity.x == 0 && Frog.instance.rigidBody.velocity.y == 0) {
+        if (Frog.instance.GetCrouch() == false && Frog.instance.GetJump() == false && 
+            PlatformController.instance.transitioning == false && 
+            Frog.instance.rigidBody.velocity.x == 0 && Frog.instance.rigidBody.velocity.y == 0) {
             powerButton.interactable = true;
         } else {
             powerButton.interactable = false;

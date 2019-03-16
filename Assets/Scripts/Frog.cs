@@ -19,9 +19,6 @@ public class Frog : MonoBehaviour {
 
     public Button powerButton;
 
-    public AudioSource[] jumpSound;
-    public AudioSource deathSound;
-
     public SpriteMask powerStickMask;
     float powerStickMaskSize = 2.53f;
 
@@ -44,13 +41,13 @@ public class Frog : MonoBehaviour {
     }
 
     public void Jump() {
-        if (rigidBody.velocity.x == 0 && rigidBody.velocity.y == 0) {
+        if (gameObject.activeSelf && rigidBody.velocity.x == 0 && rigidBody.velocity.y == 0) {
             StartCoroutine(JumpCoroutine());
         }
     }
 
     IEnumerator JumpCoroutine() {
-        jumpSound[Random.Range(0, jumpSound.Length)].Play();
+        GameController.instance.PlayJumpSound();
         SetCrouch(true);
         yield return new WaitForSeconds(0.5f);
         SetCrouch(false);
@@ -164,7 +161,7 @@ public class Frog : MonoBehaviour {
             if(currentPlatformId > GameController.instance.level) {
                 GameController.instance.NewScore(currentPlatformId);
             }
-            if (platform.CompareTag("TransitionPlatform")) {
+            if (platform.CompareTag("TransitionPlatform") && PlatformController.instance.transitioning == false) {
                 PlatformController.instance.TransitionPlatformAction(platform);
             }
             //CameraController.instance.MoveTo(transform, 5f);
@@ -178,6 +175,10 @@ public class Frog : MonoBehaviour {
 
     public void SetCrouch(bool value) {
         GetComponent<Animator> ().SetBool (crouchHash,value);
+    }
+
+    public bool GetCrouch() {
+        return GetComponent<Animator>().GetBool(crouchHash);
     }
 
     public void SetJump(bool value) {
@@ -197,7 +198,9 @@ public class Frog : MonoBehaviour {
     }
 
     IEnumerator RespawnCoroutine() {
-        Vector3 pos = PlatformController.instance.GetPlatformById(currentPlatformId).transform.position;
+        Platform currentPlatform = PlatformController.instance.GetPlatformById(currentPlatformId);
+        Vector3 pos = currentPlatform.transform.position;
+        CameraController.instance.MoveTo(currentPlatform.transform);
         yield return new WaitUntil (() => Camera.main.transform.position.x == pos.x);
         pos.y = GameController.instance.respawnHeight;
         Vector2 velocity = new Vector2 (0, -GameController.instance.fallSpeed);
@@ -207,7 +210,6 @@ public class Frog : MonoBehaviour {
 
     public void RespawnDeath() {
         GameController.instance.Die ();
-        deathSound.Play ();
         if (GameController.instance.lives > 0) {
             Respawn ();
         }

@@ -15,9 +15,15 @@ public class GameController : MonoBehaviour {
     public float level = 0;
     public float lives = 3;
 
+    public AudioSource[] jumpSound;
+    public AudioSource deathSound;
+
     public Text scoreText;
     public Text livesText;
 
+    public GameObject gameoverPanel;
+    public Text gameoverScoreText;
+    public Button retryButton;
 
 	void Awake () {
         if (instance == null) {
@@ -33,26 +39,41 @@ public class GameController : MonoBehaviour {
 
 	}
 
+    void Start() {
+        UpdateUI();
+    }
+
+    public void PlayJumpSound() {
+        jumpSound[Random.Range(0, jumpSound.Length)].Play();
+    }
+
     public void NewScore(int score) {
         level = score;
         UpdateUI ();
     }
 
     public void Die() {
+        deathSound.Play();
         lives--;
         if (lives < 1) {
-            Reboot ();
+            ShowGameoverPanel();
         } else {
             UpdateUI ();
         }
     }
 
-    void UpdateUI() {
-        scoreText.text = level.ToString ("000000");
-        livesText.text = lives.ToString ();
+    void ShowGameoverPanel() {
+        Frog.instance.gameObject.SetActive(false);
+        gameoverScoreText.text = "You reached cloud " + level.ToString() + "!";
+        gameoverPanel.SetActive(true);
     }
 
-    void Reboot() {
+    void UpdateUI() {
+        scoreText.text = level.ToString ();
+        //livesText.text = lives.ToString ();
+    }
+
+    public void Reboot() {
         SceneManager.LoadScene (SceneManager.GetActiveScene().name);
     }
 }

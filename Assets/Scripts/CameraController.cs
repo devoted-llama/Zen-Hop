@@ -61,7 +61,6 @@ public class CameraController : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D collider) {
         if (collider.gameObject.CompareTag ("Player")) {
-            MoveTo (PlatformController.instance.GetPlatformById(Frog.instance.currentPlatformId).transform);
             Frog.instance.RespawnDeath ();
         }
     }

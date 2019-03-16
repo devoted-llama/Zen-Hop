@@ -58,10 +58,13 @@ public class PlatformController : MonoBehaviour {
                 platforms [i].tag = "Platform";
             }
         }
-        //platforms [transitionPlatformIndex].GetComponent<Animator> ().SetTrigger (fadeInHash);
     }
 
     void RepositionPlatforms(int index) {
+        StartCoroutine(RepositionPlatformsCoroutine(index));
+    }
+
+    IEnumerator RepositionPlatformsCoroutine(int index) {
         //index - 2 = the number of "new" platforms to create
         int newPlatforms = index - 2;
 
@@ -70,16 +73,26 @@ public class PlatformController : MonoBehaviour {
         // 8 - index = the starting index of the "new" platforms
         int repositionIndex = 8 - index;
         for (int i = 0; i < amount; i++) {
+            
             platforms[i].id += newPlatforms;
-            if(i < amount-(newPlatforms)) {
+
+            if(i < newPlatforms) {
+                platforms[i].GetComponent<Animator>().SetTrigger(fadeOutHash);
+                yield return new WaitForSecondsRealtime(.2f);
+                platforms[i].GetComponent<Animator>().SetTrigger(visibleHash);
+            }
+            if(i < amount-newPlatforms) {
                 platforms [i].transform.position = platforms [i + (newPlatforms)].transform.position;
             }
             if (i >= repositionIndex) {
+                platforms[i].GetComponent<Animator>().SetTrigger(invisibleHash);
                 Vector3 position = new Vector3 (startX + (i * 4), Random.Range (2, 8), depth);
                 platforms [i].transform.position = position;
+                platforms[i].GetComponent<Animator>().SetTrigger(fadeInHash);
             }
+            
         }
-        //platforms [transitionPlatformIndex].GetComponent<Animator> ().SetTrigger (fadeInHash);
+        transitioning = false;
     }
 
 
@@ -101,13 +114,9 @@ public class PlatformController : MonoBehaviour {
         }
 
         if (transitionPlatform == true) {
-            //platforms [0].GetComponent<Animator> ().SetTrigger (fadeOutHash);
-            //yield return new WaitUntil (() => platforms [0].transform.localScale.x == 0);
-
             RepositionPlatforms(index);
         }
         platforms[index].tag = "TransitionPlatform";
-        transitioning = false;
     }
 
     int GetIndexOfPlatform(Platform platform) {
