@@ -31,6 +31,7 @@ public class CameraController : MonoBehaviour {
     void Start() {
         frogRigidBody = Frog.instance.GetComponent<Rigidbody2D> ();
         frogConstraints = frogRigidBody.constraints;
+        //MoveTo(PlatformController.instance.GetPlatformById(0).transform);
     }
 
     public void Move(Vector3 end) {
@@ -60,12 +61,13 @@ public class CameraController : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D collider) {
         if (collider.gameObject.CompareTag ("Player")) {
-            MoveTo (GameObject.FindGameObjectWithTag ("StartPlatform").transform);
+            MoveTo (PlatformController.instance.GetPlatformById(Frog.instance.currentPlatformId).transform);
             Frog.instance.RespawnDeath ();
         }
     }
 
-    public void MoveTo(Transform t) {
+    public void MoveTo(Transform t, float speed = 10f) {
+        this.speed = speed;
         Vector3 pos = transform.position;
         pos.x = t.position.x;
         Move (pos);

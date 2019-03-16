@@ -5,9 +5,7 @@ using UnityEngine;
 public class PlatformController : MonoBehaviour {
     public static PlatformController instance = null;
 
-    public GameObject platformPrefab;
-    public GameObject endPlatformPrefab;
-
+    public Platform platformPrefab;
 
     const float startPosition = 0f;
     const int amount = 6;
@@ -15,7 +13,7 @@ public class PlatformController : MonoBehaviour {
     const int transitionPlatformIndex = 3;
     const float depth = -2.45f;
 
-    GameObject[] platforms;
+    Platform[] platforms;
 
     int fadeOutHash = Animator.StringToHash ("Fade Out");
     int fadeInHash = Animator.StringToHash ("Fade In");
@@ -30,18 +28,16 @@ public class PlatformController : MonoBehaviour {
         } else if (instance != this) {
             Destroy (gameObject);
         }
-
-        //DontDestroyOnLoad (gameObject);
     }
 
     void Start() {
-        platforms = new GameObject[(int)amount];
+        platforms = new Platform[(int)amount];
         for (int i = 0; i < platforms.Length; i++) {
             platforms[i] = Instantiate (platformPrefab);
+            platforms[i].id = i;
         }
 
         GeneratePlatforms (startPosition);
-        //CameraController.instance.MoveTo (Frog.instance.transform);
     }
 
 
@@ -66,15 +62,20 @@ public class PlatformController : MonoBehaviour {
     }
 
     void RepositionPlatforms(int index) {
-        float start = platforms[index-2].transform.position.x;
+        //index - 2 = the number of "new" platforms to create
+        int newPlatforms = index - 2;
+
+        float startX = platforms[newPlatforms].transform.position.x;
+
+        // 8 - index = the starting index of the "new" platforms
         int repositionIndex = 8 - index;
         for (int i = 0; i < amount; i++) {
-
-            if(i < amount-(index-2)) {
-                platforms [i].transform.position = platforms [i + (index-2)].transform.position;
+            platforms[i].id += newPlatforms;
+            if(i < amount-(newPlatforms)) {
+                platforms [i].transform.position = platforms [i + (newPlatforms)].transform.position;
             }
             if (i >= repositionIndex) {
-                Vector3 position = new Vector3 (start + (i * 4), Random.Range (2, 8), depth);
+                Vector3 position = new Vector3 (startX + (i * 4), Random.Range (2, 8), depth);
                 platforms [i].transform.position = position;
             }
         }
@@ -82,53 +83,49 @@ public class PlatformController : MonoBehaviour {
     }
 
 
-    public void EndPlatformAction(GameObject platform) {
-        StartCoroutine (EndPlatformActionCoroutine (platform));
-    }
-
-    IEnumerator EndPlatformActionCoroutine(GameObject platform) {
+    public void TransitionPlatformAction(Platform platform) {
         transitioning = true;
 
-        int index = GetIndexOfPlatform (platform);
+        int index = GetIndexOfPlatform(platform);
 
-        platforms [index].tag = "TransitionPlatform__";
+        platforms[index].tag = "TransitionPlatform__";
 
         int colliderSize = 2;
         bool transitionPlatform = false;
 
-        yield return new WaitForSeconds (1f);
-       
         Collider2D[] colliders = new Collider2D[colliderSize];
-        Frog.instance.rigidBody.GetContacts (colliders);
+        Frog.instance.rigidBody.GetContacts(colliders);
         for (int i = 0; i < colliderSize; i++) {
-            if(colliders[i] != null && colliders [i].CompareTag ("TransitionPlatform__"))
+            if (colliders[i] != null && colliders[i].CompareTag("TransitionPlatform__"))
                 transitionPlatform = true;
         }
 
-        Vector2 velocity = Frog.instance.rigidBody.velocity;
-
-        if (transitionPlatform == true && velocity.x < 0.00001f && velocity.y < 0.00001f) {
-            GameController.instance.NextLevel ();
+        if (transitionPlatform == true) {
             //platforms [0].GetComponent<Animator> ().SetTrigger (fadeOutHash);
             //yield return new WaitUntil (() => platforms [0].transform.localScale.x == 0);
 
-            RepositionPlatforms (index);
-
-            //Vector3 pos = Camera.main.transform.position;
-            //pos.x += platformSeparation * (amount-1);
-            //CameraController.instance.Move (pos);
+            RepositionPlatforms(index);
         }
-        platforms [index].tag = "TransitionPlatform";
+        platforms[index].tag = "TransitionPlatform";
         transitioning = false;
     }
 
-    int GetIndexOfPlatform(GameObject platform) {
+    int GetIndexOfPlatform(Platform platform) {
         for (int i = 0; i < platforms.Length; i++) {
             if(platforms[i].Equals(platform)){
                 return i;
             }
         }
         return -1;
+    }
+
+    public Platform GetPlatformById(int id) {
+        for(int i = 0; i<platforms.Length; i++) {
+            if(platforms[i].id == id) {
+                return platforms[i];
+            }
+        }
+        return null;
     }
 
 }

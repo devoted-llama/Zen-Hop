@@ -33,8 +33,8 @@ public class GameController : MonoBehaviour {
 
 	}
 
-    public void NextLevel() {
-        level++;
+    public void NewScore(int score) {
+        level = score;
         UpdateUI ();
     }
 
