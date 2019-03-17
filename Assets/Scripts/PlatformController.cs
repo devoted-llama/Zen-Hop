@@ -44,7 +44,7 @@ public class PlatformController : MonoBehaviour {
 
     void GeneratePlatforms(float start) {
         for (int i = 0; i < amount; i++) {
-            if (GameController.instance.level == 0) {
+            if (GameController.instance.Score == 0) {
                 Vector3 position = new Vector3 (start + (i * 4), Random.Range (2, 8), -2.45f);
                 platforms [i].transform.position = position;
             }

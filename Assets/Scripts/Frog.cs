@@ -49,7 +49,7 @@ public class Frog : MonoBehaviour {
     }
 
     IEnumerator JumpCoroutine() {
-        GameController.instance.PlayJumpSound();
+        AudioController.instance.PlayJumpSound();
         SetCrouch(true);
         yield return new WaitForSeconds(0.5f);
         SetCrouch(false);
@@ -128,11 +128,12 @@ public class Frog : MonoBehaviour {
             if (id != Frog.instance.currentPlatformId) {
                 DoPlatformActions(collision.gameObject.GetComponent<Platform>());
             }
-            if (GetJump() == true) {
-                SetJump(false);
-            }
+        }
+    }
 
-
+    void OnCollisionStay2D(Collision2D collision) {
+        if (GetJump() == true) {
+            SetJump(false);
         }
     }
 
@@ -161,7 +162,7 @@ public class Frog : MonoBehaviour {
 
         if (landed == true && rigidBody.velocity.x < 0.00001f && rigidBody.velocity.y < 0.00001f) {
             currentPlatformId = platform.id;
-            if(currentPlatformId > GameController.instance.level) {
+            if(currentPlatformId > GameController.instance.Score) {
                 GameController.instance.NewScore(currentPlatformId);
             }
             if (platform.CompareTag("TransitionPlatform") && PlatformController.instance.transitioning == false) {
@@ -215,7 +216,7 @@ public class Frog : MonoBehaviour {
 
     public void RespawnDeath() {
         GameController.instance.Die ();
-        if (GameController.instance.lives > 0) {
+        if (GameController.instance.Lives > 0) {
             Respawn ();
         }
     }

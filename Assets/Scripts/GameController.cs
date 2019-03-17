@@ -12,11 +12,12 @@ public class GameController : MonoBehaviour {
     public float respawnHeight = 5;
     public float fallSpeed = 10;
 
-    public float level = 0;
-    public float lives = 3;
-
-    public AudioSource[] jumpSound;
-    public AudioSource deathSound;
+    float score = 0;
+    public float Score { get { return score; } }
+    float lives = 1;
+    public float Lives { get { return lives; } }
+    float best = 0;
+ 
 
     public Text scoreText;
     public Text livesText;
@@ -32,7 +33,7 @@ public class GameController : MonoBehaviour {
             Destroy (gameObject);
         }
 
-        //DontDestroyOnLoad (gameObject);
+        DontDestroyOnLoad (gameObject);
 
         Time.timeScale = timescale;
         Random.InitState (randomSeed);
@@ -43,37 +44,44 @@ public class GameController : MonoBehaviour {
         UpdateUI();
     }
 
-    public void PlayJumpSound() {
-        jumpSound[Random.Range(0, jumpSound.Length)].Play();
-    }
-
     public void NewScore(int score) {
-        level = score;
+        this.score = score;
         UpdateUI ();
     }
 
     public void Die() {
-        deathSound.Play();
+        AudioController.instance.PlayDeathSound();
         lives--;
         if (lives < 1) {
             ShowGameoverPanel();
         } else {
-            UpdateUI ();
+            UpdateUI();
         }
     }
 
     void ShowGameoverPanel() {
+        best = score > best ? score : best;
         Frog.instance.gameObject.SetActive(false);
-        gameoverScoreText.text = "You reached cloud " + level.ToString() + "!";
+        gameoverScoreText.text = "Score: " + score.ToString() + ", Best: " + best.ToString() + ".";
         gameoverPanel.SetActive(true);
     }
 
+    void HideGameoverPanel() {
+        gameoverPanel.SetActive(false);
+    }
+
     void UpdateUI() {
-        scoreText.text = level.ToString ();
+        scoreText.text = score.ToString ();
         //livesText.text = lives.ToString ();
     }
 
     public void Reboot() {
+        
+        score = 0;
+        lives = 1;
+        UpdateUI();
+        //AdController.instance.ShowAd();
         SceneManager.LoadScene (SceneManager.GetActiveScene().name);
+        HideGameoverPanel();
     }
 }
