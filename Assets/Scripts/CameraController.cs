@@ -15,9 +15,6 @@ public class CameraController : MonoBehaviour {
 
     public delegate void moveEvent();
 
-    RigidbodyConstraints2D frogConstraints;
-    Rigidbody2D frogRigidBody;
-
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -29,8 +26,6 @@ public class CameraController : MonoBehaviour {
     }
 
     void Start() {
-        frogRigidBody = Frog.instance.GetComponent<Rigidbody2D> ();
-        frogConstraints = frogRigidBody.constraints;
         //MoveTo(PlatformController.instance.GetPlatformById(0).transform);
     }
 
