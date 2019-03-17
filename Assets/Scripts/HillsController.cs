@@ -7,12 +7,16 @@ public class HillsController : MonoBehaviour {
     public Transform sprite1;
     public Transform sprite2;
 
-    const float width = 26.00f;
+    float width;
     const float parallaxSpeed = 0.4f;
-    const float scrollSpeed = 0.06f;
+    const float scrollSpeed = 0.05f;
 
 
     int count = 1;
+
+    private void Awake() {
+        width = sprite2.position.x;    
+    }
 
     void Update() {
         Vector3 pos = transform.localPosition;
