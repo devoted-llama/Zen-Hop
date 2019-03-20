@@ -123,16 +123,19 @@ public class Frog : MonoBehaviour {
         if (collision.gameObject.CompareTag("Platform") ||
             collision.gameObject.CompareTag("StartPlatform") ||
             collision.gameObject.CompareTag("TransitionPlatform")) {
-
-            int id = collision.gameObject.GetComponent<Platform>().id;
+            Platform platform = collision.gameObject.GetComponent<Platform>();
+            platform.AnimateBounce();
+            int id = platform.id;
             if (id != Frog.instance.currentPlatformId) {
-                DoPlatformActions(collision.gameObject.GetComponent<Platform>());
+                
+                DoPlatformActions(platform);
             }
         }
     }
 
     void OnCollisionStay2D(Collision2D collision) {
-        if (GetJump() == true) {
+        Platform platform = collision.gameObject.GetComponent<Platform>();
+        if (platform != null && GetJump() == true) {
             SetJump(false);
         }
     }
