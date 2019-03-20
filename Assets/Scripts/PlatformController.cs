@@ -13,12 +13,12 @@ public class PlatformController : MonoBehaviour {
     const int transitionPlatformIndex = 3;
     const float depth = -2.45f;
 
+    public float minHeight;
+    public float maxHeight;
+
     Platform[] platforms;
 
-    int fadeOutHash = Animator.StringToHash ("Fade Out");
-    int fadeInHash = Animator.StringToHash ("Fade In");
-    int invisibleHash = Animator.StringToHash ("Invisible");
-    int visibleHash = Animator.StringToHash ("Visible");
+
 
     public bool transitioning = false;
 
@@ -45,7 +45,7 @@ public class PlatformController : MonoBehaviour {
     void GeneratePlatforms(float start) {
         for (int i = 0; i < amount; i++) {
             if (GameController.instance.Score == 0) {
-                Vector3 position = new Vector3 (start + (i * 4), Random.Range (2, 8), -2.45f);
+                Vector3 position = new Vector3 (start + (i * 4), Random.Range (minHeight, maxHeight), -2.45f);
                 platforms [i].transform.position = position;
             }
 
@@ -77,18 +77,21 @@ public class PlatformController : MonoBehaviour {
             platforms[i].id += newPlatforms;
 
             if(i < newPlatforms) {
-                platforms[i].GetComponent<Animator>().SetTrigger(fadeOutHash);
+                platforms[i].AnimateFadeOut();
                 yield return new WaitForSecondsRealtime(.2f);
-                platforms[i].GetComponent<Animator>().SetTrigger(visibleHash);
+                platforms[i].AnimateVisible();
             }
             if(i < amount-newPlatforms) {
+                if(i == 2) {
+                    platforms[i].bounceTime = Time.time;
+                }
                 platforms [i].transform.position = platforms [i + (newPlatforms)].transform.position;
             }
             if (i >= repositionIndex) {
-                platforms[i].GetComponent<Animator>().SetTrigger(invisibleHash);
+                platforms[i].AnimateInvisible();
                 Vector3 position = new Vector3 (startX + (i * 4), Random.Range (2, 8), depth);
                 platforms [i].transform.position = position;
-                platforms[i].GetComponent<Animator>().SetTrigger(fadeInHash);
+                platforms[i].AnimateFadeIn();
             }
             
         }
