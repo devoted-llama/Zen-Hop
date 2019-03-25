@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIController : MonoBehaviour
-{
-    public static UIController instance = null;
+public class GameOverController : MonoBehaviour {
+    public static GameOverController instance = null;
 
     void Awake() {
         if (instance == null) {

@@ -15,12 +15,12 @@ public class HillsController : MonoBehaviour {
     int count = 1;
 
     private void Awake() {
-        width = sprite2.position.x;    
+        width = sprite2.localPosition.x;    
     }
 
     void Update() {
         Vector3 pos = transform.localPosition;
-        pos.x = (-transform.parent.position.x * parallaxSpeed) - (scrollSpeed * Time.time);
+        pos.x = (-transform.parent.localPosition.x * parallaxSpeed) - (scrollSpeed * Time.time);
         transform.localPosition = pos;
 
         if (pos.x <= (-width)*count) {
