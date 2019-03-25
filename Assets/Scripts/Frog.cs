@@ -34,6 +34,14 @@ public class Frog : MonoBehaviour {
         } else if (instance != this) {
             Destroy(gameObject);
         }
+
+        GameStartSetActive();
+    }
+
+    void GameStartSetActive() {
+        if(GameController.instance.playing == false) {
+            gameObject.SetActive(false);
+        }
     }
 
 

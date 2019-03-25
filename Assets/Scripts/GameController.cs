@@ -12,11 +12,17 @@ public class GameController : MonoBehaviour {
     public float respawnHeight = 5;
     public float fallSpeed = 10;
 
-    float score = 0;
-    public float Score { get { return score; } }
-    float lives = 1;
-    public float Lives { get { return lives; } }
-    float best = 0;
+    [SerializeField]
+    int score = 0;
+    public int Score { get { return score; } }
+    [SerializeField]
+    int lives = 1;
+    public int Lives { get { return lives; } }
+    [SerializeField]
+    int highScore = 0;
+
+    bool _playing = false;
+    public bool playing {  get { return _playing; } set { _playing = value; } }
  
 
     public Text scoreText;
@@ -41,6 +47,7 @@ public class GameController : MonoBehaviour {
 	}
 
     void Start() {
+        GetHighScore();
         UpdateUI();
     }
 
@@ -60,9 +67,9 @@ public class GameController : MonoBehaviour {
     }
 
     void ShowGameoverPanel() {
-        best = score > best ? score : best;
+        SaveHighScore();
         Frog.instance.gameObject.SetActive(false);
-        gameoverScoreText.text = "Score: " + score.ToString() + ", Best: " + best.ToString() + ".";
+        gameoverScoreText.text = "Score: " + score.ToString() + ", Best: " + highScore.ToString() + ".";
         gameoverPanel.SetActive(true);
     }
 
@@ -76,12 +83,33 @@ public class GameController : MonoBehaviour {
     }
 
     public void Reboot() {
-        
-        score = 0;
-        lives = 1;
+        ResetScore();
+        ResetLives();
         UpdateUI();
         //AdController.instance.ShowAd();
         SceneManager.LoadScene (SceneManager.GetActiveScene().name);
         HideGameoverPanel();
+    }
+
+    void SaveHighScore() {
+        if(score > highScore) {
+            highScore = score;
+            PlayerPrefs.SetInt("highScore", highScore);
+            PlayerPrefs.Save();
+        }
+    }
+
+    void GetHighScore() {
+        if(PlayerPrefs.HasKey("highScore")) {
+            highScore = PlayerPrefs.GetInt("highScore");
+        }
+    }
+
+    void ResetScore() {
+        score = 0;
+    }
+
+    void ResetLives() {
+        lives = 1;
     }
 }

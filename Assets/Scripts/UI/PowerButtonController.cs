@@ -29,7 +29,7 @@ public class PowerButtonController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Frog.instance.GetCrouch() == false && Frog.instance.GetJump() == false &&
+        if (GameController.instance.playing == true && Frog.instance.GetCrouch() == false && Frog.instance.GetJump() == false &&
             PlatformController.instance.transitioning == false && Frog.instance.doingPlatformActions == false &&
             Frog.instance.rigidBody.velocity.x == 0 && Frog.instance.rigidBody.velocity.y == 0) {
             powerButton.interactable = true;
@@ -38,7 +38,7 @@ public class PowerButtonController : MonoBehaviour {
         }
         m_PointerEventData = new PointerEventData (m_EventSystem);
         m_PointerEventData.position = Input.mousePosition;
-        if (m_Raycaster != null) {
+        if (Frog.instance != null && m_Raycaster != null) {
             List<RaycastResult> results = new List<RaycastResult> ();
             m_Raycaster.Raycast (m_PointerEventData, results);
 

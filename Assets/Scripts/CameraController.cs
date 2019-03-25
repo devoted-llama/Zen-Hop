@@ -14,19 +14,24 @@ public class CameraController : MonoBehaviour {
     bool moving = false;
 
     public delegate void moveEvent();
+    public event moveEvent finishMoving;
 
     void Awake() {
         if (instance == null) {
             instance = this;
         } else if (instance != this) {
-            Destroy (gameObject);
+            Destroy(gameObject);
         }
 
-        //DontDestroyOnLoad (gameObject);
+        MoveToTitleScreenPosition();
+        
     }
-
-    void Start() {
-        //MoveTo(PlatformController.instance.GetPlatformById(0).transform);
+    void MoveToTitleScreenPosition() {
+        if (GameController.instance.playing == false) {
+            Vector3 pos = transform.position;
+            pos.x = -12;
+            transform.position = pos;
+        }
     }
 
     public void Move(Vector3 end) {
@@ -34,7 +39,6 @@ public class CameraController : MonoBehaviour {
         endMarker = end;
         startTime = Time.time;
         journeyLength = Vector3.Distance (startMarker, endMarker);
-        //frogRigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
         moving = true;
     }
 
@@ -45,9 +49,11 @@ public class CameraController : MonoBehaviour {
             transform.position = Vector3.Lerp (startMarker, endMarker, fracJourney);
             if (transform.position == endMarker) {
                 moving = false;
-                //frogRigidBody.constraints = frogConstraints;
+                if(finishMoving != null) {
+                    finishMoving();
+                }
             }
-        } else {
+        } else if(GameController.instance.playing == true){
             Vector3 pos = transform.position;
             pos.x = Frog.instance.transform.position.x;
             transform.position = pos;
