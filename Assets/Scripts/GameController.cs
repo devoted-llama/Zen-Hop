@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour {
     public static GameController instance = null;
 
-    public float timescale = 1;
-    public int randomSeed = 0;
-    public float respawnTime = 1;
-    public float respawnHeight = 5;
-    public float fallSpeed = 10;
+    public float timescale;
+    public int randomSeed;
+    public float respawnTime;
+    public float respawnHeight;
+    public float fallSpeed;
 
     [SerializeField]
     int score = 0;
@@ -32,6 +32,8 @@ public class GameController : MonoBehaviour {
     public Text gameoverScoreText;
     public Button retryButton;
 
+    Random.State randomState;
+
 	void Awake () {
         if (instance == null) {
             instance = this;
@@ -39,10 +41,11 @@ public class GameController : MonoBehaviour {
             Destroy (gameObject);
         }
 
-        DontDestroyOnLoad (gameObject);
+        //DontDestroyOnLoad (gameObject);
 
         Time.timeScale = timescale;
         Random.InitState (randomSeed);
+        randomState = Random.state;
 
 	}
 
@@ -87,7 +90,11 @@ public class GameController : MonoBehaviour {
         ResetLives();
         UpdateUI();
         //AdController.instance.ShowAd();
-        SceneManager.LoadScene (SceneManager.GetActiveScene().name);
+        //SceneManager.LoadScene (SceneManager.GetActiveScene().name);
+        Random.state = randomState;
+        PlatformController.instance.GeneratePlatforms();
+        Frog.instance.gameObject.SetActive(true);
+        Frog.instance.Respawn();
         HideGameoverPanel();
     }
 

@@ -210,14 +210,10 @@ public class Frog : MonoBehaviour {
         GetComponent<Animator> ().SetBool (idleHash,value);
     }
 
-    void Respawn() {
-        StartCoroutine (RespawnCoroutine ());
-    }
-
     IEnumerator RespawnCoroutine() {
-        Platform currentPlatform = PlatformController.instance.GetPlatformById(currentPlatformId);
+        Platform currentPlatform = PlatformController.instance.GetPlatformById(0);
         Vector3 pos = currentPlatform.transform.position;
-        CameraController.instance.MoveTo(currentPlatform.transform);
+        CameraController.instance.MoveTo(currentPlatform.transform,20f);
         yield return new WaitUntil (() => Camera.main.transform.position.x == pos.x);
         pos.y = GameController.instance.respawnHeight;
         Vector2 velocity = new Vector2 (0, -GameController.instance.fallSpeed);
@@ -225,11 +221,8 @@ public class Frog : MonoBehaviour {
         transform.position = pos;
     }
 
-    public void RespawnDeath() {
-        GameController.instance.Die ();
-        if (GameController.instance.Lives > 0) {
-            Respawn ();
-        }
+    public void Respawn() {
+        StartCoroutine(RespawnCoroutine());
     }
 
 
