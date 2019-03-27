@@ -31,22 +31,27 @@ public class PlatformController : MonoBehaviour {
     }
 
     void Start() {
-        platforms = new Platform[(int)amount];
-        for (int i = 0; i < platforms.Length; i++) {
-            platforms[i] = Instantiate (platformPrefab);
-            platforms[i].id = i;
-        }
-
-        GeneratePlatforms (startPosition);
+        InitialisePlatforms();
+        GeneratePlatforms ();
     }
 
+    void InitialisePlatforms() {
+        platforms = new Platform[(int)amount];
+        for (int i = 0; i < platforms.Length; i++) {
+            platforms[i] = Instantiate(platformPrefab);
+        }
+    }
 
+    public void GeneratePlatforms() {
+        GeneratePlatforms(startPosition);
+    }
 
     void GeneratePlatforms(float start) {
         for (int i = 0; i < amount; i++) {
             if (GameController.instance.Score == 0) {
                 Vector3 position = new Vector3 (start + (i * 4), Random.Range (minHeight, maxHeight), -2.45f);
                 platforms [i].transform.position = position;
+                platforms[i].id = i;
             }
 
 

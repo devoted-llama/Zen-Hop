@@ -62,7 +62,7 @@ public class CameraController : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D collider) {
         if (collider.gameObject.CompareTag ("Player")) {
-            Frog.instance.RespawnDeath ();
+            GameController.instance.Die ();
         }
     }
 

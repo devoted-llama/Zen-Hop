@@ -22,7 +22,7 @@ public class AudioController : MonoBehaviour
         } else if (instance != this) {
             Destroy(gameObject);
         }
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     public void PlayJumpSound() {
