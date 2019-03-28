@@ -7,6 +7,7 @@ public class CameraController : MonoBehaviour {
 
     public Vector3 startMarker;
     public Vector3 endMarker;
+    public const float titleScreenPosition = -12f;
     float speed = 10.0f;
     float startTime;
     float journeyLength;
@@ -26,15 +27,16 @@ public class CameraController : MonoBehaviour {
         MoveToTitleScreenPosition();
         
     }
-    void MoveToTitleScreenPosition() {
+    public void MoveToTitleScreenPosition() {
         if (GameController.instance.playing == false) {
             Vector3 pos = transform.position;
-            pos.x = -12;
+            pos.x = titleScreenPosition;
             transform.position = pos;
         }
     }
 
-    public void Move(Vector3 end) {
+    public void Move(Vector3 end, float speed = 10f) {
+        this.speed = speed;
         startMarker = transform.position;
         endMarker = end;
         startTime = Time.time;

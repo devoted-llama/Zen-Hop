@@ -26,11 +26,13 @@ public class GameController : MonoBehaviour {
  
 
     public Text scoreText;
-    public Text livesText;
 
     public GameObject gameoverPanel;
     public Text gameoverScoreText;
     public Button retryButton;
+
+    public GameObject gamePanel;
+    public GameObject gameStartPanel;
 
     Random.State randomState;
 
@@ -76,10 +78,6 @@ public class GameController : MonoBehaviour {
         gameoverPanel.SetActive(true);
     }
 
-    void HideGameoverPanel() {
-        gameoverPanel.SetActive(false);
-    }
-
     void UpdateUI() {
         scoreText.text = score.ToString ();
         //livesText.text = lives.ToString ();
@@ -90,12 +88,30 @@ public class GameController : MonoBehaviour {
         ResetLives();
         UpdateUI();
         //AdController.instance.ShowAd();
-        //SceneManager.LoadScene (SceneManager.GetActiveScene().name);
         Random.state = randomState;
         PlatformController.instance.GeneratePlatforms();
         Frog.instance.gameObject.SetActive(true);
         Frog.instance.Respawn();
-        HideGameoverPanel();
+        gameoverPanel.SetActive(false);
+    }
+
+    public void ResetToTitleScreen() {
+        StartCoroutine(ResetToTitleScreenCoroutine());
+    }
+
+    IEnumerator ResetToTitleScreenCoroutine() {
+        playing = false;
+        ResetScore();
+        ResetLives();
+        UpdateUI();
+        gameoverPanel.SetActive(false);
+        gamePanel.SetActive(false);
+        CameraController.instance.MoveToTitleScreenPosition();
+        Frog.instance.ResetToStartPosition();
+        Random.state = randomState;
+        PlatformController.instance.GeneratePlatforms();
+        yield return new WaitUntil(() => Camera.main.transform.position.x == CameraController.titleScreenPosition);
+        gameStartPanel.SetActive(true);
     }
 
     void SaveHighScore() {
@@ -118,5 +134,19 @@ public class GameController : MonoBehaviour {
 
     void ResetLives() {
         lives = 1;
+    }
+
+    public void Play() {
+        CameraController.instance.finishMoving += SetPlayActive;
+        CameraController.instance.MoveTo(PlatformController.instance.GetPlatformById(0).transform, 5);
+        gameStartPanel.SetActive(false);
+
+    }
+
+    void SetPlayActive() {
+        Frog.instance.gameObject.SetActive(true);
+        gamePanel.SetActive(true);
+        playing = true;
+        CameraController.instance.finishMoving -= SetPlayActive;
     }
 }

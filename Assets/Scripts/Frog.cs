@@ -28,6 +28,8 @@ public class Frog : MonoBehaviour {
 
     public bool doingPlatformActions = false;
 
+    Vector3 startPosition;
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -36,6 +38,12 @@ public class Frog : MonoBehaviour {
         }
 
         GameStartSetActive();
+
+        startPosition = transform.position;
+    }
+
+    public void ResetToStartPosition() {
+        transform.position = startPosition;
     }
 
     void GameStartSetActive() {
@@ -48,6 +56,7 @@ public class Frog : MonoBehaviour {
     void Start() {
         rigidBody = GetComponent<Rigidbody2D>();
         SetPower(0);
+
     }
 
     public void Jump() {
