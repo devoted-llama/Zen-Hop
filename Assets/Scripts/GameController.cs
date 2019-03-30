@@ -33,6 +33,7 @@ public class GameController : MonoBehaviour {
 
     public GameObject gamePanel;
     public GameObject gameStartPanel;
+    public GameObject aboutPanel;
 
     Random.State randomState;
 
@@ -74,6 +75,7 @@ public class GameController : MonoBehaviour {
     void ShowGameoverPanel() {
         SaveHighScore();
         Frog.instance.gameObject.SetActive(false);
+        gamePanel.SetActive(false);
         gameoverScoreText.text = "Score: " + score.ToString() + ", Best: " + highScore.ToString() + ".";
         gameoverPanel.SetActive(true);
     }
@@ -93,6 +95,7 @@ public class GameController : MonoBehaviour {
         Frog.instance.gameObject.SetActive(true);
         Frog.instance.Respawn();
         gameoverPanel.SetActive(false);
+        gamePanel.SetActive(true);
     }
 
     public void ResetToTitleScreen() {
@@ -148,5 +151,13 @@ public class GameController : MonoBehaviour {
         gamePanel.SetActive(true);
         playing = true;
         CameraController.instance.finishMoving -= SetPlayActive;
+    }
+
+    public void ShowAboutScreen() {
+        aboutPanel.SetActive(true);
+    }
+
+    public void HideAboutScreen() {
+        aboutPanel.SetActive(false);
     }
 }
