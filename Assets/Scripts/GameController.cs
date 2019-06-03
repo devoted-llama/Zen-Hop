@@ -11,6 +11,11 @@ public class GameController : MonoBehaviour {
     public float respawnTime;
     public float respawnHeight;
     public float fallSpeed;
+    public float timeBetweenAds;
+
+    [SerializeField]
+    float timeSinceAd = 0;
+    public float TimeSinceAd { get { return timeSinceAd; } }
 
     [SerializeField]
     int score = 0;
@@ -53,6 +58,7 @@ public class GameController : MonoBehaviour {
 	}
 
     void Start() {
+        timeSinceAd = Time.unscaledTime;
         GetHighScore();
         UpdateUI();
     }
@@ -85,17 +91,29 @@ public class GameController : MonoBehaviour {
         //livesText.text = lives.ToString ();
     }
 
-    public void Reboot() {
+
+
+    public void RebootWithAds() {
+        if (Time.unscaledTime - TimeSinceAd < timeBetweenAds) {
+            Reboot();
+        } else {
+            AdController.instance.AdFinished += Reboot;
+            AdController.instance.ShowAd();
+            timeSinceAd = Time.unscaledTime;
+        }
+    }
+
+    void Reboot() {
         ResetScore();
         ResetLives();
         UpdateUI();
-        //AdController.instance.ShowAd();
         Random.state = randomState;
         PlatformController.instance.GeneratePlatforms();
         Frog.instance.gameObject.SetActive(true);
         Frog.instance.Respawn();
         gameoverPanel.SetActive(false);
         gamePanel.SetActive(true);
+        AdController.instance.AdFinished -= Reboot;
     }
 
     public void ResetToTitleScreen() {
