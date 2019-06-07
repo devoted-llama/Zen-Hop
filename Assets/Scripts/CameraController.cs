@@ -55,7 +55,7 @@ public class CameraController : MonoBehaviour {
                     finishMoving();
                 }
             }
-        } else if(GameController.instance.playing == true){
+        } else if(GameController.instance.playing == true && Frog.instance.gameObject.activeSelf == true){
             Vector3 pos = transform.position;
             pos.x = Frog.instance.transform.position.x;
             transform.position = pos;

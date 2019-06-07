@@ -80,7 +80,9 @@ public class GameController : MonoBehaviour {
 
     void ShowGameoverPanel() {
         SaveHighScore();
+        
         Frog.instance.gameObject.SetActive(false);
+        Frog.instance.gameObject.transform.position = new Vector3(0, -100, 0);
         gamePanel.SetActive(false);
         gameoverScoreText.text = "Score: " + score.ToString() + ", Best: " + highScore.ToString() + ".";
         gameoverPanel.SetActive(true);
