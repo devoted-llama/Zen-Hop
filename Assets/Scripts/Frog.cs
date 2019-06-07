@@ -52,6 +52,12 @@ public class Frog : MonoBehaviour {
         }
     }
 
+    private void Update() {
+        if (rigidBody.velocity.x > 4f || rigidBody.velocity.y > 4f || rigidBody.velocity.x < -4f || rigidBody.velocity.y < -4f) {
+            SetJump(true);
+        }
+    }
+
 
     void Start() {
         rigidBody = GetComponent<Rigidbody2D>();
@@ -137,23 +143,24 @@ public class Frog : MonoBehaviour {
 
 
     void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.CompareTag("Platform") ||
-            collision.gameObject.CompareTag("StartPlatform") ||
-            collision.gameObject.CompareTag("TransitionPlatform")) {
-            Platform platform = collision.gameObject.GetComponent<Platform>();
-            platform.AnimateBounce();
-            int id = platform.id;
-            if (id != Frog.instance.currentPlatformId) {
-                
-                DoPlatformActions(platform);
+        Platform platform = collision.gameObject.GetComponent<Platform>();
+        if (platform != null) {
+            if (rigidBody.velocity.x < 4f && rigidBody.velocity.y < 4f && rigidBody.velocity.x > -4f && rigidBody.velocity.y > -4f && GetJump() == true) {
+                SetJump(false);
             }
+            platform.AnimateBounce();
+            DoPlatformActions(platform);
         }
     }
 
-    void OnCollisionStay2D(Collision2D collision) {
+
+
+    private void OnCollisionStay2D(Collision2D collision) {
         Platform platform = collision.gameObject.GetComponent<Platform>();
-        if (platform != null && GetJump() == true) {
-            SetJump(false);
+        if (platform != null) {
+            if (rigidBody.velocity.x < 4f && rigidBody.velocity.y < 4f && rigidBody.velocity.x > -4f && rigidBody.velocity.y > -4f && GetJump() == true) { 
+                SetJump(false);
+            }
         }
     }
 
@@ -163,7 +170,15 @@ public class Frog : MonoBehaviour {
     }
 
     IEnumerator DoPlatformActionsCoroutine(Platform platform) {
-        //CameraController.instance.MoveTo(transform, 5f);
+       
+
+        int id = platform.id;
+        if (id == currentPlatformId) {
+            doingPlatformActions = false;
+            // exit
+            yield break;
+        }
+
         yield return new WaitForSecondsRealtime(.5f);
 
         bool landed = false;
@@ -180,7 +195,7 @@ public class Frog : MonoBehaviour {
             }
         }
 
-        if (landed == true && rigidBody.velocity.x < 0.00001f && rigidBody.velocity.y < 0.00001f) {
+        if (landed == true && rigidBody.velocity.x < 0.00001f && rigidBody.velocity.y < 0.00001f && rigidBody.velocity.x > -0.00001f && rigidBody.velocity.y > -0.00001f) {
             currentPlatformId = platform.id;
             if(currentPlatformId > GameController.instance.Score) {
                 GameController.instance.NewScore(currentPlatformId);
@@ -188,7 +203,6 @@ public class Frog : MonoBehaviour {
             if (platform.CompareTag("TransitionPlatform") && PlatformController.instance.transitioning == false) {
                 PlatformController.instance.TransitionPlatformAction(platform);
             }
-            //CameraController.instance.MoveTo(transform, 5f);
         }
 
         doingPlatformActions = false;

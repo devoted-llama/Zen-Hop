@@ -1,0 +1,362 @@
+fileFormatVersion: 2
+guid: 0da9a23ae7b065d4689c01ad1f9dbe94
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: frog_head
+    21300002: frog_arm_upper_left
+    21300004: frog_abdomen
+    21300006: frog_arm_upper_right
+    21300008: frog_arm_fore_left
+    21300010: frog_arm_fore_right
+    21300012: frog_leg_thigh_left
+    21300014: frog_leg_thigh_right
+    21300016: frog_leg_lower_left
+    21300018: frog_leg_lower_right
+    21300020: frog_foot_left
+    21300022: frog_foot_right
+  externalObjects: {}
+  serializedVersion: 9
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: frog_head
+      rect:
+        serializedVersion: 2
+        x: 224.71834
+        y: 1193.9584
+        width: 501.721
+        height: 325.84106
+      alignment: 9
+      pivot: {x: 0.49884632, y: 0.4942337}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d591cb26b515e3e41b1b512aefb68747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frog_arm_upper_left
+      rect:
+        serializedVersion: 2
+        x: 81.46938
+        y: 1065.56
+        width: 215.60626
+        height: 96.70154
+      alignment: 9
+      pivot: {x: 0.50337416, y: 0.5060927}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab5093f02b9b0cd4cb821788eaeed237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frog_abdomen
+      rect:
+        serializedVersion: 2
+        x: 329.91525
+        y: 733.17993
+        width: 292.39896
+        height: 436.07556
+      alignment: 9
+      pivot: {x: 0.49618775, y: 0.49950078}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 302e2c296d85e114aabf1a419f49a2de
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frog_arm_upper_right
+      rect:
+        serializedVersion: 2
+        x: 629.8576
+        y: 1072.54
+        width: 215.60626
+        height: 97.94006
+      alignment: 9
+      pivot: {x: 0.50157326, y: 0.48458293}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec0c2f196227c9c4086ae2c144599cac
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frog_arm_fore_left
+      rect:
+        serializedVersion: 2
+        x: 161.65317
+        y: 879.5839
+        width: 141.29074
+        height: 178.44855
+      alignment: 9
+      pivot: {x: 0.49434838, y: 0.49547133}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a137e643eff930347a485ab1b85cef40
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frog_arm_fore_right
+      rect:
+        serializedVersion: 2
+        x: 648.7936
+        y: 880.6014
+        width: 141.29077
+        height: 178.44855
+      alignment: 9
+      pivot: {x: 0.49335438, y: 0.48976967}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52cd9ff4d64daa94e9387669dbd5f5fa
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frog_leg_thigh_left
+      rect:
+        serializedVersion: 2
+        x: 14.771809
+        y: 466.85516
+        width: 403.87222
+        height: 272.58148
+      alignment: 9
+      pivot: {x: 0.49948522, y: 0.49212745}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2893cc469d0d8e469cba7367b835789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frog_leg_thigh_right
+      rect:
+        serializedVersion: 2
+        x: 509.0351
+        y: 466.85516
+        width: 403.8722
+        height: 272.58148
+      alignment: 9
+      pivot: {x: 0.49759528, y: 0.49212745}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44536ddf380e54349b3d9dee30102030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frog_leg_lower_left
+      rect:
+        serializedVersion: 2
+        x: 42.50719
+        y: 75.59824
+        width: 200.74315
+        height: 395.2021
+      alignment: 9
+      pivot: {x: 0.4931317, y: 0.49823067}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7de5184a75b54a418c1d29f4402defe
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frog_leg_lower_right
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 75.94776
+        width: 200.74316
+        height: 393.71582
+      alignment: 9
+      pivot: {x: 0.49814928, y: 0.4992237}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95319493359327742a9135b7786d8bd6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frog_foot_left
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 241.57106
+        height: 47.08496
+      alignment: 9
+      pivot: {x: 0.4884691, y: 0.44600227}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a46d8454a899ec4faa7611ebdf2eeed
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frog_foot_right
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 0
+        width: 241
+        height: 47.08496
+      alignment: 9
+      pivot: {x: 0.5103737, y: 0.44600227}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 978fdfd4fcf6dac498aba1cccc223751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 9603a86d10050ed48be762aeb7e64a30
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 1
+  userData: 636955069477873757
+  assetBundleName: 
+  assetBundleVariant: 
