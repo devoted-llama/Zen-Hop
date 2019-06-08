@@ -94,8 +94,10 @@ public class PowerButtonController : MonoBehaviour {
 
             if (Input.GetButtonUp ("Fire1")) {
                 foreach (RaycastResult result in results) {
-                    Frog.instance.SetAim (false);
-                    Frog.instance.Jump ();
+                    if (powerButton.IsInteractable()) {
+                        Frog.instance.SetAim(false);
+                        Frog.instance.Jump();
+                    }
                 }
             }
         }
