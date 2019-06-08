@@ -14,6 +14,9 @@ TextureImporter:
     21300018: frog_leg_lower_right
     21300020: frog_foot_left
     21300022: frog_foot_right
+    21300024: frog_0
+    21300026: frog_eyelid_mask
+    21300028: frog_eyelid
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -346,6 +349,46 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: frog_eyelid_mask
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 235
+        width: 116
+        height: 116
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 313d5a56392b50c43bd8677b30e2f9fa
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frog_eyelid
+      rect:
+        serializedVersion: 2
+        x: 511.99994
+        y: 235.84454
+        width: 114.04181
+        height: 115.21243
+      alignment: 9
+      pivot: {x: 0.49543235, y: 0.49608758}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 639c5c4aae201c743bb3ad84bfe7e49d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -357,6 +400,6 @@ TextureImporter:
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 1
-  userData: 636955069477873757
+  userData: 636955382933202845
   assetBundleName: 
   assetBundleVariant: 
