@@ -17,6 +17,7 @@ TextureImporter:
     21300024: sprites-01_11
     21300026: sprites-01_13
     21300028: sprites-01_14
+    21300030: sprites-water
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -225,6 +226,26 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 7ec08605519967544ab91395a15122b9
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sprites-water
+      rect:
+        serializedVersion: 2
+        x: 1655
+        y: 2
+        width: 1699
+        height: 715
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 759eb3b8d68d24945b82ff02cae2257a
       vertices: []
       indices: 
       edges: []
