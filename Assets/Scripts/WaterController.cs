@@ -18,12 +18,12 @@ public class WaterController : MonoBehaviour
     private void Awake() {
         startPos = transform.position.x;
         sprite1 = transform.GetChild(0).transform;
-        width = sprite1.GetComponent<SpriteRenderer>().bounds.size.x;
+        width = sprite1.localScale.x;
         Vector3 sprite2Pos = sprite1.localPosition;
         Debug.Log(sprite2Pos.x);
         sprite2Pos.x -= width;
         Debug.Log(sprite2Pos.x);
-        sprite2 = Instantiate(sprite1.GetComponent<SpriteRenderer>(), transform).transform;
+        sprite2 = Instantiate(sprite1.GetComponent<SineWave>(), transform).transform;
         sprite2.transform.localPosition = sprite2Pos;
     }
 
