@@ -1,25 +1,57 @@
 fileFormatVersion: 2
 guid: b97fcf4ac14c9634197b4df58f8aa69b
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: sprites-circle_black
-    21300002: sprites-lily
-    21300004: sprites-aimer
-    21300006: sprites-circle_white
-    21300008: sprites-reset
-    21300010: sprites-play
-    21300012: sprites-01_6
-    21300014: sprites-01_7
-    21300016: sprites-01_8
-    21300018: sprites-01_9
-    21300020: sprites-01_10
-    21300022: sprites-01_12
-    21300024: sprites-01_11
-    21300026: sprites-01_13
-    21300028: sprites-01_14
-    21300030: sprites-water
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: sprites-circle_black
+  - first:
+      213: 21300002
+    second: sprites-lily
+  - first:
+      213: 21300004
+    second: sprites-aimer
+  - first:
+      213: 21300006
+    second: sprites-circle_white
+  - first:
+      213: 21300008
+    second: sprites-reset
+  - first:
+      213: 21300010
+    second: sprites-play
+  - first:
+      213: 21300012
+    second: sprites-01_6
+  - first:
+      213: 21300014
+    second: sprites-01_7
+  - first:
+      213: 21300016
+    second: sprites-01_8
+  - first:
+      213: 21300018
+    second: sprites-01_9
+  - first:
+      213: 21300020
+    second: sprites-01_10
+  - first:
+      213: 21300022
+    second: sprites-01_12
+  - first:
+      213: 21300024
+    second: sprites-01_11
+  - first:
+      213: 21300026
+    second: sprites-01_13
+  - first:
+      213: 21300028
+    second: sprites-01_14
+  - first:
+      213: 21300030
+    second: sprites-water
   externalObjects: {}
-  serializedVersion: 9
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -73,8 +105,9 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  applyGammaDecoding: 1
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -85,7 +118,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -96,7 +130,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
     buildTarget: iPhone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -107,6 +142,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -126,6 +162,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 2e8b91325ececc245b2016eddd0c43e1
+      internalID: 21300000
       vertices: []
       indices: 
       edges: []
@@ -146,6 +183,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 4a5565421931f804195d857c6a5a3a45
+      internalID: 21300002
       vertices: []
       indices: 
       edges: []
@@ -166,6 +204,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 5f67291cec1a64c4ba020aa5fea68b05
+      internalID: 21300004
       vertices: []
       indices: 
       edges: []
@@ -186,6 +225,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 20b0192f4666cdc449a9c8b9915567a9
+      internalID: 21300006
       vertices: []
       indices: 
       edges: []
@@ -206,6 +246,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 14f67198b78bf75439df2e7fbb2e14d9
+      internalID: 21300008
       vertices: []
       indices: 
       edges: []
@@ -226,6 +267,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 7ec08605519967544ab91395a15122b9
+      internalID: 21300010
       vertices: []
       indices: 
       edges: []
@@ -234,10 +276,10 @@ TextureImporter:
       name: sprites-water
       rect:
         serializedVersion: 2
-        x: 1655
-        y: 2
-        width: 1699
-        height: 715
+        x: 1348
+        y: 154
+        width: 2681
+        height: 710
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -246,6 +288,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 759eb3b8d68d24945b82ff02cae2257a
+      internalID: 21300030
       vertices: []
       indices: 
       edges: []
@@ -254,10 +297,12 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 6e0020bfe8b9d91408b7efa46c45f8df
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
+    secondaryTextures: []
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 1
