@@ -96,7 +96,7 @@ public class GameController : MonoBehaviour {
 
 
     public void RebootWithAds() {
-        if (Time.unscaledTime - TimeSinceAd < timeBetweenAds) {
+        if (AdController.instance == null || Time.unscaledTime - TimeSinceAd < timeBetweenAds) {
             Reboot();
         } else {
             AdController.instance.AdFinished += Reboot;
@@ -115,7 +115,9 @@ public class GameController : MonoBehaviour {
         Frog.instance.Respawn();
         gameoverPanel.SetActive(false);
         gamePanel.SetActive(true);
-        AdController.instance.AdFinished -= Reboot;
+        if (AdController.instance != null) {
+            AdController.instance.AdFinished -= Reboot;
+        }
     }
 
     public void ResetToTitleScreen() {
