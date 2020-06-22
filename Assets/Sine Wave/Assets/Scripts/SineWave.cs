@@ -8,6 +8,11 @@ public enum Direction {
 
 [ExecuteInEditMode,RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class SineWave : MonoBehaviour {
+    public bool solid = true;
+
+    [Range(-1f, 1f)]
+    public float thickness = 0;
+
     public Direction direction = Direction.right;
 
     [Range(0f, 1f)]
@@ -55,10 +60,11 @@ public class SineWave : MonoBehaviour {
 
     float updateTime = 0.01f;
 
-    Vector3[] vertices;
+    public Vector3[] vertices;
     Mesh mesh;
 
     public float time = 0f;
+
 
     private void Awake() {
         Generate();
@@ -68,11 +74,24 @@ public class SineWave : MonoBehaviour {
     IEnumerator Sinify() {
         while (true) {
             float deg = 0;
-            for (int i = polygons + 1; i < vertices.Length; deg += WaveLength / polygons, i++) {
-                float rad = Mathf.Deg2Rad * deg;
-                float y = amplitude * Mathf.Sin((AngularFrequency * time) + rad);
-                vertices[i].y = y + height;
+            if (solid == true) {
+                for (int i = polygons + 1; i < vertices.Length; deg += WaveLength / polygons, i++) {
+                    float rad = Mathf.Deg2Rad * deg;
+                    float y = amplitude * Mathf.Sin((AngularFrequency * time) + rad);
+                    vertices[i].y = y + height;
+                }
+            } else {
+                for (int i = polygons + 1; i < vertices.Length; deg += WaveLength / polygons, i++) {
+                    float rad = Mathf.Deg2Rad * deg;
+                    float y = (-amplitude / Mathf.Sqrt(1 + Mathf.Pow(Mathf.Cos((AngularFrequency*time) + rad),2))) + amplitude;
+                    vertices[i].y = y + height;
+
+                    y = (amplitude / Mathf.Sqrt(1 + Mathf.Pow(Mathf.Cos((AngularFrequency * time) + rad + (Mathf.PI /2)), 2))) - amplitude - thickness;
+                    vertices[i - polygons - 1].y = y + height;
+                }
+
             }
+            
 
             mesh.vertices = vertices;
             mesh.RecalculateNormals();
