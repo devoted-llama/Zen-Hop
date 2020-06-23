@@ -85,9 +85,7 @@ public class PlatformController : MonoBehaviour {
                 platforms[i].AnimateVisible();
             }
             if(i < amount-newPlatforms) {
-                if(i == 2) {
-                    platforms[i].bounceTime = Time.time;
-                }
+                platforms[i].bounceTime = Time.time;
                 platforms [i].transform.position = platforms [i + (newPlatforms)].transform.position;
             }
             if (i >= repositionIndex) {
