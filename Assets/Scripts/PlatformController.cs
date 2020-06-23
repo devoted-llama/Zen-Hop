@@ -7,11 +7,11 @@ public class PlatformController : MonoBehaviour {
 
     public Platform platformPrefab;
 
-    const float startPosition = 0f;
-    const int amount = 6;
-    const float platformSeparation = 4f;
-    const int transitionPlatformIndex = 3;
-    const float depth = -2.45f;
+    float startPosition = 0f;
+    public int amount = 20;
+    public float platformSeparation = 4f;
+    int transitionPlatformIndex { get { return amount / 2; } }
+    float depth = -2.45f;
 
     public float minHeight;
     public float maxHeight;
@@ -49,7 +49,7 @@ public class PlatformController : MonoBehaviour {
     void GeneratePlatforms(float start) {
         for (int i = 0; i < amount; i++) {
             if (GameController.instance.Score == 0) {
-                Vector3 position = new Vector3 (start + (i * 4), Random.Range (minHeight, maxHeight), -2.45f);
+                Vector3 position = new Vector3 (start + (i * platformSeparation), Random.Range (minHeight, maxHeight), depth);
                 platforms [i].transform.position = position;
                 platforms[i].id = i;
             }
@@ -70,13 +70,11 @@ public class PlatformController : MonoBehaviour {
     }
 
     IEnumerator RepositionPlatformsCoroutine(int index) {
-        //index - 2 = the number of "new" platforms to create
-        int newPlatforms = index - 2;
+        int newPlatforms = index - transitionPlatformIndex;
 
         float startX = platforms[newPlatforms].transform.position.x;
-
-        // 8 - index = the starting index of the "new" platforms
-        int repositionIndex = 8 - index;
+        
+        int repositionIndex = amount + transitionPlatformIndex - index;
         for (int i = 0; i < amount; i++) {
             
             platforms[i].id += newPlatforms;
@@ -94,7 +92,7 @@ public class PlatformController : MonoBehaviour {
             }
             if (i >= repositionIndex) {
                 platforms[i].AnimateInvisible();
-                Vector3 position = new Vector3 (startX + (i * 4), Random.Range (2, 8), depth);
+                Vector3 position = new Vector3 (startX + (i * platformSeparation), Random.Range (minHeight, maxHeight), depth);
                 platforms [i].transform.position = position;
                 platforms[i].AnimateFadeIn();
             }
