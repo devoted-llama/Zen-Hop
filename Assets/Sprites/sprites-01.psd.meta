@@ -1,28 +1,28 @@
 fileFormatVersion: 2
-guid: 936b190585754a0458dde8d7e0504b98
+guid: c9644cd7f19680b419efc1a78bad199c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6128299156075563123
-    second: sprites_black_ball
+      213: -8063389566774839230
+    second: sprites-black-circle
   - first:
-      213: 3386662938922423588
-    second: sprites_hexagon
+      213: 4339604125760024862
+    second: sprites-power-button
   - first:
-      213: -6110656803992641779
-    second: sprites_controller
+      213: 834441551224903031
+    second: sprites-white-circle
   - first:
-      213: 8553092956536608252
-    second: sprites_white_ball
+      213: -6801801844444778299
+    second: sprites-reset
   - first:
-      213: 6708733205153277002
-    second: sprites_platform
+      213: -2294724076887565222
+    second: sprites-platform
   - first:
-      213: 6813553822765877458
-    second: sprites_restart
+      213: -7425856497852158053
+    second: sprites-play
   - first:
-      213: -5082647686934749709
-    second: sprites_play
+      213: 4140464319912937634
+    second: sprites-platform
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -120,7 +120,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sprites_black_ball
+      name: sprites-black-circle
       rect:
         serializedVersion: 2
         x: 74
@@ -134,35 +134,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 378c5330d971c0550800000000000000
-      internalID: 6128299156075563123
+      spriteID: 2487bc229e5191090800000000000000
+      internalID: -8063389566774839230
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sprites_hexagon
-      rect:
-        serializedVersion: 2
-        x: 610
-        y: 3756
-        width: 521
-        height: 471
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4259378eff7dffe20800000000000000
-      internalID: 3386662938922423588
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: sprites_controller
+      name: sprites-power-button
       rect:
         serializedVersion: 2
         x: 2560
@@ -176,14 +155,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d0fd1bd2306923ba0800000000000000
-      internalID: -6110656803992641779
+      spriteID: e11febdc5fe593c30800000000000000
+      internalID: 4339604125760024862
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sprites_white_ball
+      name: sprites-white-circle
       rect:
         serializedVersion: 2
         x: 74
@@ -197,35 +176,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cf5924d4ab0b2b670800000000000000
-      internalID: 8553092956536608252
+      spriteID: 77516967b28849b00800000000000000
+      internalID: 834441551224903031
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sprites_platform
-      rect:
-        serializedVersion: 2
-        x: 678
-        y: 3348
-        width: 1688
-        height: 194
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a4467024e453a1d50800000000000000
-      internalID: 6708733205153277002
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: sprites_restart
+      name: sprites-reset
       rect:
         serializedVersion: 2
         x: 141
@@ -239,14 +197,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2d807ff1a1b9e8e50800000000000000
-      internalID: 6813553822765877458
+      spriteID: 5c0b54d82452b91a0800000000000000
+      internalID: -6801801844444778299
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sprites_play
+      name: sprites-play
       rect:
         serializedVersion: 2
         x: 220
@@ -260,8 +218,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3fd1bc59bdec679b0800000000000000
-      internalID: -5082647686934749709
+      spriteID: b9fee7cebde02f890800000000000000
+      internalID: -7425856497852158053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sprites-platform
+      rect:
+        serializedVersion: 2
+        x: 887
+        y: 3965
+        width: 1138
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a80791ac52e57930800000000000000
+      internalID: 4140464319912937634
       vertices: []
       indices: 
       edges: []
