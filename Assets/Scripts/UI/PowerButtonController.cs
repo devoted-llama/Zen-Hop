@@ -82,7 +82,7 @@ public class PowerButtonController : MonoBehaviour {
                             modifier = 360f;
                         }
 
-                        Frog.instance.SetAimerAngle (angle, modifier);
+                        Frog.instance.SetJumpAngle (angle, modifier);
                         //Debug.Log (Vector2.Distance (point1, point2));
                         //Debug.LogFormat ("radius:{0},dist:{1}", radius, Vector2.Distance (point1, point2));
 

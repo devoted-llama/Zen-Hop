@@ -7,7 +7,6 @@ using UnityEngine.EventSystems;
 public class Frog : MonoBehaviour {
     public static Frog instance = null;
 
-    public GameObject aimer;
     public float powerForceMultiplier;
     float powerAmount = 0;
     float powerWithMultiplier { get { return powerAmount * powerForceMultiplier; } }
@@ -19,8 +18,6 @@ public class Frog : MonoBehaviour {
 
     public Button powerButton;
 
-    public SpriteMask powerStickMask;
-    float powerStickMaskSize = 2.53f;
 
     public Rigidbody2D rigidBody;
 
@@ -29,6 +26,8 @@ public class Frog : MonoBehaviour {
     public bool doingPlatformActions = false;
 
     Vector3 startPosition;
+
+    float jumpAngle;
 
     void Awake() {
         if (instance == null) {
@@ -80,41 +79,36 @@ public class Frog : MonoBehaviour {
         rigidBody.AddForce(GetForce());
 
         SetPower(0);
-        UpdateAmountUI();
     }
 
-    public void SetAimerAngle(float angle, float modifier = 0) {
+    public void SetJumpAngle(float angle, float modifier = 0) {
         if (!float.IsNaN(angle)) {
-            Quaternion qAngle = aimer.transform.localRotation;
-            Vector3 eulerAngle = qAngle.eulerAngles;
-            eulerAngle.z = modifier + angle;
-            qAngle.eulerAngles = eulerAngle;
-            aimer.transform.localRotation = qAngle;
+            jumpAngle = modifier + angle;
         }
     }
 
 
     Vector2 GetForce() {
-        float angle = aimer.transform.localEulerAngles.z;
+        float angle = jumpAngle;
 
         float ratio = 0f;
         float forceX = 0f;
         float forceY = 0f;
 
         if (angle >= 0 && angle <= 90) {
-            ratio = aimer.transform.localEulerAngles.z / 90f;
+            ratio = angle / 90f;
             forceX = ratio * powerWithMultiplier;
             forceY = (1 - ratio) * powerWithMultiplier;
         } else if (angle > 90 && angle <= 180) {
-            ratio = (aimer.transform.localEulerAngles.z - 90) / 90f;
+            ratio = (angle - 90) / 90f;
             forceX = (1 - ratio) * powerWithMultiplier;
             forceY = -(ratio) * powerWithMultiplier;
         } else if (angle > 180 && angle <= 270) {
-            ratio = (aimer.transform.localEulerAngles.z - 180) / 90f;
+            ratio = (angle - 180) / 90f;
             forceX = -ratio * powerWithMultiplier;
             forceY = -(1 - ratio) * powerWithMultiplier;
         } else if (angle > 270 && angle <= 360) {
-            ratio = (aimer.transform.localEulerAngles.z - 270) / 90f;
+            ratio = (angle - 270) / 90f;
             forceX = -(1 - ratio) * powerWithMultiplier;
             forceY = ratio * powerWithMultiplier;
         }
@@ -130,15 +124,6 @@ public class Frog : MonoBehaviour {
     public void SetPower(float power) {
         power = power > 1 ? 1 : power;
         powerAmount = power * 100;
-        UpdateAmountUI();
-    }
-
-    void UpdateAmountUI() {
-
-        float size = (powerStickMaskSize - 1) * (powerAmount / 100f);
-        Vector3 pos = powerStickMask.transform.localPosition;
-        pos.y = 1 + size;
-        powerStickMask.transform.localPosition = pos;
     }
 
 
