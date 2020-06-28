@@ -7,30 +7,35 @@ using System.Collections.Generic;
 public class CircleGenerator : MonoBehaviour {
     readonly int[] polygonArray = new int[] {3, 3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360 };
 
-    [SerializeField, Range(0, 10)]
+    [Range(0, 10)]
     public float size = 1;
 
-    [SerializeField, Range(1, 3)]
+    [Range(1, 3)]
     public float thickness = 0.5f;
 
-    [SerializeField, Range(0, 360)]
+    [Range(0, 360)]
     public int completion = 360;
 
-    [SerializeField, Range(0, 360)]
-    public int angle = 0;
+    [Range(0, 360)]
+    public int angle = 90;
 
-    [SerializeField, Range(1,22)]
-    int polygons = 1;
+    [Range(1,22)]
+    public int polygons = 1;
 
     public bool keepPolygonAmountConsistent = false;
     
 
     Vector3[] vertices;
     Mesh mesh;
-    
+
+    private void OnValidate() {
+        Generate();
+    }
+
     void Awake() {
         Generate();
     }
+
 
     public void Generate() {
         if(mesh == null) {
