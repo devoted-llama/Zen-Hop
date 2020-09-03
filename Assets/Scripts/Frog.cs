@@ -233,5 +233,11 @@ public class Frog : MonoBehaviour {
         StartCoroutine(RespawnCoroutine());
     }
 
+    public Collider2D[] GetRigidbodyContacts(int amount) {
+        Collider2D[] colliders = new Collider2D[amount];
+        rigidBody.GetContacts(colliders);
+        return colliders;
+    }
+
 
 }
