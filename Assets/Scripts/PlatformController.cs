@@ -18,8 +18,6 @@ public class PlatformController : MonoBehaviour {
 
     Platform[] platforms;
 
-
-
     public bool transitioning = false;
 
     void Awake() {
@@ -99,28 +97,34 @@ public class PlatformController : MonoBehaviour {
         transitioning = false;
     }
 
+    bool CheckRigidbodyContactsHasPlatform(Collider2D[] contacts, Platform platform) {
+        for (int i = 0; i < contacts.Length; i++) {
+            if (contacts[i] != null) {
+                Platform platformContact = contacts[i].GetComponent<Platform>();
+                if (platformContact != null && platform.Equals(platformContact)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    bool GetFrogIsTouchingPlatform(Platform platform) {
+        Collider2D[] frogContacts = Frog.instance.GetRigidbodyContacts(2);
+        return CheckRigidbodyContactsHasPlatform(frogContacts, platform);
+    }
+
 
     public void TransitionPlatformAction(Platform platform) {
-        transitioning = true;
-
-        int index = GetIndexOfPlatform(platform);
-
-        platforms[index].tag = "TransitionPlatform__";
-
-        int colliderSize = 2;
-        bool transitionPlatform = false;
-
-        Collider2D[] colliders = new Collider2D[colliderSize];
-        Frog.instance.rigidBody.GetContacts(colliders);
-        for (int i = 0; i < colliderSize; i++) {
-            if (colliders[i] != null && colliders[i].CompareTag("TransitionPlatform__"))
-                transitionPlatform = true;
+        if(platform.CompareTag("TransitionPlatform") == false) {
+            return; // oops, we're not a transition platform!
         }
-
-        if (transitionPlatform == true) {
+        transitioning = true;
+        int index = GetIndexOfPlatform(platform);
+        
+        if (GetFrogIsTouchingPlatform(platform) == true) {
             RepositionPlatforms(index);
         }
-        platforms[index].tag = "TransitionPlatform";
     }
 
     int GetIndexOfPlatform(Platform platform) {
