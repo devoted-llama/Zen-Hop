@@ -8,9 +8,9 @@ public class PlatformController : MonoBehaviour {
     public Platform platformPrefab;
 
     float startPosition = 0f;
-    public int amount = 20;
+    public int numberOfPlatforms = 20;
     public float platformSeparation = 4f;
-    int transitionPlatformIndex { get { return amount / 2; } }
+    int transitionPlatformIndex { get { return numberOfPlatforms / 2; } } 
     float depth = -2.45f;
 
     public float minHeight;
@@ -19,6 +19,8 @@ public class PlatformController : MonoBehaviour {
     Platform[] platforms;
 
     public bool transitioning = false;
+
+    int numberOfNewPlatforms;
 
     void Awake() {
         if (instance == null) {
@@ -34,7 +36,7 @@ public class PlatformController : MonoBehaviour {
     }
 
     void InitialisePlatforms() {
-        platforms = new Platform[(int)amount];
+        platforms = new Platform[(int)numberOfPlatforms];
         for (int i = 0; i < platforms.Length; i++) {
             platforms[i] = Instantiate(platformPrefab);
         }
@@ -45,7 +47,7 @@ public class PlatformController : MonoBehaviour {
     }
 
     void GeneratePlatforms(float start) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < numberOfPlatforms; i++) {
             if (GameController.instance.Score == 0) {
                 Vector3 position = new Vector3 (start + (i * platformSeparation), Random.Range (minHeight, maxHeight), depth);
                 platforms [i].transform.position = position;
@@ -63,38 +65,37 @@ public class PlatformController : MonoBehaviour {
         }
     }
 
-    void RepositionPlatforms(int index) {
-        StartCoroutine(RepositionPlatformsCoroutine(index));
+    void RepositionNewPlatform(int index, int triggerPlatformIndex, float startX) {
+        int repositionIndex = numberOfPlatforms + transitionPlatformIndex - triggerPlatformIndex - 1;
+        
+        if (index >= repositionIndex) {
+            platforms[index].AnimateInvisible();
+            Vector3 position = new Vector3(startX + (index * platformSeparation), Random.Range(minHeight, maxHeight), depth);
+            platforms[index].transform.position = position;
+            platforms[index].AnimateFadeIn();
+        }
     }
 
-    IEnumerator RepositionPlatformsCoroutine(int index) {
-        int newPlatforms = index - transitionPlatformIndex;
+    void RepositionExistingPlatform(int index) {
+        if (index < numberOfPlatforms - numberOfNewPlatforms) {
+            platforms[index].bounceTime = Time.time;
+            platforms[index].transform.position = platforms[index + (numberOfNewPlatforms)].transform.position;
+        }
+    }
 
-        float startX = platforms[newPlatforms].transform.position.x;
-        
-        int repositionIndex = amount + transitionPlatformIndex - index;
-        for (int i = 0; i < amount; i++) {
-            
-            platforms[i].id += newPlatforms;
+    void RepositionPlatforms(int triggerPlatformIndex) {
+        numberOfNewPlatforms = triggerPlatformIndex - transitionPlatformIndex + 1;
 
-            if(i < newPlatforms) {
-                platforms[i].AnimateFadeOut();
-                yield return new WaitForSecondsRealtime(.2f);
-                platforms[i].AnimateVisible();
-            }
-            if(i < amount-newPlatforms) {
-                platforms[i].bounceTime = Time.time;
-                platforms [i].transform.position = platforms [i + (newPlatforms)].transform.position;
-            }
-            if (i >= repositionIndex) {
-                platforms[i].AnimateInvisible();
-                Vector3 position = new Vector3 (startX + (i * platformSeparation), Random.Range (minHeight, maxHeight), depth);
-                platforms [i].transform.position = position;
-                platforms[i].AnimateFadeIn();
-            }
+        if(numberOfNewPlatforms == 0) {
+            return;
+        }
+        float startX = platforms[numberOfNewPlatforms].transform.position.x;
+        for (int i = 0; i < numberOfPlatforms; i++) {
+            platforms[i].id += numberOfNewPlatforms;
+            RepositionExistingPlatform(i );
+            RepositionNewPlatform(i, triggerPlatformIndex, startX);
             
         }
-        transitioning = false;
     }
 
     bool CheckRigidbodyContactsHasPlatform(Collider2D[] contacts, Platform platform) {
@@ -120,11 +121,12 @@ public class PlatformController : MonoBehaviour {
             return; // oops, we're not a transition platform!
         }
         transitioning = true;
-        int index = GetIndexOfPlatform(platform);
+        int platformIndex = GetIndexOfPlatform(platform);
         
         if (GetFrogIsTouchingPlatform(platform) == true) {
-            RepositionPlatforms(index);
+            RepositionPlatforms(platformIndex);
         }
+        transitioning = false;
     }
 
     int GetIndexOfPlatform(Platform platform) {
