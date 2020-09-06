@@ -112,13 +112,10 @@ public class Frog : MonoBehaviour {
             forceX = -(1 - ratio) * powerWithMultiplier;
             forceY = ratio * powerWithMultiplier;
         }
-
-        //Debug.LogFormat ("x: {0}, y: {1}", forceX, forceY);
-
+        
         Vector2 force = new Vector2(forceX, forceY);
 
         return force;
-
     }
 
     public void SetPower(float power) {
@@ -167,17 +164,9 @@ public class Frog : MonoBehaviour {
         yield return new WaitForSecondsRealtime(.5f);
 
         bool landed = false;
-        int colliderSize = 2;
-        Collider2D[] colliders = new Collider2D[colliderSize];
-        rigidBody.GetContacts(colliders);
-        for (int i = 0; i < colliderSize; i++) {
 
-            if (colliders[i] != null) { 
-                platform = colliders[i].GetComponent<Platform>();
-                if (platform != null) {
-                    landed = true;
-                }
-            }
+        if (Helper.CheckRigidBodyContactsHasComponent<Platform>(rigidBody)) {
+            landed = true;
         }
 
         if (landed == true && rigidBody.velocity.x < 0.00001f && rigidBody.velocity.y < 0.00001f && rigidBody.velocity.x > -0.00001f && rigidBody.velocity.y > -0.00001f) {

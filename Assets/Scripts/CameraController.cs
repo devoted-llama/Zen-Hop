@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour {
     public Vector3 endMarker;
     public const float titleScreenPosition = -12f;
     float speed = 10.0f;
+    const float SPEED = 10.0f;
     float startTime;
     float journeyLength;
 
@@ -35,7 +36,7 @@ public class CameraController : MonoBehaviour {
         }
     }
 
-    public void Move(Vector3 end, float speed = 10f) {
+    public void Move(Vector3 end, float speed = SPEED) {
         this.speed = speed;
         startMarker = transform.position;
         endMarker = end;
@@ -51,9 +52,7 @@ public class CameraController : MonoBehaviour {
             transform.position = Vector3.Lerp (startMarker, endMarker, fracJourney);
             if (transform.position == endMarker) {
                 moving = false;
-                if(finishMoving != null) {
-                    finishMoving();
-                }
+                finishMoving?.Invoke();
             }
         } else if(GameController.instance.playing == true && Frog.instance.gameObject.activeSelf == true){
             Vector3 pos = transform.position;
@@ -68,7 +67,7 @@ public class CameraController : MonoBehaviour {
         }
     }
 
-    public void MoveTo(Transform t, float speed = 10f) {
+    public void MoveTo(Transform t, float speed = SPEED) {
         this.speed = speed;
         Vector3 pos = transform.position;
         pos.x = t.position.x;

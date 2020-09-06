@@ -110,7 +110,7 @@ public class GameController : MonoBehaviour {
         ResetLives();
         UpdateUI();
         Random.state = randomState;
-        PlatformController.instance.GeneratePlatforms();
+        PlatformController.instance.PositionStartingPlatforms();
         Frog.instance.gameObject.SetActive(true);
         Frog.instance.Respawn();
         gameoverPanel.SetActive(false);
@@ -134,7 +134,7 @@ public class GameController : MonoBehaviour {
         CameraController.instance.MoveToTitleScreenPosition();
         Frog.instance.ResetToStartPosition();
         Random.state = randomState;
-        PlatformController.instance.GeneratePlatforms();
+        PlatformController.instance.PositionStartingPlatforms();
         yield return new WaitUntil(() => Camera.main.transform.position.x == CameraController.titleScreenPosition);
         gameStartPanel.SetActive(true);
     }
