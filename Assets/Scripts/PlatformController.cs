@@ -31,22 +31,22 @@ public class PlatformController : MonoBehaviour {
     }
 
     void Start() {
-        InitialisePlatforms();
-        GeneratePlatforms ();
+        InstantiatePlatforms();
+        PositionStartingPlatforms();
     }
 
-    void InitialisePlatforms() {
+    void InstantiatePlatforms() {
         platforms = new Platform[(int)numberOfPlatforms];
         for (int i = 0; i < platforms.Length; i++) {
             platforms[i] = Instantiate(platformPrefab);
         }
     }
 
-    public void GeneratePlatforms() {
-        GeneratePlatforms(startPosition);
+    public void PositionStartingPlatforms() {
+        PositionStartingPlatforms(startPosition);
     }
 
-    void GeneratePlatforms(float start) {
+    void PositionStartingPlatforms(float start) {
         for (int i = 0; i < numberOfPlatforms; i++) {
             if (GameController.instance.Score == 0) {
                 Vector3 position = new Vector3 (start + (i * platformSeparation), Random.Range (minHeight, maxHeight), depth);
@@ -64,6 +64,7 @@ public class PlatformController : MonoBehaviour {
             }
         }
     }
+
 
     void RepositionNewPlatform(int index, int triggerPlatformIndex, float startX) {
         int repositionIndex = numberOfPlatforms + transitionPlatformIndex - triggerPlatformIndex - 1;
@@ -94,25 +95,12 @@ public class PlatformController : MonoBehaviour {
             platforms[i].id += numberOfNewPlatforms;
             RepositionExistingPlatform(i );
             RepositionNewPlatform(i, triggerPlatformIndex, startX);
-            
         }
-    }
-
-    bool CheckRigidbodyContactsHasPlatform(Collider2D[] contacts, Platform platform) {
-        for (int i = 0; i < contacts.Length; i++) {
-            if (contacts[i] != null) {
-                Platform platformContact = contacts[i].GetComponent<Platform>();
-                if (platformContact != null && platform.Equals(platformContact)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     bool GetFrogIsTouchingPlatform(Platform platform) {
         Collider2D[] frogContacts = Frog.instance.GetRigidbodyContacts(2);
-        return CheckRigidbodyContactsHasPlatform(frogContacts, platform);
+        return Helper.CheckRigidBodyContactsGameObjectHasComponent<Platform>(Frog.instance.rigidBody, platform.gameObject);
     }
 
 
