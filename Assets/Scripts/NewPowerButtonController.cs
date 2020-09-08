@@ -32,7 +32,7 @@ public class NewPowerButtonController : MonoBehaviour
 
         if (Input.GetButtonUp("Fire1") && showing) {
             Hide();
-            Frog.instance.Jump();
+            Player.Instance.Jump();
         }
     }
 
@@ -50,7 +50,7 @@ public class NewPowerButtonController : MonoBehaviour
         powerRing.completion = (int)(360 * power);
         powerRing.Generate();
 
-        Frog.instance.SetPower(power);
+        Player.Instance.SetPower(power);
     }
 
     void SetAngle(Vector3 buttonPos, Vector3 mousePos) {
@@ -71,7 +71,7 @@ public class NewPowerButtonController : MonoBehaviour
             modifier = 360f;
         }
 
-        Frog.instance.SetJumpAngle(angle, modifier);
+        Player.Instance.SetJumpAngle(angle, modifier);
     }
 
     void Show() {
