@@ -42,7 +42,7 @@ public class Platform : MonoBehaviour {
             animator.SetTrigger(bounceHash);
         }
     }
-    
+
     bool CanBounce() {
         if(Time.time > bounceTime + bounceWaitTime) {
             return true;

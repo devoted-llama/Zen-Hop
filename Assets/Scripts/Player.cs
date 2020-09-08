@@ -20,9 +20,12 @@ public class Player : MonoBehaviour {
     int jumpHash = Animator.StringToHash("Jump");
 
     int currentPlatformId = 0;
-    bool doingPlatformActions = false;
     Vector3 startPosition;
     float jumpAngle = 0;
+    bool doingPlatformActionsCoroutine = false;
+
+    public delegate void PlatformLandedAction(int platformId);
+    public event PlatformLandedAction OnPlatformLanded;
 
     void Awake() {
         if (Instance == null) {
@@ -47,7 +50,7 @@ public class Player : MonoBehaviour {
     }
 
     private void Update() {
-        if (GetRigidBodyGreaterThanVelocity(4f)) {
+        if (GetRigidBodyVelocityGreaterThan(4f)) {
             SetJumpAnimation(true);
         }
     }
@@ -60,7 +63,7 @@ public class Player : MonoBehaviour {
     }
 
     public void Jump() {
-        if (gameObject.activeSelf && GetRigidBodyEqualsVelocity(0)) {
+        if (gameObject.activeSelf && GetRigidBodyVelocityEquals(0)) {
             StartCoroutine(JumpCoroutine());
         }
     }
@@ -119,9 +122,10 @@ public class Player : MonoBehaviour {
 
 
     void OnCollisionEnter2D(Collision2D collision) {
+
         Platform platform = collision.gameObject.GetComponent<Platform>();
         if (platform != null) {
-            if (GetRigidBodyLessThanVelocity(4f) && GetJumpAnimation() == true) {
+            if (GetRigidBodyVelocityLessThan(4f) && GetJumpAnimation() == true) {
                 SetJumpAnimation(false);
             }
             platform.AnimateBounce();
@@ -134,64 +138,69 @@ public class Player : MonoBehaviour {
     private void OnCollisionStay2D(Collision2D collision) {
         Platform platform = collision.gameObject.GetComponent<Platform>();
         if (platform != null) {
-            if (GetRigidBodyLessThanVelocity(4f) && GetJumpAnimation() == true) {
+            if (GetRigidBodyVelocityLessThan(4f) && GetJumpAnimation() == true) {
                 SetJumpAnimation(false);
             }
         }
     }
 
     void DoPlatformActions(Platform platform) {
-        doingPlatformActions = true;
-        StartCoroutine(DoPlatformActionsCoroutine(platform));
+         StartCoroutine(DoPlatformActionsCoroutine(platform));
     }
 
-    bool GetRigidBodyGreaterThanVelocity(float velocity) {
+    bool GetRigidBodyVelocityGreaterThan(float velocity) {
         return RigidBody.velocity.x > velocity || 
             RigidBody.velocity.y > velocity || 
             RigidBody.velocity.x < -velocity || 
             RigidBody.velocity.y < -velocity;
     }
 
-    bool GetRigidBodyEqualsVelocity(float velocity) {
+    bool GetRigidBodyVelocityEquals(float velocity) {
         return RigidBody.velocity.x == velocity &&
             RigidBody.velocity.y == velocity;
     }
 
-    bool GetRigidBodyLessThanVelocity(float velocity) {
+    bool GetRigidBodyVelocityLessThan(float velocity) {
         return RigidBody.velocity.x < velocity && 
             RigidBody.velocity.y < velocity && 
             RigidBody.velocity.x > -velocity && 
             RigidBody.velocity.y > -velocity;
     }
 
-    IEnumerator DoPlatformActionsCoroutine(Platform platform) {
+    bool GetHasLandedOnPlatform() {
+        if (Helper.CheckRigidBodyContactsHasComponent<Platform>(RigidBody)) {
+            return true;
+        }
+        return false;
+    }
 
-        int id = platform.id;
-        if (id == currentPlatformId) {
-            doingPlatformActions = false;
-            // exit
+    bool GetHasLandedOnPlatformAndStopped() {
+        return GetHasLandedOnPlatform() && GetRigidBodyVelocityLessThan(0.00001f);
+    }
+
+
+
+    IEnumerator DoPlatformActionsCoroutine(Platform platform) {
+       
+        if(doingPlatformActionsCoroutine == true) {
+            yield break;
+        }
+        doingPlatformActionsCoroutine = true;
+
+        if (platform.id == currentPlatformId) { // We've landed on the same platform!
+            doingPlatformActionsCoroutine = false;
             yield break;
         }
 
+        // Wait a bit to stop moving
         yield return new WaitForSecondsRealtime(.5f);
 
-        bool landed = false;
-
-        if (Helper.CheckRigidBodyContactsHasComponent<Platform>(RigidBody)) {
-            landed = true;
-        }
-
-        if (landed == true && GetRigidBodyLessThanVelocity(0.00001f)) {
+        if (GetHasLandedOnPlatformAndStopped()) {
             currentPlatformId = platform.id;
-            if(currentPlatformId > GameController.instance.Score) {
-                GameController.instance.NewScore(currentPlatformId);
-            }
-            if (platform.CompareTag(PlatformController.TRANSITION_PLATFORM) && PlatformController.Instance.Transitioning == false) {
-                PlatformController.Instance.TransitionPlatformAction(platform);
-            }
+            OnPlatformLanded(currentPlatformId);
         }
-
-        doingPlatformActions = false;
+        
+        doingPlatformActionsCoroutine = false;
     }
 
 

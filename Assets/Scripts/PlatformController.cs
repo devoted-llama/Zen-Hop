@@ -39,6 +39,11 @@ public class PlatformController : MonoBehaviour {
     void Start() {
         InstantiatePlatforms();
         PositionStartingPlatforms();
+        Player.Instance.OnPlatformLanded += DoPlayerPlatformLandedActions;
+    }
+
+    void DoPlayerPlatformLandedActions(int platformId) {
+        DoTransitionPlatformAction(platformId);
     }
 
     void InstantiatePlatforms() {
@@ -91,6 +96,7 @@ public class PlatformController : MonoBehaviour {
     }
 
     void RepositionPlatforms(int triggerPlatformIndex) {
+        
         numberOfNewPlatforms = triggerPlatformIndex - TransitionPlatformIndex + 1;
 
         if(numberOfNewPlatforms == 0) {
@@ -107,9 +113,17 @@ public class PlatformController : MonoBehaviour {
     bool GetPlayerIsTouchingPlatform(Platform platform) {
         return Helper.CheckRigidBodyContactsGameObjectHasComponent<Platform>(Player.Instance.RigidBody, platform.gameObject);
     }
+    void DoTransitionPlatformAction(int platformId) {
+        for (int i = 0; i < platforms.Length; i++) {
+            if(platforms[i].id == platformId) {
+                DoTransitionPlatformAction(platforms[i]);
+                return;
+            }
+        }
 
+    }
 
-    public void TransitionPlatformAction(Platform platform) {
+    void DoTransitionPlatformAction(Platform platform) {
         if(platform.CompareTag(TRANSITION_PLATFORM) == false) {
             return; // oops, we're not a transition platform!
         }
