@@ -4,35 +4,30 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Frog : MonoBehaviour {
-    public static Frog instance = null;
+public class Player : MonoBehaviour {
+    public static Player Instance { get; private set; } = null;
+    public Rigidbody2D RigidBody { get; private set; }
+    float PowerWithMultiplier { get { return powerAmount * powerForceMultiplier; } }
 
-    public float powerForceMultiplier;
+    [SerializeField]
+    float powerForceMultiplier = 1000f;
     float powerAmount = 0;
-    float powerWithMultiplier { get { return powerAmount * powerForceMultiplier; } }
+   
 
     int idleHash = Animator.StringToHash("Idle");
     int aimHash = Animator.StringToHash("Aim");
     int crouchHash = Animator.StringToHash("Crouch");
     int jumpHash = Animator.StringToHash("Jump");
 
-    public Button powerButton;
-
-
-    public Rigidbody2D rigidBody;
-
-    public int currentPlatformId = 0;
-
-    public bool doingPlatformActions = false;
-
+    int currentPlatformId = 0;
+    bool doingPlatformActions = false;
     Vector3 startPosition;
-
-    float jumpAngle;
+    float jumpAngle = 0;
 
     void Awake() {
-        if (instance == null) {
-            instance = this;
-        } else if (instance != this) {
+        if (Instance == null) {
+            Instance = this;
+        } else if (Instance != this) {
             Destroy(gameObject);
         }
 
@@ -52,31 +47,31 @@ public class Frog : MonoBehaviour {
     }
 
     private void Update() {
-        if (rigidBody.velocity.x > 4f || rigidBody.velocity.y > 4f || rigidBody.velocity.x < -4f || rigidBody.velocity.y < -4f) {
-            SetJump(true);
+        if (GetRigidBodyGreaterThanVelocity(4f)) {
+            SetJumpAnimation(true);
         }
     }
 
 
     void Start() {
-        rigidBody = GetComponent<Rigidbody2D>();
+        RigidBody = GetComponent<Rigidbody2D>();
         SetPower(0);
 
     }
 
     public void Jump() {
-        if (gameObject.activeSelf && rigidBody.velocity.x == 0 && rigidBody.velocity.y == 0) {
+        if (gameObject.activeSelf && GetRigidBodyEqualsVelocity(0)) {
             StartCoroutine(JumpCoroutine());
         }
     }
 
     IEnumerator JumpCoroutine() {
         AudioController.instance.PlayJumpSound();
-        SetCrouch(true);
+        SetCrouchAnimation(true);
         yield return new WaitForSeconds(0.5f);
-        SetCrouch(false);
-        SetJump(true);
-        rigidBody.AddForce(GetForce());
+        SetCrouchAnimation(false);
+        SetJumpAnimation(true);
+        RigidBody.AddForce(GetForce());
 
         SetPower(0);
     }
@@ -97,20 +92,20 @@ public class Frog : MonoBehaviour {
 
         if (angle >= 0 && angle <= 90) {
             ratio = angle / 90f;
-            forceX = ratio * powerWithMultiplier;
-            forceY = (1 - ratio) * powerWithMultiplier;
+            forceX = ratio * PowerWithMultiplier;
+            forceY = (1 - ratio) * PowerWithMultiplier;
         } else if (angle > 90 && angle <= 180) {
             ratio = (angle - 90) / 90f;
-            forceX = (1 - ratio) * powerWithMultiplier;
-            forceY = -(ratio) * powerWithMultiplier;
+            forceX = (1 - ratio) * PowerWithMultiplier;
+            forceY = -(ratio) * PowerWithMultiplier;
         } else if (angle > 180 && angle <= 270) {
             ratio = (angle - 180) / 90f;
-            forceX = -ratio * powerWithMultiplier;
-            forceY = -(1 - ratio) * powerWithMultiplier;
+            forceX = -ratio * PowerWithMultiplier;
+            forceY = -(1 - ratio) * PowerWithMultiplier;
         } else if (angle > 270 && angle <= 360) {
             ratio = (angle - 270) / 90f;
-            forceX = -(1 - ratio) * powerWithMultiplier;
-            forceY = ratio * powerWithMultiplier;
+            forceX = -(1 - ratio) * PowerWithMultiplier;
+            forceY = ratio * PowerWithMultiplier;
         }
         
         Vector2 force = new Vector2(forceX, forceY);
@@ -119,16 +114,15 @@ public class Frog : MonoBehaviour {
     }
 
     public void SetPower(float power) {
-        power = power > 1 ? 1 : power;
-        powerAmount = power * 100;
+        powerAmount = power > 1 ? 1 : power;
     }
 
 
     void OnCollisionEnter2D(Collision2D collision) {
         Platform platform = collision.gameObject.GetComponent<Platform>();
         if (platform != null) {
-            if (rigidBody.velocity.x < 4f && rigidBody.velocity.y < 4f && rigidBody.velocity.x > -4f && rigidBody.velocity.y > -4f && GetJump() == true) {
-                SetJump(false);
+            if (GetRigidBodyLessThanVelocity(4f) && GetJumpAnimation() == true) {
+                SetJumpAnimation(false);
             }
             platform.AnimateBounce();
             DoPlatformActions(platform);
@@ -140,8 +134,8 @@ public class Frog : MonoBehaviour {
     private void OnCollisionStay2D(Collision2D collision) {
         Platform platform = collision.gameObject.GetComponent<Platform>();
         if (platform != null) {
-            if (rigidBody.velocity.x < 4f && rigidBody.velocity.y < 4f && rigidBody.velocity.x > -4f && rigidBody.velocity.y > -4f && GetJump() == true) { 
-                SetJump(false);
+            if (GetRigidBodyLessThanVelocity(4f) && GetJumpAnimation() == true) {
+                SetJumpAnimation(false);
             }
         }
     }
@@ -151,8 +145,26 @@ public class Frog : MonoBehaviour {
         StartCoroutine(DoPlatformActionsCoroutine(platform));
     }
 
+    bool GetRigidBodyGreaterThanVelocity(float velocity) {
+        return RigidBody.velocity.x > velocity || 
+            RigidBody.velocity.y > velocity || 
+            RigidBody.velocity.x < -velocity || 
+            RigidBody.velocity.y < -velocity;
+    }
+
+    bool GetRigidBodyEqualsVelocity(float velocity) {
+        return RigidBody.velocity.x == velocity &&
+            RigidBody.velocity.y == velocity;
+    }
+
+    bool GetRigidBodyLessThanVelocity(float velocity) {
+        return RigidBody.velocity.x < velocity && 
+            RigidBody.velocity.y < velocity && 
+            RigidBody.velocity.x > -velocity && 
+            RigidBody.velocity.y > -velocity;
+    }
+
     IEnumerator DoPlatformActionsCoroutine(Platform platform) {
-       
 
         int id = platform.id;
         if (id == currentPlatformId) {
@@ -165,17 +177,17 @@ public class Frog : MonoBehaviour {
 
         bool landed = false;
 
-        if (Helper.CheckRigidBodyContactsHasComponent<Platform>(rigidBody)) {
+        if (Helper.CheckRigidBodyContactsHasComponent<Platform>(RigidBody)) {
             landed = true;
         }
 
-        if (landed == true && rigidBody.velocity.x < 0.00001f && rigidBody.velocity.y < 0.00001f && rigidBody.velocity.x > -0.00001f && rigidBody.velocity.y > -0.00001f) {
+        if (landed == true && GetRigidBodyLessThanVelocity(0.00001f)) {
             currentPlatformId = platform.id;
             if(currentPlatformId > GameController.instance.Score) {
                 GameController.instance.NewScore(currentPlatformId);
             }
-            if (platform.CompareTag("TransitionPlatform") && PlatformController.instance.transitioning == false) {
-                PlatformController.instance.TransitionPlatformAction(platform);
+            if (platform.CompareTag(PlatformController.TRANSITION_PLATFORM) && PlatformController.Instance.Transitioning == false) {
+                PlatformController.Instance.TransitionPlatformAction(platform);
             }
         }
 
@@ -183,50 +195,42 @@ public class Frog : MonoBehaviour {
     }
 
 
-    public void SetAim(bool value) {
+    public void SetAimAnimation(bool value) {
         GetComponent<Animator> ().SetBool (aimHash,value);
     }
 
-    public void SetCrouch(bool value) {
+    public void SetCrouchAnimation(bool value) {
         GetComponent<Animator> ().SetBool (crouchHash,value);
     }
 
-    public bool GetCrouch() {
+    public bool GetCrouchAnimation() {
         return GetComponent<Animator>().GetBool(crouchHash);
     }
 
-    public void SetJump(bool value) {
+    public void SetJumpAnimation(bool value) {
         GetComponent<Animator> ().SetBool (jumpHash,value);
     }
 
-    public bool GetJump() {
+    public bool GetJumpAnimation() {
         return GetComponent<Animator>().GetBool(jumpHash);
     }
 
-    public void SetIdle(bool value) {
+    public void SetIdleAnimation(bool value) {
         GetComponent<Animator> ().SetBool (idleHash,value);
     }
 
     IEnumerator RespawnCoroutine() {
-        Platform currentPlatform = PlatformController.instance.GetPlatformById(0);
+        Platform currentPlatform = PlatformController.Instance.GetPlatformById(0);
         Vector3 pos = currentPlatform.transform.position;
-        CameraController.instance.MoveTo(currentPlatform.transform,20f);
+        CameraController.instance.MoveTo(currentPlatform.transform);
         yield return new WaitUntil (() => Camera.main.transform.position.x == pos.x);
         pos.y = GameController.instance.respawnHeight;
         Vector2 velocity = new Vector2 (0, -GameController.instance.fallSpeed);
-        rigidBody.velocity = velocity;
+        RigidBody.velocity = velocity;
         transform.position = pos;
     }
 
     public void Respawn() {
         StartCoroutine(RespawnCoroutine());
     }
-
-    public Collider2D[] GetRigidbodyContacts(int amount) {
-        Collider2D[] colliders = new Collider2D[amount];
-        rigidBody.GetContacts(colliders);
-        return colliders;
-    }
-
-
 }

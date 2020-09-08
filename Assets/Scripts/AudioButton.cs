@@ -7,7 +7,6 @@ public class AudioButton : MonoBehaviour
     public Image onImage;
     public Image offImage;
 
-    // Start is called before the first frame update
     void Start() {
         AudioController.instance.ToggleSoundEvent += ToggleOnOff;
         ToggleOnOff(AudioController.instance.Sound);

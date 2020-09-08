@@ -16,10 +16,6 @@ public class Platform : MonoBehaviour {
     public float bounceTime = 0;
     float bounceWaitTime = 2f;
 
-    private void Update() {
-        
-    }
-
     private void Start() {
         animator = GetComponent<Animator>();    
     }
@@ -46,8 +42,7 @@ public class Platform : MonoBehaviour {
             animator.SetTrigger(bounceHash);
         }
     }
-
-
+    
     bool CanBounce() {
         if(Time.time > bounceTime + bounceWaitTime) {
             return true;

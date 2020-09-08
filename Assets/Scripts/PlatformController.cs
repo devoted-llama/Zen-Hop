@@ -3,29 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlatformController : MonoBehaviour {
-    public static PlatformController instance = null;
+    public static PlatformController Instance { get; private set; } = null;
 
-    public Platform platformPrefab;
+    public bool Transitioning { get; private set; } = false;
 
+    [SerializeField]
+    Platform platformPrefab;
     float startPosition = 0f;
-    public int numberOfPlatforms = 20;
-    public float platformSeparation = 4f;
-    int transitionPlatformIndex { get { return numberOfPlatforms / 2; } } 
+    [SerializeField]
+    int numberOfPlatforms = 20;
+    [SerializeField]
+    float platformSeparation = 4f;
+    [SerializeField]
+    float minHeight = 0;
+    [SerializeField]
+    float maxHeight = 12;
+
+    int TransitionPlatformIndex { get { return numberOfPlatforms / 2; } }
     float depth = -2.45f;
-
-    public float minHeight;
-    public float maxHeight;
-
     Platform[] platforms;
+    int numberOfNewPlatforms = 0;
 
-    public bool transitioning = false;
-
-    int numberOfNewPlatforms;
+    public static readonly string START_PLATFORM = "StartPlatform";
+    public static readonly string TRANSITION_PLATFORM = "TransitionPlatform";
+    public static readonly string PLATFORM = "Platform";
 
     void Awake() {
-        if (instance == null) {
-            instance = this;
-        } else if (instance != this) {
+        if (Instance == null) {
+            Instance = this;
+        } else if (Instance != this) {
             Destroy (gameObject);
         }
     }
@@ -56,18 +62,18 @@ public class PlatformController : MonoBehaviour {
 
 
             if (i == 0) {
-                platforms [i].tag = "StartPlatform";
-            } else if (i >= transitionPlatformIndex) {
-                platforms [i].tag = "TransitionPlatform";
+                platforms [i].tag = START_PLATFORM;
+            } else if (i >= TransitionPlatformIndex) {
+                platforms [i].tag = TRANSITION_PLATFORM;
             } else {
-                platforms [i].tag = "Platform";
+                platforms [i].tag = PLATFORM;
             }
         }
     }
 
 
     void RepositionNewPlatform(int index, int triggerPlatformIndex, float startX) {
-        int repositionIndex = numberOfPlatforms + transitionPlatformIndex - triggerPlatformIndex - 1;
+        int repositionIndex = numberOfPlatforms + TransitionPlatformIndex - triggerPlatformIndex - 1;
         
         if (index >= repositionIndex) {
             platforms[index].AnimateInvisible();
@@ -85,7 +91,7 @@ public class PlatformController : MonoBehaviour {
     }
 
     void RepositionPlatforms(int triggerPlatformIndex) {
-        numberOfNewPlatforms = triggerPlatformIndex - transitionPlatformIndex + 1;
+        numberOfNewPlatforms = triggerPlatformIndex - TransitionPlatformIndex + 1;
 
         if(numberOfNewPlatforms == 0) {
             return;
@@ -98,23 +104,22 @@ public class PlatformController : MonoBehaviour {
         }
     }
 
-    bool GetFrogIsTouchingPlatform(Platform platform) {
-        Collider2D[] frogContacts = Frog.instance.GetRigidbodyContacts(2);
-        return Helper.CheckRigidBodyContactsGameObjectHasComponent<Platform>(Frog.instance.rigidBody, platform.gameObject);
+    bool GetPlayerIsTouchingPlatform(Platform platform) {
+        return Helper.CheckRigidBodyContactsGameObjectHasComponent<Platform>(Player.Instance.RigidBody, platform.gameObject);
     }
 
 
     public void TransitionPlatformAction(Platform platform) {
-        if(platform.CompareTag("TransitionPlatform") == false) {
+        if(platform.CompareTag(TRANSITION_PLATFORM) == false) {
             return; // oops, we're not a transition platform!
         }
-        transitioning = true;
+        Transitioning = true;
         int platformIndex = GetIndexOfPlatform(platform);
         
-        if (GetFrogIsTouchingPlatform(platform) == true) {
+        if (GetPlayerIsTouchingPlatform(platform) == true) {
             RepositionPlatforms(platformIndex);
         }
-        transitioning = false;
+        Transitioning = false;
     }
 
     int GetIndexOfPlatform(Platform platform) {

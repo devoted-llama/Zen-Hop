@@ -8,8 +8,6 @@ public static class Helper
         for (int i = 0; i < contacts.Length; i++) {
             if (contacts[i] != null) {
                 T contact = contacts[i].GetComponent<T>();
-
-
                 if (contact != null && contact.Equals(go.GetComponent<T>())) {
                     return true;
                 }
@@ -24,8 +22,6 @@ public static class Helper
         for (int i = 0; i < contacts.Length; i++) {
             if (contacts[i] != null) {
                 T contact = contacts[i].GetComponent<T>();
-
-
                 if (contact != null) {
                     return true;
                 }

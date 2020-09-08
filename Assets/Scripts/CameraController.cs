@@ -8,7 +8,6 @@ public class CameraController : MonoBehaviour {
     public Vector3 startMarker;
     public Vector3 endMarker;
     public const float titleScreenPosition = -12f;
-    float speed = 10.0f;
     const float SPEED = 10.0f;
     float startTime;
     float journeyLength;
@@ -37,7 +36,6 @@ public class CameraController : MonoBehaviour {
     }
 
     public void Move(Vector3 end, float speed = SPEED) {
-        this.speed = speed;
         startMarker = transform.position;
         endMarker = end;
         startTime = Time.time;
@@ -45,20 +43,29 @@ public class CameraController : MonoBehaviour {
         moving = true;
     }
 
-    void Update() {
+    void LerpToNewPosition() {
         if (moving == true) {
-            float distCovered = (Time.time - startTime) * speed;
-            float fracJourney = distCovered / journeyLength;
-            transform.position = Vector3.Lerp (startMarker, endMarker, fracJourney);
+            float distCovered = (Time.time - startTime) * SPEED;
+            float fractionJourney = distCovered / journeyLength;
+            transform.position = Vector3.Lerp(startMarker, endMarker, fractionJourney);
             if (transform.position == endMarker) {
                 moving = false;
                 finishMoving?.Invoke();
             }
-        } else if(GameController.instance.playing == true && Frog.instance.gameObject.activeSelf == true){
+        }
+    }
+
+    void FollowPlayer() {
+        if (moving == false && GameController.instance.playing == true && Player.Instance.gameObject.activeSelf == true) {
             Vector3 pos = transform.position;
-            pos.x = Frog.instance.transform.position.x;
+            pos.x = Player.Instance.transform.position.x;
             transform.position = pos;
         }
+    }
+
+    void Update() {
+        LerpToNewPosition();
+        FollowPlayer();
     }
 
     void OnTriggerExit2D(Collider2D collider) {
@@ -67,8 +74,7 @@ public class CameraController : MonoBehaviour {
         }
     }
 
-    public void MoveTo(Transform t, float speed = SPEED) {
-        this.speed = speed;
+    public void MoveTo(Transform t) {
         Vector3 pos = transform.position;
         pos.x = t.position.x;
         Move (pos);
