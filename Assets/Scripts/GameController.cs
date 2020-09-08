@@ -25,10 +25,8 @@ public class GameController : MonoBehaviour {
     public int Lives { get { return lives; } }
     [SerializeField]
     int highScore = 0;
+    public bool playing { get; set; } = false;
 
-    bool _playing = false;
-    public bool playing {  get { return _playing; } set { _playing = value; } }
- 
 
     public Text scoreText;
 
@@ -42,7 +40,11 @@ public class GameController : MonoBehaviour {
 
     Random.State randomState;
 
-	void Awake () {
+
+    public delegate void MyDelegate();
+    MyDelegate myDelegate;
+
+    void Awake () {
         if (instance == null) {
             instance = this;
         } else if (instance != this) {
@@ -61,9 +63,21 @@ public class GameController : MonoBehaviour {
         timeSinceAd = Time.unscaledTime;
         GetHighScore();
         UpdateUI();
+        Player.Instance.OnPlatformLanded += DoPlayerPlatformLandedActions;
     }
 
-    public void NewScore(int score) {
+    void DoPlayerPlatformLandedActions(int platformId) {
+        UpdateScoreBasedOnPlatformId(platformId);
+    }
+
+    void UpdateScoreBasedOnPlatformId(int platformId) {
+        if (platformId > Score) {
+            SetScore(platformId);
+        }
+    }
+
+    
+    void SetScore(int score) {
         this.score = score;
         UpdateUI ();
     }
