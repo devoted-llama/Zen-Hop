@@ -51,8 +51,6 @@ public class GameController : MonoBehaviour {
             Destroy (gameObject);
         }
 
-        //DontDestroyOnLoad (gameObject);
-
         Time.timeScale = timescale;
         Random.InitState (randomSeed);
         randomState = Random.state;
@@ -104,7 +102,6 @@ public class GameController : MonoBehaviour {
 
     void UpdateUI() {
         scoreText.text = score.ToString ();
-        //livesText.text = lives.ToString ();
     }
 
 
