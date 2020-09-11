@@ -10,14 +10,14 @@ public class Player : MonoBehaviour {
     float PowerWithMultiplier { get { return powerAmount * powerForceMultiplier; } }
 
     [SerializeField]
-    float powerForceMultiplier = 1000f;
+    readonly float powerForceMultiplier = 1000f;
     float powerAmount = 0;
-   
 
-    int idleHash = Animator.StringToHash("Idle");
-    int aimHash = Animator.StringToHash("Aim");
-    int crouchHash = Animator.StringToHash("Crouch");
-    int jumpHash = Animator.StringToHash("Jump");
+
+    readonly int idleHash = Animator.StringToHash("Idle");
+    readonly int aimHash = Animator.StringToHash("Aim");
+    readonly int crouchHash = Animator.StringToHash("Crouch");
+    readonly int jumpHash = Animator.StringToHash("Jump");
 
     int currentPlatformId = 0;
     Vector3 startPosition;
@@ -65,6 +65,7 @@ public class Player : MonoBehaviour {
     public void Jump() {
         if (gameObject.activeSelf && GetRigidBodyVelocityEquals(0)) {
             StartCoroutine(JumpCoroutine());
+            
         }
     }
 
@@ -187,12 +188,11 @@ public class Player : MonoBehaviour {
         }
         doingPlatformActionsCoroutine = true;
 
-        if (platform.id == currentPlatformId) { // We've landed on the same platform!
+        if (platform.id == currentPlatformId) {
             doingPlatformActionsCoroutine = false;
             yield break;
         }
 
-        // Wait a bit to stop moving
         yield return new WaitForSecondsRealtime(.5f);
 
         if (GetHasLandedOnPlatformAndStopped()) {

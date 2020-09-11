@@ -8,8 +8,10 @@ public class NewPowerButtonController : MonoBehaviour
 {
     bool showing = false;
 
-    public CircleGenerator outerRing;
-    public CircleGenerator powerRing;
+    [SerializeField]
+    CircleGenerator outerRing;
+    [SerializeField]
+    CircleGenerator powerRing;
 
     private void Start() {
         Hide();
@@ -35,6 +37,8 @@ public class NewPowerButtonController : MonoBehaviour
             Player.Instance.Jump();
         }
     }
+
+
 
     void SetPower(Vector3 buttonPos, Vector3 mousePos) {
         Vector2 point1 = mousePos;
@@ -75,7 +79,7 @@ public class NewPowerButtonController : MonoBehaviour
     }
 
     void Show() {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        Player player = Player.Instance;
         Vector3 position = player.transform.position;
         transform.position = position;
 

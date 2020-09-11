@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlatformController : MonoBehaviour {
     public static PlatformController Instance { get; private set; } = null;
@@ -9,21 +7,21 @@ public class PlatformController : MonoBehaviour {
 
     [SerializeField]
     Platform platformPrefab;
-    float startPosition = 0f;
     [SerializeField]
-    int numberOfPlatforms = 20;
+    int numberOfPlatforms = 10;
     [SerializeField]
-    float platformSeparation = 4f;
+    float platformSeparation = 10f;
     [SerializeField]
-    float minHeight = 0;
+    float minHeight = 0f;
     [SerializeField]
-    float maxHeight = 12;
+    float maxHeight = 12f;
 
     int TransitionPlatformIndex { get { return numberOfPlatforms / 2; } }
-    float depth = -2.45f;
+    readonly float depth = -2.45f;
+    readonly float startPosition = 0f;
     Platform[] platforms;
     int numberOfNewPlatforms = 0;
-
+    
     public static readonly string START_PLATFORM = "StartPlatform";
     public static readonly string TRANSITION_PLATFORM = "TransitionPlatform";
     public static readonly string PLATFORM = "Platform";
@@ -39,6 +37,10 @@ public class PlatformController : MonoBehaviour {
     void Start() {
         InstantiatePlatforms();
         PositionStartingPlatforms();
+        SubscribeToPlayerPlatformLanded();
+    }
+
+    void SubscribeToPlayerPlatformLanded() {
         Player.Instance.OnPlatformLanded += DoPlayerPlatformLandedActions;
     }
 
@@ -47,35 +49,37 @@ public class PlatformController : MonoBehaviour {
     }
 
     void InstantiatePlatforms() {
-        platforms = new Platform[(int)numberOfPlatforms];
+        platforms = new Platform[numberOfPlatforms];
         for (int i = 0; i < platforms.Length; i++) {
             platforms[i] = Instantiate(platformPrefab);
         }
     }
 
-    public void PositionStartingPlatforms() {
-        PositionStartingPlatforms(startPosition);
+    void PositionPlatformBasedOnIndex(int i) {
+        Vector3 position = new Vector3(startPosition + (i * platformSeparation), Random.Range(minHeight, maxHeight), depth);
+        platforms[i].transform.position = position;
     }
 
-    void PositionStartingPlatforms(float start) {
-        for (int i = 0; i < numberOfPlatforms; i++) {
-            if (GameController.instance.Score == 0) {
-                Vector3 position = new Vector3 (start + (i * platformSeparation), Random.Range (minHeight, maxHeight), depth);
-                platforms [i].transform.position = position;
-                platforms[i].id = i;
-            }
-
-
-            if (i == 0) {
-                platforms [i].tag = START_PLATFORM;
-            } else if (i >= TransitionPlatformIndex) {
-                platforms [i].tag = TRANSITION_PLATFORM;
-            } else {
-                platforms [i].tag = PLATFORM;
-            }
+    void SetPlatformTagBasedOnIndex(int i) {
+        if (i == 0) {
+            platforms[i].tag = START_PLATFORM;
+        } else if (i >= TransitionPlatformIndex) {
+            platforms[i].tag = TRANSITION_PLATFORM;
+        } else {
+            platforms[i].tag = PLATFORM;
         }
     }
 
+    public void PositionStartingPlatforms() {
+        for (int i = 0; i < numberOfPlatforms; i++) {
+
+            PositionPlatformBasedOnIndex(i);
+            platforms[i].id = i;
+
+
+            SetPlatformTagBasedOnIndex(i);
+        }
+    }
 
     void RepositionNewPlatform(int index, int triggerPlatformIndex, float startX) {
         int repositionIndex = numberOfPlatforms + TransitionPlatformIndex - triggerPlatformIndex - 1;
@@ -125,7 +129,7 @@ public class PlatformController : MonoBehaviour {
 
     void DoTransitionPlatformAction(Platform platform) {
         if(platform.CompareTag(TRANSITION_PLATFORM) == false) {
-            return; // oops, we're not a transition platform!
+            return;
         }
         Transitioning = true;
         int platformIndex = GetIndexOfPlatform(platform);
