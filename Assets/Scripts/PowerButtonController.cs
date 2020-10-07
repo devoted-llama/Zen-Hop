@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class NewPowerButtonController : MonoBehaviour
+public class PowerButtonController : MonoBehaviour
 {
     bool showing = false;
 
@@ -46,12 +46,12 @@ public class NewPowerButtonController : MonoBehaviour
 
         float distance = Vector2.Distance(point1, point2);
 
-        float size = outerRing.size;
+        float size = outerRing.Size;
 
         float power = distance / size;
         power = power > 1 ? 1 : power;
 
-        powerRing.completion = (int)(360 * power);
+        powerRing.Completion = (int)(360 * power);
         powerRing.Generate();
 
         Player.Instance.SetPower(power);
@@ -67,9 +67,7 @@ public class NewPowerButtonController : MonoBehaviour
 
         if (adjacent >= 0 && opposite >= 0) {
             modifier = 0;
-        } else if (adjacent > 0 && opposite < 0) {
-            modifier = 180f;
-        } else if (adjacent < 0 && opposite < 0) {
+        } else if ((adjacent > 0 && opposite < 0) || (adjacent < 0 && opposite < 0)) {
             modifier = 180f;
         } else if (adjacent < 0 && opposite > 0) {
             modifier = 360f;

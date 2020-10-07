@@ -81,20 +81,23 @@ public class GameController : MonoBehaviour {
     }
 
     public void Die() {
-        AudioController.instance.PlayDeathSound();
         lives--;
         if (lives < 1) {
+            SaveHighScore();
+            DeactivatePlayer();
             ShowGameoverPanel();
+            
         } else {
             UpdateUI();
         }
     }
 
-    void ShowGameoverPanel() {
-        SaveHighScore();
-        
+    void DeactivatePlayer() {
         Player.Instance.gameObject.SetActive(false);
         Player.Instance.gameObject.transform.position = new Vector3(0, -100, 0);
+    }
+
+    void ShowGameoverPanel() {
         gamePanel.SetActive(false);
         gameoverScoreText.text = "Score: " + score.ToString() + ", Best: " + highScore.ToString() + ".";
         gameoverPanel.SetActive(true);

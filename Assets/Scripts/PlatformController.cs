@@ -74,7 +74,7 @@ public class PlatformController : MonoBehaviour {
         for (int i = 0; i < numberOfPlatforms; i++) {
 
             PositionPlatformBasedOnIndex(i);
-            platforms[i].id = i;
+            platforms[i].Id = i;
 
 
             SetPlatformTagBasedOnIndex(i);
@@ -108,7 +108,7 @@ public class PlatformController : MonoBehaviour {
         }
         float startX = platforms[numberOfNewPlatforms].transform.position.x;
         for (int i = 0; i < numberOfPlatforms; i++) {
-            platforms[i].id += numberOfNewPlatforms;
+            platforms[i].Id += numberOfNewPlatforms;
             RepositionExistingPlatform(i );
             RepositionNewPlatform(i, triggerPlatformIndex, startX);
         }
@@ -117,14 +117,14 @@ public class PlatformController : MonoBehaviour {
     bool GetPlayerIsTouchingPlatform(Platform platform) {
         return Helper.CheckRigidBodyContactsGameObjectHasComponent<Platform>(Player.Instance.RigidBody, platform.gameObject);
     }
+
     void DoTransitionPlatformAction(int platformId) {
         for (int i = 0; i < platforms.Length; i++) {
-            if(platforms[i].id == platformId) {
+            if(platforms[i].Id == platformId) {
                 DoTransitionPlatformAction(platforms[i]);
                 return;
             }
         }
-
     }
 
     void DoTransitionPlatformAction(Platform platform) {
@@ -151,7 +151,7 @@ public class PlatformController : MonoBehaviour {
 
     public Platform GetPlatformById(int id) {
         for(int i = 0; i<platforms.Length; i++) {
-            if(platforms[i].id == id) {
+            if(platforms[i].Id == id) {
                 return platforms[i];
             }
         }
