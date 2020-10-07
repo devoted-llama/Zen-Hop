@@ -70,7 +70,6 @@ public class Player : MonoBehaviour {
     }
 
     IEnumerator JumpCoroutine() {
-        AudioController.instance.PlayJumpSound();
         SetCrouchAnimation(true);
         yield return new WaitForSeconds(0.5f);
         SetCrouchAnimation(false);
@@ -188,7 +187,7 @@ public class Player : MonoBehaviour {
         }
         doingPlatformActionsCoroutine = true;
 
-        if (platform.id == currentPlatformId) {
+        if (platform.Id == currentPlatformId) {
             doingPlatformActionsCoroutine = false;
             yield break;
         }
@@ -196,7 +195,7 @@ public class Player : MonoBehaviour {
         yield return new WaitForSecondsRealtime(.5f);
 
         if (GetHasLandedOnPlatformAndStopped()) {
-            currentPlatformId = platform.id;
+            currentPlatformId = platform.Id;
             OnPlatformLanded(currentPlatformId);
         }
         

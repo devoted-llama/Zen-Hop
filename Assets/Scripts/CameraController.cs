@@ -5,8 +5,8 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
     public static CameraController instance = null;
 
-    public Vector3 startMarker;
-    public Vector3 endMarker;
+    Vector3 startMarker;
+    Vector3 endMarker;
     public const float titleScreenPosition = -12f;
     const float SPEED = 10.0f;
     float startTime;
@@ -55,8 +55,12 @@ public class CameraController : MonoBehaviour {
         }
     }
 
+    bool GetCameraNotMovingAndPlayerIsAlive() {
+        return moving == false && GameController.instance.playing == true && Player.Instance.gameObject.activeSelf == true;
+    }
+
     void FollowPlayer() {
-        if (moving == false && GameController.instance.playing == true && Player.Instance.gameObject.activeSelf == true) {
+        if (GetCameraNotMovingAndPlayerIsAlive()) {
             Vector3 pos = transform.position;
             pos.x = Player.Instance.transform.position.x;
             transform.position = pos;

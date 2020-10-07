@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Platform : MonoBehaviour {
-    public int id;
+    public int Id { get; set; }
 
-    int fadeOutHash = Animator.StringToHash("Fade Out");
-    int fadeInHash = Animator.StringToHash("Fade In");
-    int invisibleHash = Animator.StringToHash("Invisible");
-    int visibleHash = Animator.StringToHash("Visible");
-    int bounceHash = Animator.StringToHash("Bounce");
+    readonly int fadeOutHash = Animator.StringToHash("Fade Out");
+    readonly int fadeInHash = Animator.StringToHash("Fade In");
+    readonly int invisibleHash = Animator.StringToHash("Invisible");
+    readonly int visibleHash = Animator.StringToHash("Visible");
+    readonly int bounceHash = Animator.StringToHash("Bounce");
 
     Animator animator;
 
-    public float bounceTime = 0;
-    float bounceWaitTime = 2f;
+    public float bounceTime { get; set; } = 0;
+    readonly float bounceWaitTime = 2f;
 
     private void Start() {
         animator = GetComponent<Animator>();    

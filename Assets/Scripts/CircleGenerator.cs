@@ -7,22 +7,27 @@ using System.Collections.Generic;
 public class CircleGenerator : MonoBehaviour {
     readonly int[] polygonQuantityArray = new int[] {3, 3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360 };
 
-    [Range(0, 10)]
-    public float size = 1;
+    [Range(0, 10), SerializeField]
+    float size = 1;
 
-    [Range(1, 3)]
-    public float thickness = 0.5f;
+    public float Size { get { return size; } }
 
-    [Range(0, 360)]
-    public int completion = 360;
+    [Range(1, 3), SerializeField]
+    float thickness = 0.5f;
 
-    [Range(0, 360)]
-    public int angle = 90;
+    [Range(0, 360), SerializeField]
+    int completion = 360;
 
-    [Range(1,22)]
-    public int polygons = 1;
+    public int Completion { get { return completion; } set { completion = value; } }
 
-    public bool keepPolygonAmountConsistentForCompletionAmount = false;
+    [Range(0, 360), SerializeField]
+    int angle = 90;
+
+    [Range(1,22), SerializeField]
+    int polygons = 1;
+
+    [SerializeField]
+    bool keepPolygonAmountConsistentForCompletionAmount = false;
 
     int polygonQty = 0;
     

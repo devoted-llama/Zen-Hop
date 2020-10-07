@@ -1,13 +1,10 @@
 ﻿
-using System.Collections;
 using UnityEngine.Advertisements;
 using UnityEngine;
 
-public class AdController : MonoBehaviour
-{
-    public static AdController instance = null;
 
-    public string placementId = "video";
+public class AdController : MonoBehaviour, IUnityAdsListener {
+    public static AdController instance = null;
 
     string gameId = "1234567";
     bool testMode = true;
@@ -15,11 +12,9 @@ public class AdController : MonoBehaviour
     public delegate void AdEvent();
     public event AdEvent AdFinished;
 
-
     void Start() {
+        Advertisement.AddListener(this);
         Advertisement.Initialize(gameId, testMode);
-        Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_LEFT);
-        StartCoroutine(ShowBannerWhenReady());
     }
 
     private void Awake() {
@@ -31,20 +26,33 @@ public class AdController : MonoBehaviour
     }
 
     public void ShowAd() {
-        var options = new ShowOptions { resultCallback = HandleShowResult };
-        Advertisement.Show(options);
-    }
-
-    void HandleShowResult(ShowResult result) {
-        if (AdFinished != null) {
-            AdFinished();
+        if (Advertisement.IsReady()) {
+            Advertisement.Show();
+        } else {
+            Debug.Log("Interstitial ad not ready at the moment! Please try again later!");
         }
     }
 
-    IEnumerator ShowBannerWhenReady() {
-        while (!Advertisement.IsReady(placementId)) {
-            yield return new WaitForSeconds(0.5f);
+    void IUnityAdsListener.OnUnityAdsReady(string placementId) {
+        
+    }
+
+    void IUnityAdsListener.OnUnityAdsDidError(string message) {
+        Debug.LogError(message);
+    }
+
+    void IUnityAdsListener.OnUnityAdsDidStart(string placementId) {
+        Debug.Log("The ad started playing.");
+    }
+
+    void IUnityAdsListener.OnUnityAdsDidFinish(string placementId, ShowResult showResult) {
+        if(showResult == ShowResult.Finished) {
+            AdFinished?.Invoke();
+        } else if (showResult == ShowResult.Skipped) {
+            Debug.Log("The ad was skipped");
+        } else if (showResult == ShowResult.Failed) {
+            Debug.LogWarning("The ad did not finish due to an error.");
         }
-        Advertisement.Banner.Show(placementId);
+        
     }
 }
