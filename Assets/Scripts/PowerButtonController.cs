@@ -12,13 +12,15 @@ public class PowerButtonController : MonoBehaviour
     CircleGenerator outerRing;
     [SerializeField]
     CircleGenerator powerRing;
+    [SerializeField]
+    LineRenderer line;
 
     private void Start() {
         Hide();
     }
 
     void Update() {
-        if (GameController.instance.playing && Input.GetButtonDown("Fire1") && !showing) {
+        if (Player.Instance.IsReady() && Input.GetButtonDown("Fire1") && !showing) {
 
                 Show(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             
@@ -72,7 +74,16 @@ public class PowerButtonController : MonoBehaviour
             modifier = 360f;
         }
 
+        SetLineAngle(angle);
+
         Player.Instance.SetJumpAngle(angle, modifier);
+    }
+
+    void SetLineAngle(float angle) {
+        if (!float.IsNaN(angle)) {
+            Vector3 eulerAngle = new Vector3(0, 0, angle);
+            line.transform.eulerAngles = -eulerAngle;
+        }
     }
 
     void Show(Vector3 position) {

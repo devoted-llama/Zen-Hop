@@ -86,7 +86,6 @@ public class GameController : MonoBehaviour {
             SaveHighScore();
             DeactivatePlayer();
             ShowGameoverPanel();
-            
         } else {
             UpdateUI();
         }
@@ -175,7 +174,7 @@ public class GameController : MonoBehaviour {
         lives = 1;
     }
 
-    public void Play() {
+    public void PlayButtonClick() {
         CameraController.instance.finishMoving += SetPlayActive;
         CameraController.instance.MoveTo(PlatformController.Instance.GetPlatformById(0).transform);
         gameStartPanel.SetActive(false);
