@@ -184,4 +184,8 @@ public class Player : MonoBehaviour {
     public void Respawn() {
         StartCoroutine(RespawnCoroutine());
     }
+
+    public bool IsReady() {
+        return (gameObject.activeSelf && RigidBody.velocity.x == 0 && RigidBody.velocity.y == 0);
+    }
 }
