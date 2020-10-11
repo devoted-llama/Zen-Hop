@@ -186,6 +186,9 @@ public class Player : MonoBehaviour {
     }
 
     public bool IsReady() {
-        return (gameObject.activeSelf && RigidBody.velocity.x == 0 && RigidBody.velocity.y == 0);
+        if (gameObject != null && RigidBody != null) {
+            return (gameObject.activeSelf && RigidBody.velocity.x == 0 && RigidBody.velocity.y == 0);
+        }
+        return false;
     }
 }
