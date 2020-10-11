@@ -13,12 +13,6 @@ public class Player : MonoBehaviour {
     readonly float powerForceMultiplier = 1000f;
     float powerAmount = 0;
 
-
-    readonly int idleHash = Animator.StringToHash("Idle");
-    readonly int aimHash = Animator.StringToHash("Aim");
-    readonly int crouchHash = Animator.StringToHash("Crouch");
-    readonly int jumpHash = Animator.StringToHash("Jump");
-
     int currentPlatformId = 0;
     Vector3 startPosition;
     float jumpAngle = 0;
@@ -49,13 +43,6 @@ public class Player : MonoBehaviour {
         }
     }
 
-    private void Update() {
-        if (GetRigidBodyVelocityGreaterThan(4f)) {
-            SetJumpAnimation(true);
-        }
-    }
-
-
     void Start() {
         RigidBody = GetComponent<Rigidbody2D>();
         SetPower(0);
@@ -70,10 +57,7 @@ public class Player : MonoBehaviour {
     }
 
     IEnumerator JumpCoroutine() {
-        SetCrouchAnimation(true);
         yield return new WaitForSeconds(0.5f);
-        SetCrouchAnimation(false);
-        SetJumpAnimation(true);
         RigidBody.AddForce(GetForce());
 
         SetPower(0);
@@ -125,22 +109,8 @@ public class Player : MonoBehaviour {
 
         Platform platform = collision.gameObject.GetComponent<Platform>();
         if (platform != null) {
-            if (GetRigidBodyVelocityLessThan(4f) && GetJumpAnimation() == true) {
-                SetJumpAnimation(false);
-            }
             platform.AnimateBounce();
             DoPlatformActions(platform);
-        }
-    }
-
-
-
-    private void OnCollisionStay2D(Collision2D collision) {
-        Platform platform = collision.gameObject.GetComponent<Platform>();
-        if (platform != null) {
-            if (GetRigidBodyVelocityLessThan(4f) && GetJumpAnimation() == true) {
-                SetJumpAnimation(false);
-            }
         }
     }
 
@@ -178,8 +148,6 @@ public class Player : MonoBehaviour {
         return GetHasLandedOnPlatform() && GetRigidBodyVelocityLessThan(0.00001f);
     }
 
-
-
     IEnumerator DoPlatformActionsCoroutine(Platform platform) {
        
         if(doingPlatformActionsCoroutine == true) {
@@ -200,31 +168,6 @@ public class Player : MonoBehaviour {
         }
         
         doingPlatformActionsCoroutine = false;
-    }
-
-
-    public void SetAimAnimation(bool value) {
-        GetComponent<Animator> ().SetBool (aimHash,value);
-    }
-
-    public void SetCrouchAnimation(bool value) {
-        GetComponent<Animator> ().SetBool (crouchHash,value);
-    }
-
-    public bool GetCrouchAnimation() {
-        return GetComponent<Animator>().GetBool(crouchHash);
-    }
-
-    public void SetJumpAnimation(bool value) {
-        GetComponent<Animator> ().SetBool (jumpHash,value);
-    }
-
-    public bool GetJumpAnimation() {
-        return GetComponent<Animator>().GetBool(jumpHash);
-    }
-
-    public void SetIdleAnimation(bool value) {
-        GetComponent<Animator> ().SetBool (idleHash,value);
     }
 
     IEnumerator RespawnCoroutine() {

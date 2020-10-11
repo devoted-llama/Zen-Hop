@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
-[ExecuteInEditMode, RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class CircleGenerator : MonoBehaviour {
     readonly int[] polygonQuantityArray = new int[] {3, 3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360 };
 
@@ -35,11 +35,9 @@ public class CircleGenerator : MonoBehaviour {
     Vector3[] vertices;
     Mesh mesh;
 
-    private void OnValidate() {
-        Generate();
-    }
 
-    void Awake() {
+
+    void Start() {
         Generate();
     }
 
@@ -77,7 +75,7 @@ public class CircleGenerator : MonoBehaviour {
     void SetMeshVertices() {
         vertices = new Vector3[(polygonQty + 1) * 2];
         for (int i = 0; i <= polygonQty; i++) {
-            float rad = i * ((float)completion / polygonQty) * Mathf.Deg2Rad + (angle * Mathf.Deg2Rad);
+            float rad = i * -((float)completion / polygonQty) * Mathf.Deg2Rad + (angle * Mathf.Deg2Rad);
 
             float x = Mathf.Cos(rad) * size;
             float y = Mathf.Sin(rad) * size;
@@ -95,8 +93,8 @@ public class CircleGenerator : MonoBehaviour {
         int[] triangles = new int[polygonQty * 6];
         for (int ti = 0, vi = 0, x = 0; x < polygonQty; x++, ti += 6, vi++) {
             triangles[ti] = vi;
-            triangles[ti + 1] = triangles[ti + 4] = vi + polygonQty + 1;
-            triangles[ti + 2] = triangles[ti + 3] = vi + 1;
+            triangles[ti + 2] = triangles[ti + 3] = vi + polygonQty + 1;
+            triangles[ti + 1] = triangles[ti + 4] = vi + 1;
             triangles[ti + 5] = vi + polygonQty + 2;
             mesh.triangles = triangles;
         }

@@ -149,7 +149,7 @@ public class GameController : MonoBehaviour {
         Player.Instance.ResetToStartPosition();
         Random.state = randomState;
         PlatformController.Instance.PositionStartingPlatforms();
-        yield return new WaitUntil(() => Camera.main.transform.position.x == CameraController.titleScreenPosition);
+        yield return new WaitUntil(() => Camera.main.transform.position.x == CameraController.instance.TitleScreenPosition);
         gameStartPanel.SetActive(true);
     }
 

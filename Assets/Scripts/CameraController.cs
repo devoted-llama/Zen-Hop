@@ -7,8 +7,12 @@ public class CameraController : MonoBehaviour {
 
     Vector3 startMarker;
     Vector3 endMarker;
-    public const float titleScreenPosition = -12f;
-    const float SPEED = 10.0f;
+    [SerializeField]
+    float titleScreenPosition = -12f;
+    public float TitleScreenPosition { get { return titleScreenPosition; } }
+    [SerializeField]
+    float speed = 10.0f;
+    public float Speed { get { return speed; } }
     float startTime;
     float journeyLength;
 
@@ -30,12 +34,12 @@ public class CameraController : MonoBehaviour {
     public void MoveToTitleScreenPosition() {
         if (GameController.instance.playing == false) {
             Vector3 pos = transform.position;
-            pos.x = titleScreenPosition;
+            pos.x = TitleScreenPosition;
             transform.position = pos;
         }
     }
 
-    public void Move(Vector3 end, float speed = SPEED) {
+    public void Move(Vector3 end) {
         startMarker = transform.position;
         endMarker = end;
         startTime = Time.time;
@@ -45,7 +49,7 @@ public class CameraController : MonoBehaviour {
 
     void LerpToNewPosition() {
         if (moving == true) {
-            float distCovered = (Time.time - startTime) * SPEED;
+            float distCovered = (Time.time - startTime) * Speed;
             float fractionJourney = distCovered / journeyLength;
             transform.position = Vector3.Lerp(startMarker, endMarker, fractionJourney);
             if (transform.position == endMarker) {
