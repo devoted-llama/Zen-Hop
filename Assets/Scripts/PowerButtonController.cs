@@ -18,11 +18,10 @@ public class PowerButtonController : MonoBehaviour
     }
 
     void Update() {
-        if (Input.GetButtonDown("Fire1") && !showing) {
-            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), -Vector2.up, Mathf.Infinity, LayerMask.GetMask("Objects"));
-            if (hit.collider != null && hit.collider.gameObject.CompareTag("Player") && !showing) {
-                Show();
-            }
+        if (GameController.instance.playing && Input.GetButtonDown("Fire1") && !showing) {
+
+                Show(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            
         }
 
         if (Input.GetButton("Fire1") && showing) {
@@ -76,9 +75,9 @@ public class PowerButtonController : MonoBehaviour
         Player.Instance.SetJumpAngle(angle, modifier);
     }
 
-    void Show() {
+    void Show(Vector3 position) {
         Player player = Player.Instance;
-        Vector3 position = player.transform.position;
+        position.z = player.transform.position.z;
         transform.position = position;
 
         Vector3 scale = transform.localScale;
