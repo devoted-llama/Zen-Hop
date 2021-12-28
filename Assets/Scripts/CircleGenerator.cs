@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer)), ExecuteAlways]
 public class CircleGenerator : MonoBehaviour {
     readonly int[] polygonQuantityArray = new int[] {3, 3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90, 120, 180, 360 };
 
@@ -12,7 +12,7 @@ public class CircleGenerator : MonoBehaviour {
 
     public float Size { get { return size; } }
 
-    [Range(1, 3), SerializeField]
+    [Range(0, 3), SerializeField]
     float thickness = 0.5f;
 
     [Range(0, 360), SerializeField]
@@ -44,7 +44,8 @@ public class CircleGenerator : MonoBehaviour {
 
     public void Generate() {
         if(mesh == null) {
-            mesh = GetComponent<MeshFilter>().mesh;
+            mesh = new Mesh();
+            GetComponent<MeshFilter>().sharedMesh = mesh;
             mesh.name = "Circle";
         }
 
@@ -100,6 +101,15 @@ public class CircleGenerator : MonoBehaviour {
         }
     }
 
+    
+#if UNITY_EDITOR
+    private void OnValidate() => UnityEditor.EditorApplication.delayCall += _OnValidate;
 
+    private void _OnValidate() {
+        UnityEditor.EditorApplication.delayCall -= _OnValidate;
+        if (this == null) return;
+        Generate();
+    }
+#endif
 
 }
