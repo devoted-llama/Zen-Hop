@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class PowerButtonController : MonoBehaviour
 {
     bool showing = false;
+    bool handheld = false;
 
     [SerializeField]
     CircleGenerator outerRing;
@@ -16,14 +17,50 @@ public class PowerButtonController : MonoBehaviour
     LineRenderer line;
 
     private void Start() {
+        SetIsHandHeld();
         Hide();
     }
 
     void Update() {
-        if (Player.Instance.IsReady() && Input.GetButtonDown("Fire1") && !showing) {
+        
+        if (handheld) {
+            DoHandHeldAction();
+        } else {
+            DoDesktopAction();
+        }
+    }
 
+    void SetIsHandHeld() {
+        handheld = SystemInfo.deviceType == DeviceType.Handheld;
+    }
+       
+    void DoHandHeldAction() {
+        if (Input.touchCount > 0) {
+
+            Touch touch = Input.GetTouch(0);
+
+            if (Player.Instance.IsReady() && touch.phase == TouchPhase.Began && !showing) {
                 Show(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            
+            }
+
+            if (touch.phase == TouchPhase.Moved && showing) {
+                Vector3 buttonPos = transform.position;
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                SetAngle(buttonPos, mousePos);
+                SetPower(buttonPos, mousePos);
+            }
+
+            if (touch.phase == TouchPhase.Ended && showing) {
+
+                Hide();
+                Player.Instance.Jump();
+            }
+        }
+    }
+
+    void DoDesktopAction() {
+        if (Player.Instance.IsReady() && Input.GetButtonDown("Fire1") && !showing) {
+            Show(Camera.main.ScreenToWorldPoint(Input.mousePosition));
         }
 
         if (Input.GetButton("Fire1") && showing) {
@@ -38,7 +75,6 @@ public class PowerButtonController : MonoBehaviour
             Player.Instance.Jump();
         }
     }
-
 
 
     void SetPower(Vector3 buttonPos, Vector3 mousePos) {
