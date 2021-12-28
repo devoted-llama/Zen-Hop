@@ -57,7 +57,7 @@ public class GameController : MonoBehaviour {
 
 	}
 
-    void Start() {
+    void Start() { 
         timeSinceAd = Time.unscaledTime;
         GetHighScore();
         UpdateUI();
@@ -109,11 +109,12 @@ public class GameController : MonoBehaviour {
 
 
     public void RebootWithAds() {
-        if (AdController.instance == null || Time.unscaledTime - TimeSinceAd < timeBetweenAds) {
+        if (AdInterstitial.instance == null || Time.unscaledTime - TimeSinceAd < timeBetweenAds) {
             Reboot();
         } else {
-            AdController.instance.AdFinished += Reboot;
-            AdController.instance.ShowAd();
+            AdInterstitial.instance.AdFinished += Reboot;
+            AdInterstitial.instance.LoadAd();
+            AdInterstitial.instance.ShowAd();
             timeSinceAd = Time.unscaledTime;
         }
     }
@@ -128,8 +129,8 @@ public class GameController : MonoBehaviour {
         Player.Instance.Respawn();
         gameoverPanel.SetActive(false);
         gamePanel.SetActive(true);
-        if (AdController.instance != null) {
-            AdController.instance.AdFinished -= Reboot;
+        if (AdInterstitial.instance != null) {
+            AdInterstitial.instance.AdFinished -= Reboot;
         }
     }
 
