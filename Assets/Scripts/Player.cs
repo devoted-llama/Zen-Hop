@@ -115,6 +115,7 @@ public class Player : MonoBehaviour {
     }
 
     void DoPlatformActions(Platform platform) {
+        Debug.Log("Starting Platform Action Coroutine.");
          StartCoroutine(DoPlatformActionsCoroutine(platform));
     }
 
@@ -160,13 +161,16 @@ public class Player : MonoBehaviour {
             yield break;
         }
 
-        yield return new WaitForSecondsRealtime(.5f);
 
-        if (GetHasLandedOnPlatformAndStopped()) {
-            currentPlatformId = platform.Id;
-            OnPlatformLanded(currentPlatformId);
+        while (GetHasLandedOnPlatformAndStopped() == false) {
+            yield return new WaitForSecondsRealtime(.1f);
+            Debug.Log("Landed but not still. Waiting.");
         }
-        
+        Debug.Log("Finally still.");
+
+        currentPlatformId = platform.Id;
+        OnPlatformLanded(currentPlatformId);
+
         doingPlatformActionsCoroutine = false;
     }
 
@@ -179,6 +183,7 @@ public class Player : MonoBehaviour {
         Vector2 velocity = new Vector2 (0, -GameController.instance.fallSpeed);
         RigidBody.velocity = velocity;
         transform.position = pos;
+        doingPlatformActionsCoroutine = false;
     }
 
     public void Respawn() {
