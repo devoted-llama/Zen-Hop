@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 95659579382095548}
   - component: {fileID: 50636420292216998}
   - component: {fileID: 8528469980149119583}
-  - component: {fileID: 9082336582347377705}
+  - component: {fileID: 8970520140138860343}
   m_Layer: 0
   m_Name: Platform
   m_TagString: Untagged
@@ -87,10 +87,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfa149d264852054b9ff5709029231b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
-  bounceTime: 0
---- !u!61 &9082336582347377705
-BoxCollider2D:
+--- !u!60 &8970520140138860343
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +100,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.019419909, y: 0.01294744}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -112,9 +110,26 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 5.6480737, y: 0.09369016}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 2.7531772, y: 0.2146272}
+      - {x: 2.8411179, y: 0.16646281}
+      - {x: 2.9082417, y: -0.028896973}
+      - {x: 2.7991598, y: -0.16502763}
+      - {x: 2.650776, y: -0.19458164}
+      - {x: 2.5047147, y: -0.037657827}
+      - {x: -2.505515, y: -0.035556197}
+      - {x: -2.5741792, y: -0.16498506}
+      - {x: -2.640517, y: -0.19181007}
+      - {x: -2.749355, y: -0.18686698}
+      - {x: -2.8722596, y: -0.0904524}
+      - {x: -2.8445876, y: 0.169065}
+      - {x: -2.6687548, y: 0.2251477}
+      - {x: -2.5157251, y: 0.1446642}
+      - {x: -2.514556, y: 0.037250012}
+      - {x: 2.5005505, y: 0.03725001}
+      - {x: 2.5264547, y: 0.124349624}
+      - {x: 2.5595808, y: 0.17010954}
 --- !u!1 &5502563260485552888
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,6 +176,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
