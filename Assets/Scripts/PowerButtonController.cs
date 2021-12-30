@@ -8,6 +8,7 @@ public class PowerButtonController : MonoBehaviour
 {
     bool showing = false;
     bool handheld = false;
+    Touch touch;
 
     [SerializeField]
     CircleGenerator outerRing;
@@ -22,60 +23,62 @@ public class PowerButtonController : MonoBehaviour
     }
 
     void Update() {
-        
-        if (handheld) {
-            DoHandHeldAction();
-        } else {
-            DoDesktopAction();
+        if (handheld && Input.touchCount > 0) {
+            touch = Input.GetTouch(0);
         }
+        DoAction();
     }
 
     void SetIsHandHeld() {
         handheld = SystemInfo.deviceType == DeviceType.Handheld;
         Debug.Log(string.Format("handheld set to {0}", handheld));
     }
-       
-    void DoHandHeldAction() {
-        if (Input.touchCount > 0) {
 
-            Touch touch = Input.GetTouch(0);
-            Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
+    void DoAction() {
+        Vector3 pressPos = GetPressPosition();
 
-            if (Player.Instance.IsReady() && touch.phase == TouchPhase.Began && !showing) {
-                Show(touchPos);
-            }
-
-            if (touch.phase == TouchPhase.Moved && showing) {
-                Vector3 buttonPos = transform.position;
-                SetAngle(buttonPos, touchPos);
-                SetPower(buttonPos, touchPos);
-            }
-
-            if (touch.phase == TouchPhase.Ended && showing) {
-                Hide();
-                Player.Instance.Jump();
-            }
-        }
-    }
-
-    void DoDesktopAction() {
-
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        if (Player.Instance.IsReady() && Input.GetButtonDown("Fire1") && !showing) {
-            Show(mousePos);
+        if (Player.Instance.IsReady() && GetPressStart() && !showing) {
+            Show(pressPos);
         }
 
-        if (Input.GetButton("Fire1") && showing) {
+        if (GetPressHold() && showing) {
             Vector3 buttonPos = transform.position;
-            SetAngle(buttonPos, mousePos);
-            SetPower(buttonPos, mousePos);
+            SetAngle(buttonPos, pressPos);
+            SetPower(buttonPos, pressPos);
         }
 
-        if (Input.GetButtonUp("Fire1") && showing) {
+        if (GetPressEnd() && showing) {
             Hide();
             Player.Instance.Jump();
         }
+    }
+
+    Vector3 GetPressPosition() {
+        if (handheld) {
+            return Camera.main.ScreenToWorldPoint(touch.position);
+        }
+        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    }
+
+    bool GetPressStart() {
+        if(handheld) {
+            return touch.phase == TouchPhase.Began;
+        }
+        return Input.GetButtonDown("Fire1");
+    }
+
+    bool GetPressHold() {
+        if (handheld) {
+            return touch.phase == TouchPhase.Moved;
+        }
+        return Input.GetButton("Fire1");
+    }
+
+    bool GetPressEnd() {
+        if (handheld) {
+            return touch.phase == TouchPhase.Ended;
+        }
+        return Input.GetButtonUp("Fire1");
     }
 
 
@@ -85,7 +88,7 @@ public class PowerButtonController : MonoBehaviour
 
         float distance = Vector2.Distance(point1, point2);
 
-        float size = outerRing.Size;
+        float size = outerRing.Size * 2;
 
         float power = distance / size;
         power = power > 1 ? 1 : power;
