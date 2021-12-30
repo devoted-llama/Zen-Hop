@@ -32,26 +32,26 @@ public class PowerButtonController : MonoBehaviour
 
     void SetIsHandHeld() {
         handheld = SystemInfo.deviceType == DeviceType.Handheld;
+        Debug.Log(string.Format("handheld set to {0}", handheld));
     }
        
     void DoHandHeldAction() {
         if (Input.touchCount > 0) {
 
             Touch touch = Input.GetTouch(0);
+            Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
 
             if (Player.Instance.IsReady() && touch.phase == TouchPhase.Began && !showing) {
-                Show(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                Show(touchPos);
             }
 
             if (touch.phase == TouchPhase.Moved && showing) {
                 Vector3 buttonPos = transform.position;
-                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                SetAngle(buttonPos, mousePos);
-                SetPower(buttonPos, mousePos);
+                SetAngle(buttonPos, touchPos);
+                SetPower(buttonPos, touchPos);
             }
 
             if (touch.phase == TouchPhase.Ended && showing) {
-
                 Hide();
                 Player.Instance.Jump();
             }
@@ -59,13 +59,15 @@ public class PowerButtonController : MonoBehaviour
     }
 
     void DoDesktopAction() {
+
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
         if (Player.Instance.IsReady() && Input.GetButtonDown("Fire1") && !showing) {
-            Show(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            Show(mousePos);
         }
 
         if (Input.GetButton("Fire1") && showing) {
             Vector3 buttonPos = transform.position;
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             SetAngle(buttonPos, mousePos);
             SetPower(buttonPos, mousePos);
         }
@@ -77,8 +79,8 @@ public class PowerButtonController : MonoBehaviour
     }
 
 
-    void SetPower(Vector3 buttonPos, Vector3 mousePos) {
-        Vector2 point1 = mousePos;
+    void SetPower(Vector3 buttonPos, Vector3 cursorPos) {
+        Vector2 point1 = cursorPos;
         Vector2 point2 = buttonPos;
 
         float distance = Vector2.Distance(point1, point2);
@@ -94,9 +96,9 @@ public class PowerButtonController : MonoBehaviour
         Player.Instance.SetPower(power);
     }
 
-    void SetAngle(Vector3 buttonPos, Vector3 mousePos) {
-        float adjacent = mousePos.x - buttonPos.x;
-        float opposite = mousePos.y - buttonPos.y;
+    void SetAngle(Vector3 buttonPos, Vector3 cursorPos) {
+        float adjacent = cursorPos.x - buttonPos.x;
+        float opposite = cursorPos.y - buttonPos.y;
 
         float angle = Mathf.Rad2Deg * Mathf.Atan(adjacent / opposite);
 
@@ -123,6 +125,7 @@ public class PowerButtonController : MonoBehaviour
     }
 
     void Show(Vector3 position) {
+        Debug.Log(string.Format("Now showing power button at {0}",position));
         Player player = Player.Instance;
         position.z = player.transform.position.z;
         transform.position = position;
