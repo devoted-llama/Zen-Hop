@@ -9,6 +9,8 @@ public class PowerButtonController : MonoBehaviour
     bool showing = false;
     bool handheld = false;
     Touch touch;
+    Vector3 originPos;
+    Vector3 currentPos;
 
     [SerializeField]
     CircleGenerator outerRing;
@@ -35,16 +37,19 @@ public class PowerButtonController : MonoBehaviour
     }
 
     void DoAction() {
-        Vector3 pressPos = GetPressPosition();
+        
 
         if (Player.Instance.IsReady() && GetPressStart() && !showing) {
-            Show(pressPos);
+            originPos = GetPressPosition();
+            if (GetPressPlayer()) {
+                Show(Player.Instance.transform.position);
+            }
         }
 
         if (GetPressHold() && showing) {
-            Vector3 buttonPos = transform.position;
-            SetAngle(buttonPos, pressPos);
-            SetPower(buttonPos, pressPos);
+            currentPos = GetPressPosition();
+            SetAngle();
+            SetPower();
         }
 
         if (GetPressEnd() && showing) {
@@ -65,7 +70,20 @@ public class PowerButtonController : MonoBehaviour
             return touch.phase == TouchPhase.Began;
         }
         return Input.GetButtonDown("Fire1");
+
+        
     }
+
+    bool GetPressPlayer() {
+        Vector3 pos = GetPressPosition();
+        RaycastHit2D hit = Physics2D.Raycast(pos, -Vector3.forward);
+        
+        if(hit.collider != null && hit.transform.CompareTag("Player")) {
+            return true;
+        }
+        return false;
+    }
+
 
     bool GetPressHold() {
         if (handheld) {
@@ -82,9 +100,9 @@ public class PowerButtonController : MonoBehaviour
     }
 
 
-    void SetPower(Vector3 buttonPos, Vector3 cursorPos) {
-        Vector2 point1 = cursorPos;
-        Vector2 point2 = buttonPos;
+    void SetPower() {
+        Vector2 point1 = currentPos;
+        Vector2 point2 = originPos;
 
         float distance = Vector2.Distance(point1, point2);
 
@@ -99,10 +117,10 @@ public class PowerButtonController : MonoBehaviour
         Player.Instance.SetPower(power);
     }
 
-    void SetAngle(Vector3 buttonPos, Vector3 cursorPos) {
-        float adjacent = cursorPos.x - buttonPos.x;
-        float opposite = cursorPos.y - buttonPos.y;
-
+    void SetAngle() {
+        float adjacent = currentPos.x - originPos.x;
+        float opposite = currentPos.y - originPos.y;
+        Debug.Log(string.Format("adj {0} op {1}", adjacent, opposite));
         float angle = Mathf.Rad2Deg * Mathf.Atan(adjacent / opposite);
 
         float modifier = 0;
@@ -115,20 +133,21 @@ public class PowerButtonController : MonoBehaviour
             modifier = 360f;
         }
 
-        SetLineAngle(angle);
+        SetLineAngle(angle, modifier);
 
         Player.Instance.SetJumpAngle(angle, modifier);
     }
 
-    void SetLineAngle(float angle) {
+    void SetLineAngle(float angle, float modifier) {
         if (!float.IsNaN(angle)) {
+            angle = modifier + angle;
             Vector3 eulerAngle = new Vector3(0, 0, angle);
             line.transform.eulerAngles = -eulerAngle;
         }
     }
 
     void Show(Vector3 position) {
-        Debug.Log(string.Format("Now showing power button at {0}",position));
+        //Debug.Log(string.Format("Now showing power button at {0}",position));
         Player player = Player.Instance;
         position.z = player.transform.position.z;
         transform.position = position;
