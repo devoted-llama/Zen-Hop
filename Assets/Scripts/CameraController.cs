@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CameraController : MonoBehaviour {
-    public static CameraController instance = null;
+    public static CameraController Instance = null;
 
     Vector3 startMarker;
     Vector3 endMarker;
-    [SerializeField]
     float titleScreenPosition = -12f;
     public float TitleScreenPosition { get { return titleScreenPosition; } }
     [SerializeField]
-    float speed = 10.0f;
-    public float Speed { get { return speed; } }
     float startTime;
     float journeyLength;
+    float lerpTime = 2f;
 
     bool moving = false;
 
@@ -22,9 +21,9 @@ public class CameraController : MonoBehaviour {
     public event moveEvent finishMoving;
 
     void Awake() {
-        if (instance == null) {
-            instance = this;
-        } else if (instance != this) {
+        if (Instance == null) {
+            Instance = this;
+        } else if (Instance != this) {
             Destroy(gameObject);
         }
 
@@ -34,7 +33,7 @@ public class CameraController : MonoBehaviour {
     public void MoveToTitleScreenPosition() {
         if (GameController.instance.playing == false) {
             Vector3 pos = transform.position;
-            pos.x = TitleScreenPosition;
+            pos.x = titleScreenPosition;
             transform.position = pos;
         }
     }
@@ -47,17 +46,36 @@ public class CameraController : MonoBehaviour {
         moving = true;
     }
 
+    public void MoveToPlayerExact() {
+        Vector3 end = Player.Instance.transform.position;
+        Vector3 pos = transform.position;
+        pos.x = end.x;
+        pos.y = end.y;
+        Move(pos);
+    }
+
     void LerpToNewPosition() {
         if (moving == true) {
-            float distCovered = (Time.time - startTime) * Speed;
-            float fractionJourney = distCovered / journeyLength;
-            transform.position = Vector3.Lerp(startMarker, endMarker, fractionJourney);
+            float timeDif = Time.time - startTime;
+            float t = timeDif / lerpTime;
+            float interpolant = ParametricBlend(t);
+            
+            transform.position = Vector3.Lerp(startMarker, endMarker, interpolant);
             if (transform.position == endMarker) {
                 moving = false;
                 finishMoving?.Invoke();
             }
         }
     }
+
+
+    float ParametricBlend(float t) {
+        float alpha = 2.1f;
+        float sqt = t * t;
+        return sqt / (alpha * (sqt - t) + 1.0f);
+    }
+
+    
 
     bool GetCameraNotMovingAndPlayerIsAlive() {
         return moving == false && GameController.instance.playing == true && Player.Instance.gameObject.activeSelf == true;
@@ -86,5 +104,11 @@ public class CameraController : MonoBehaviour {
         Vector3 pos = transform.position;
         pos.x = t.position.x;
         Move (pos);
+    }
+
+    public void MoveToInstant(Transform t) {
+        Vector3 pos = transform.position;
+        pos.x = t.position.x;
+        transform.position = pos;
     }
 }

@@ -41,8 +41,7 @@ public class GameController : MonoBehaviour {
     Random.State randomState;
 
 
-    public delegate void MyDelegate();
-    MyDelegate myDelegate;
+
 
     void Awake () {
         if (instance == null) {
@@ -66,6 +65,7 @@ public class GameController : MonoBehaviour {
 
     void DoPlayerPlatformLandedActions(int platformId) {
         UpdateScoreBasedOnPlatformId(platformId);
+        CameraController.Instance.MoveToPlayerExact();
     }
 
     void UpdateScoreBasedOnPlatformId(int platformId) {
@@ -145,11 +145,11 @@ public class GameController : MonoBehaviour {
         UpdateUI();
         gameoverPanel.SetActive(false);
         gamePanel.SetActive(false);
-        CameraController.instance.MoveToTitleScreenPosition();
+        CameraController.Instance.MoveToTitleScreenPosition();
         Player.Instance.ResetToStartPosition();
         Random.state = randomState;
         PlatformController.Instance.PositionStartingPlatforms();
-        yield return new WaitUntil(() => Camera.main.transform.position.x == CameraController.instance.TitleScreenPosition);
+        yield return new WaitUntil(() => Camera.main.transform.position.x == CameraController.Instance.TitleScreenPosition);
         gameStartPanel.SetActive(true);
     }
 
@@ -176,8 +176,7 @@ public class GameController : MonoBehaviour {
     }
 
     public void PlayButtonClick() {
-        CameraController.instance.finishMoving += SetPlayActive;
-        CameraController.instance.MoveTo(PlatformController.Instance.GetPlatformById(0).transform);
+        SetPlayActive();
         gameStartPanel.SetActive(false);
 
     }
@@ -186,7 +185,6 @@ public class GameController : MonoBehaviour {
         Player.Instance.gameObject.SetActive(true);
         gamePanel.SetActive(true);
         playing = true;
-        CameraController.instance.finishMoving -= SetPlayActive;
     }
 
     public void ShowAboutScreen() {

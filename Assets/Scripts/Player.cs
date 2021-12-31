@@ -17,6 +17,7 @@ public class Player : MonoBehaviour {
     Vector3 startPosition;
     float jumpAngle = 0;
     bool doingPlatformActionsCoroutine = false;
+    Coroutine platformActionCoroutine;
 
     public delegate void PlatformLandedAction(int platformId);
     public event PlatformLandedAction OnPlatformLanded;
@@ -52,7 +53,6 @@ public class Player : MonoBehaviour {
     public void Jump() {
         if (gameObject.activeSelf && GetRigidBodyVelocityEquals(0)) {
             StartCoroutine(JumpCoroutine());
-            
         }
     }
 
@@ -116,14 +116,7 @@ public class Player : MonoBehaviour {
 
     void DoPlatformActions(Platform platform) {
         Debug.Log("Starting Platform Action Coroutine.");
-         StartCoroutine(DoPlatformActionsCoroutine(platform));
-    }
-
-    bool GetRigidBodyVelocityGreaterThan(float velocity) {
-        return RigidBody.velocity.x > velocity || 
-            RigidBody.velocity.y > velocity || 
-            RigidBody.velocity.x < -velocity || 
-            RigidBody.velocity.y < -velocity;
+        platformActionCoroutine = StartCoroutine(DoPlatformActionsCoroutine(platform));
     }
 
     bool GetRigidBodyVelocityEquals(float velocity) {
@@ -146,7 +139,7 @@ public class Player : MonoBehaviour {
     }
 
     bool GetHasLandedOnPlatformAndStopped() {
-        return GetHasLandedOnPlatform() && GetRigidBodyVelocityLessThan(0.00001f);
+        return GetHasLandedOnPlatform() && GetRigidBodyVelocityLessThan(0.1f);
     }
 
     IEnumerator DoPlatformActionsCoroutine(Platform platform) {
@@ -156,17 +149,14 @@ public class Player : MonoBehaviour {
         }
         doingPlatformActionsCoroutine = true;
 
-        if (platform.Id == currentPlatformId) {
-            doingPlatformActionsCoroutine = false;
-            yield break;
-        }
-
-
         while (GetHasLandedOnPlatformAndStopped() == false) {
             yield return new WaitForSecondsRealtime(.1f);
             Debug.Log("Landed but not still. Waiting.");
         }
         Debug.Log("Finally still.");
+
+
+        CameraController.Instance.MoveToPlayerExact();
 
         currentPlatformId = platform.Id;
         OnPlatformLanded(currentPlatformId);
@@ -177,13 +167,14 @@ public class Player : MonoBehaviour {
     IEnumerator RespawnCoroutine() {
         Platform currentPlatform = PlatformController.Instance.GetPlatformById(0);
         Vector3 pos = currentPlatform.transform.position;
-        CameraController.instance.MoveTo(currentPlatform.transform);
+        CameraController.Instance.MoveToInstant(currentPlatform.transform);
         yield return new WaitUntil (() => Camera.main.transform.position.x == pos.x);
         pos.y = GameController.instance.respawnHeight;
         Vector2 velocity = new Vector2 (0, -GameController.instance.fallSpeed);
         RigidBody.velocity = velocity;
         transform.position = pos;
         doingPlatformActionsCoroutine = false;
+        StopCoroutine(platformActionCoroutine);
     }
 
     public void Respawn() {
