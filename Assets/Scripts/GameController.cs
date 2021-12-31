@@ -38,6 +38,9 @@ public class GameController : MonoBehaviour {
     public GameObject gameStartPanel;
     public GameObject aboutPanel;
 
+    public Text versionText;
+    public VersionInfo versionInfo;
+
     Random.State randomState;
 
 
@@ -56,10 +59,11 @@ public class GameController : MonoBehaviour {
 
 	}
 
-    void Start() { 
+    void Start() {
         timeSinceAd = Time.unscaledTime;
         GetHighScore();
         UpdateUI();
+        SetBuildNumber();
         Player.Instance.OnPlatformLanded += DoPlayerPlatformLandedActions;
     }
 
@@ -193,5 +197,9 @@ public class GameController : MonoBehaviour {
 
     public void HideAboutScreen() {
         aboutPanel.SetActive(false);
+    }
+
+    void SetBuildNumber() {
+        versionText.text = $"Version {versionInfo.version}.{versionInfo.buildNumber}";
     }
 }
