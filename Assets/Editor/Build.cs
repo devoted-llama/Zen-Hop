@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using UnityEditor.Build.Reporting;
-using UnityEditor.Build;
 using System;
+using UnityEditor.Build;
 
 public class Build : MonoBehaviour {
     [MenuItem("Build/Build iOS")]
@@ -27,16 +27,18 @@ public class Build : MonoBehaviour {
     }
 }
 
-
-public class BuildPreprocessor : MonoBehaviour, IPreprocessBuildWithReport {
-    public int callbackOrder => throw new System.NotImplementedException();
+public class BuildPreprocessor : IPreprocessBuildWithReport {
+    int IOrderedCallback.callbackOrder { get { return 0; } }
 
     public void OnPreprocessBuild(BuildReport report) {
         string[] guids = AssetDatabase.FindAssets($"t:{typeof(VersionInfo)}");
         string path = AssetDatabase.GUIDToAssetPath(guids[0]);
         VersionInfo versionInfo = AssetDatabase.LoadAssetAtPath<VersionInfo>(path);
+      
         versionInfo.buildNumber++;
-        throw new System.NotImplementedException();
+        versionInfo.dateTime = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+        versionInfo.version = PlayerSettings.bundleVersion;
     }
 
 }
+

@@ -4,4 +4,5 @@ using UnityEngine;
 public class VersionInfo : ScriptableObject {
     public string version;
     public int buildNumber;
+    public string dateTime;
 }
