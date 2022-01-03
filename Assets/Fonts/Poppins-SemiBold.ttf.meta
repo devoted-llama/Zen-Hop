@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a56f6a574f60247b5b46c4e58f3d8711
+guid: 46f9d0dc73e61475f85b49b50edc1c7b
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,11 +9,10 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Lato
+  - Poppins
   fallbackFontReferences:
-  - {fileID: 12800000, guid: 60afa48d9e7124df698e84dfe98fb859, type: 3}
-  - {fileID: 12800000, guid: d3f5703e3435f44149b1ab519729695a, type: 3}
-  - {fileID: 12800000, guid: e13f5a1cdc4e7450593fe31fb181d9ec, type: 3}
+  - {fileID: 12800000, guid: 143efdd26019441aa89d04dec7139051, type: 3}
+  - {fileID: 12800000, guid: 7018c926d09974a54820c16e3139b508, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

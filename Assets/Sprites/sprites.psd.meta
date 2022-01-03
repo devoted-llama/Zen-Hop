@@ -1,28 +1,19 @@
 fileFormatVersion: 2
-guid: c9644cd7f19680b419efc1a78bad199c
+guid: e04c740c7f5bc4c659c0c8b9f5a7f36f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8063389566774839230
-    second: sprites-circle-outline
+      213: 6128299156075563123
+    second: sprites_play
   - first:
-      213: 4339604125760024862
-    second: sprites-power-button
+      213: 3386662938922423588
+    second: sprites_retry
   - first:
-      213: 834441551224903031
-    second: sprites-circle-solid
+      213: -6110656803992641779
+    second: sprites_ball
   - first:
-      213: -6801801844444778299
-    second: sprites-reset
-  - first:
-      213: -2294724076887565222
-    second: sprites-platform
-  - first:
-      213: -7425856497852158053
-    second: sprites-play
-  - first:
-      213: 4140464319912937634
-    second: sprites-platform
+      213: 8553092956536608252
+    second: sprites_platform
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -109,7 +100,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
+    buildTarget: iPhone
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -124,127 +115,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sprites-circle-outline
+      name: sprites_play
       rect:
         serializedVersion: 2
-        x: 74
-        y: 3767
-        width: 465
-        height: 465
+        x: 1
+        y: 185
+        width: 714
+        height: 715
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2487bc229e5191090800000000000000
-      internalID: -8063389566774839230
+      spriteID: 378c5330d971c0550800000000000000
+      internalID: 6128299156075563123
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sprites-power-button
+      name: sprites_retry
       rect:
         serializedVersion: 2
-        x: 2560
-        y: 2566
-        width: 1672
-        height: 1672
+        x: 717
+        y: 185
+        width: 715
+        height: 715
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e11febdc5fe593c30800000000000000
-      internalID: 4339604125760024862
+      spriteID: 4259378eff7dffe20800000000000000
+      internalID: 3386662938922423588
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sprites-circle-solid
+      name: sprites_ball
       rect:
         serializedVersion: 2
-        x: 79
-        y: 3212
-        width: 465
-        height: 465
+        x: 1435
+        y: 407
+        width: 270
+        height: 271
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 77516967b28849b00800000000000000
-      internalID: 834441551224903031
+      spriteID: d0fd1bd2306923ba0800000000000000
+      internalID: -6110656803992641779
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sprites-reset
+      name: sprites_platform
       rect:
         serializedVersion: 2
-        x: 146
-        y: 2794
-        width: 329
-        height: 331
+        x: 120
+        y: 46
+        width: 1189
+        height: 113
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5c0b54d82452b91a0800000000000000
-      internalID: -6801801844444778299
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: sprites-play
-      rect:
-        serializedVersion: 2
-        x: 215
-        y: 2510
-        width: 171
-        height: 196
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b9fee7cebde02f890800000000000000
-      internalID: -7425856497852158053
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: sprites-platform
-      rect:
-        serializedVersion: 2
-        x: 873
-        y: 3953
-        width: 1165
-        height: 92
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2a80791ac52e57930800000000000000
-      internalID: 4140464319912937634
+      spriteID: cf5924d4ab0b2b670800000000000000
+      internalID: 8553092956536608252
       vertices: []
       indices: 
       edges: []

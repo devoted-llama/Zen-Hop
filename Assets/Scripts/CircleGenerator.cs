@@ -29,7 +29,12 @@ public class CircleGenerator : MonoBehaviour {
     [SerializeField]
     bool keepPolygonAmountConsistentForCompletionAmount = false;
 
+    [SerializeField]
+    bool dashed = false;
+
     int polygonQty = 0;
+
+
     
 
     Vector3[] vertices;
@@ -74,14 +79,23 @@ public class CircleGenerator : MonoBehaviour {
     }
 
     void SetMeshVertices() {
-        vertices = new Vector3[(polygonQty + 1) * 2];
+        if(!dashed) { 
+            vertices = new Vector3[(polygonQty + 1) * 2];
+        } else {
+            vertices = new Vector3[polygonQty * 4];
+        }
+
         for (int i = 0; i <= polygonQty; i++) {
+
             float rad = i * -((float)completion / polygonQty) * Mathf.Deg2Rad + (angle * Mathf.Deg2Rad);
 
             float x = Mathf.Cos(rad) * size;
             float y = Mathf.Sin(rad) * size;
-
-            vertices[i + polygonQty + 1] = new Vector2(x, y);
+            if (!dashed) {
+                vertices[i + polygonQty + 1] = new Vector2(x, y);
+            } else {
+                vertices[i + (polygonQty * 2)] = new Vector2(x, y);
+            }
 
             x = Mathf.Cos(rad) * thickness * size;
             y = Mathf.Sin(rad) * thickness * size;
@@ -92,16 +106,33 @@ public class CircleGenerator : MonoBehaviour {
 
     void SetMeshTriangles() {
         int[] triangles = new int[polygonQty * 6];
-        for (int ti = 0, vi = 0, x = 0; x < polygonQty; x++, ti += 6, vi++) {
+        for (int ti = 0, vi = 0, x = 0; x < polygonQty; x++, ti += 6, vi+=!dashed?1:2) {
             triangles[ti] = vi;
-            triangles[ti + 2] = triangles[ti + 3] = vi + polygonQty + 1;
-            triangles[ti + 1] = triangles[ti + 4] = vi + 1;
-            triangles[ti + 5] = vi + polygonQty + 2;
+            if (!dashed) {
+                triangles[ti + 2] = triangles[ti + 3] = vi + polygonQty + 1;
+                triangles[ti + 1] = triangles[ti + 4] = vi + 1;
+                triangles[ti + 5] = vi + polygonQty + 2;
+            } else {
+                triangles[ti + 1] = triangles[ti + 4] = vi + 1;
+                triangles[ti + 2] = triangles[ti + 3] = vi + (polygonQty * 2);
+                triangles[ti + 5] = vi + (polygonQty * 2) + 1;
+            }
             mesh.triangles = triangles;
         }
     }
 
-    
+    void SetMeshTrianglesDashed() {
+        int[] triangles = new int[polygonQty * 6];
+        for (int ti = 0, vi = 0, x = 0; x < polygonQty; x++, ti += 6, vi += 2) {
+            triangles[ti] = vi;
+            triangles[ti + 1] = triangles[ti + 4]  = vi + 1;
+            triangles[ti + 2] = triangles[ti + 3] = vi + (polygonQty * 2);
+            triangles[ti + 5] = vi + (polygonQty * 2) + 1;
+            mesh.triangles = triangles;
+        }
+    }
+
+
 #if UNITY_EDITOR
     private void OnValidate() => UnityEditor.EditorApplication.delayCall += _OnValidate;
 

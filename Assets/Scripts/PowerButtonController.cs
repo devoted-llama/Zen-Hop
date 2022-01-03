@@ -14,6 +14,8 @@ public class PowerButtonController : MonoBehaviour
     CircleGenerator powerRing;
     [SerializeField]
     LineRenderer line;
+    [SerializeField]
+    float powerAreaMultiplier = 2f;
 
     private void Start() {
         SetIsHandHeld();
@@ -102,7 +104,7 @@ public class PowerButtonController : MonoBehaviour
 
         float distance = Vector2.Distance(point1, point2);
 
-        float size = outerRing.Size * 2;
+        float size = outerRing.Size * powerAreaMultiplier;
 
         float power = distance / size;
         power = power > 1 ? 1 : power;

@@ -7,7 +7,7 @@ public class Player : MonoBehaviour {
     float PowerWithMultiplier { get { return powerAmount * powerForceMultiplier; } }
 
     [SerializeField]
-    readonly float powerForceMultiplier = 1000f;
+    float powerForceMultiplier = 1000f;
     float powerAmount = 0;
 
     int currentPlatformId = 0;
