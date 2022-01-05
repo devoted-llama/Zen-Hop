@@ -29,4 +29,21 @@ public static class Helper
         }
         return false;
     }
+
+    public static bool CheckRigidBodyContactsParentsHasComponent<T>(Rigidbody2D rb, int colliderSize = 2) {
+        Collider2D[] contacts = new Collider2D[colliderSize];
+        rb.GetContacts(contacts);
+        for (int i = 0; i < contacts.Length; i++) {
+            if (contacts[i] != null) {
+                T contact = contacts[i].GetComponentInParent<T>();
+                if (contact != null) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+
 }
