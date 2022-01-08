@@ -121,17 +121,6 @@ public class CircleGenerator : MonoBehaviour {
         }
     }
 
-    void SetMeshTrianglesDashed() {
-        int[] triangles = new int[polygonQty * 6];
-        for (int ti = 0, vi = 0, x = 0; x < polygonQty; x++, ti += 6, vi += 2) {
-            triangles[ti] = vi;
-            triangles[ti + 1] = triangles[ti + 4]  = vi + 1;
-            triangles[ti + 2] = triangles[ti + 3] = vi + (polygonQty * 2);
-            triangles[ti + 5] = vi + (polygonQty * 2) + 1;
-            mesh.triangles = triangles;
-        }
-    }
-
 
 #if UNITY_EDITOR
     private void OnValidate() => UnityEditor.EditorApplication.delayCall += _OnValidate;
