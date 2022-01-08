@@ -114,9 +114,7 @@ public class PlatformController : MonoBehaviour {
         }
     }
 
-    bool GetPlayerIsTouchingPlatform(Platform platform) {
-        return Helper.CheckRigidBodyContactsGameObjectHasComponent<Platform>(Player.Instance.RigidBody, platform.gameObject);
-    }
+
 
     void DoTransitionPlatformAction(int platformId) {
         for (int i = 0; i < platforms.Length; i++) {
@@ -134,9 +132,8 @@ public class PlatformController : MonoBehaviour {
         Transitioning = true;
         int platformIndex = GetIndexOfPlatform(platform);
         
-        if (GetPlayerIsTouchingPlatform(platform) == true) {
-            RepositionPlatforms(platformIndex);
-        }
+        RepositionPlatforms(platformIndex);
+        
         Transitioning = false;
     }
 

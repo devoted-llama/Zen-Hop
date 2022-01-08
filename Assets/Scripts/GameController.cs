@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour {
 
 
     public Text scoreText;
+    public Text highScoreText;
 
     public GameObject gameoverPanel;
     public Text gameoverScoreText;
@@ -87,6 +88,7 @@ public class GameController : MonoBehaviour {
         if (lives < 1) {
             SaveHighScore();
             DeactivatePlayer();
+            SetScoreText();
             ShowGameoverPanel();
         } else {
             UpdateUI();
@@ -98,9 +100,13 @@ public class GameController : MonoBehaviour {
         Player.Instance.gameObject.transform.position = new Vector3(0, -100, 0);
     }
 
+    void SetScoreText() {
+        gameoverScoreText.text = score.ToString();
+        highScoreText.text = highScore.ToString();
+    }
+
     void ShowGameoverPanel() {
         gamePanel.SetActive(false);
-        gameoverScoreText.text = "Score: " + score.ToString() + ", Best: " + highScore.ToString() + ".";
         gameoverPanel.SetActive(true);
     }
 

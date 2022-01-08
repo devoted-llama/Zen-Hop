@@ -7,7 +7,7 @@ public class Player : MonoBehaviour {
     float PowerWithMultiplier { get { return powerAmount * powerForceMultiplier; } }
 
     [SerializeField]
-    readonly float powerForceMultiplier = 1000f;
+    float powerForceMultiplier = 1000f;
     float powerAmount = 0;
 
     int currentPlatformId = 0;
@@ -129,7 +129,7 @@ public class Player : MonoBehaviour {
     }
 
     bool GetHasLandedOnPlatform() {
-        if (Helper.CheckRigidBodyContactsHasComponent<Platform>(RigidBody)) {
+        if (Helper.CheckRigidBodyContactsParentsHasComponent<Platform>(RigidBody)) {
             return true;
         }
         return false;
@@ -171,7 +171,9 @@ public class Player : MonoBehaviour {
         RigidBody.velocity = velocity;
         transform.position = pos;
         doingPlatformActionsCoroutine = false;
-        StopCoroutine(platformActionCoroutine);
+        if (platformActionCoroutine != null) {
+            StopCoroutine(platformActionCoroutine);
+        }
     }
 
     public void Respawn() {
