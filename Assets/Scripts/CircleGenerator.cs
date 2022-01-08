@@ -108,12 +108,11 @@ public class CircleGenerator : MonoBehaviour {
         int[] triangles = new int[polygonQty * 6];
         for (int ti = 0, vi = 0, x = 0; x < polygonQty; x++, ti += 6, vi+=!dashed?1:2) {
             triangles[ti] = vi;
+            triangles[ti + 1] = triangles[ti + 4] = vi + 1;
             if (!dashed) {
                 triangles[ti + 2] = triangles[ti + 3] = vi + polygonQty + 1;
-                triangles[ti + 1] = triangles[ti + 4] = vi + 1;
                 triangles[ti + 5] = vi + polygonQty + 2;
             } else {
-                triangles[ti + 1] = triangles[ti + 4] = vi + 1;
                 triangles[ti + 2] = triangles[ti + 3] = vi + (polygonQty * 2);
                 triangles[ti + 5] = vi + (polygonQty * 2) + 1;
             }
