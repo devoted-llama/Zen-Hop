@@ -18,6 +18,10 @@ public class UIController : MonoBehaviour {
     Text gameoverScoreText;
     [SerializeField]
     GameObject gameoverPanel;
+    [SerializeField]
+    GameObject menuPanel;
+    [SerializeField]
+    Toggle musicPreferenceToggle;
 
     void Awake() {
         if (Instance == null) {
@@ -27,8 +31,16 @@ public class UIController : MonoBehaviour {
         }
     }
 
+    void Start() {
+        SetMusicPreferenceToggle();
+    }
+
     public void PlayButtonClick() {
-        GameController.instance.SetPlayActive();
+        GameController.Instance.SetPlayActive();
+    }
+
+    public void RetryButtonClick() {
+        GameController.Instance.RebootWithAds();
     }
 
     public void SetGamePanelActive(bool status) {
@@ -41,6 +53,10 @@ public class UIController : MonoBehaviour {
 
     public void SetGameOverPanelActive(bool status) {
         gameoverPanel.SetActive(status);
+    }
+
+    public void ToggleMenuPanel() {
+        menuPanel.SetActive(!menuPanel.activeSelf);
     }
 
     public void SetVersionText(string text) {
@@ -57,5 +73,13 @@ public class UIController : MonoBehaviour {
 
     public void SetGameoverHighScoreText(string text) {
         gameoverHighScoreText.text = text;
+    }
+
+    public void ClickMusicToggle() {
+        MusicController.Instance.ToggleMusicAndSetPreference();
+    }
+
+    void SetMusicPreferenceToggle() {
+        musicPreferenceToggle.SetIsOnWithoutNotify(MusicController.Instance.MusicPreference);
     }
 }

@@ -31,7 +31,6 @@ public class PowerButtonController : MonoBehaviour
 
     void SetIsHandHeld() {
         handheld = SystemInfo.deviceType == DeviceType.Handheld;
-        Debug.Log(string.Format("handheld set to {0}", handheld));
     }
 
     void DoAction() {

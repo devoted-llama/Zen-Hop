@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 public class AdInterstitial : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener {
-    public static AdInterstitial instance = null;
+    public static AdInterstitial Instance = null;
 
     [SerializeField] string _iOsAdUnitId;
     string _adUnitId;
@@ -15,9 +15,9 @@ public class AdInterstitial : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSho
 
 
     void Awake() {
-        if (instance == null) {
-            instance = this;
-        } else if (instance != this) {
+        if (Instance == null) {
+            Instance = this;
+        } else if (Instance != this) {
             Destroy(gameObject);
         }
 
