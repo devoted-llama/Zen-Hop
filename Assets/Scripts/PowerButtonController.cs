@@ -115,7 +115,6 @@ public class PowerButtonController : MonoBehaviour
     void SetAngle() {
         float adjacent = currentPos.x - originPos.x;
         float opposite = currentPos.y - originPos.y;
-        //Debug.Log(string.Format("adj {0} op {1}", adjacent, opposite));
         float angle = Mathf.Rad2Deg * Mathf.Atan(adjacent / opposite);
 
         float modifier = 0;
@@ -142,7 +141,6 @@ public class PowerButtonController : MonoBehaviour
     }
 
     void Show(Vector3 position) {
-        //Debug.Log(string.Format("Now showing power button at {0}",position));
         position.z = transform.position.z;
         transform.position = position;
 

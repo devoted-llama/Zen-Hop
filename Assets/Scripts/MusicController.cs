@@ -23,13 +23,13 @@ public class MusicController : MonoBehaviour {
         }
     }
 
-    public void ToggleMusicAndSetPreference() {
-        if(audioSource.isPlaying) {
-            audioSource.Stop();
-            SetMusicPreference(false);
-        } else {
+    public void ChangeMusicStateAndSetPreference() {
+        if(audioSource.isPlaying != true) {
             audioSource.Play();
             SetMusicPreference(true);
+        } else {
+            audioSource.Stop();
+            SetMusicPreference(false);
         }
     }
 

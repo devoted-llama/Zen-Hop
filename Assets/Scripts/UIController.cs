@@ -55,8 +55,12 @@ public class UIController : MonoBehaviour {
         gameoverPanel.SetActive(status);
     }
 
-    public void ToggleMenuPanel() {
-        menuPanel.SetActive(!menuPanel.activeSelf);
+    public void OpenMenuPanel() {
+        menuPanel.SetActive(true);
+    }
+
+    public void CloseMenuPanel() {
+        menuPanel.SetActive(false);
     }
 
     public void SetVersionText(string text) {
@@ -76,7 +80,7 @@ public class UIController : MonoBehaviour {
     }
 
     public void ClickMusicToggle() {
-        MusicController.Instance.ToggleMusicAndSetPreference();
+        MusicController.Instance.ChangeMusicStateAndSetPreference();
     }
 
     void SetMusicPreferenceToggle() {
