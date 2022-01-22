@@ -31,7 +31,7 @@ public class CameraController : MonoBehaviour {
         
     }
     public void MoveToTitleScreenPosition() {
-        if (GameController.instance.playing == false) {
+        if (GameController.Instance.Playing == false) {
             Vector3 pos = transform.position;
             pos.x = titleScreenPosition;
             transform.position = pos;
@@ -78,7 +78,7 @@ public class CameraController : MonoBehaviour {
     
 
     bool GetCameraNotMovingAndPlayerIsAlive() {
-        return moving == false && GameController.instance.playing == true && Player.Instance.gameObject.activeSelf == true;
+        return moving == false && GameController.Instance.Playing == true && Player.Instance.gameObject.activeSelf == true;
     }
 
     void FollowPlayer() {
@@ -96,7 +96,7 @@ public class CameraController : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D collider) {
         if (collider.gameObject.CompareTag ("Player")) {
-            GameController.instance.Die ();
+            GameController.Instance.Die ();
         }
     }
 

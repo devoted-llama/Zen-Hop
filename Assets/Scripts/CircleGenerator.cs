@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-using UnityEditor;
-using System.Collections.Generic;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer)), ExecuteAlways]
 public class CircleGenerator : MonoBehaviour {
@@ -34,18 +31,12 @@ public class CircleGenerator : MonoBehaviour {
 
     int polygonQty = 0;
 
-
-    
-
     Vector3[] vertices;
     Mesh mesh;
-
-
 
     void Start() {
         Generate();
     }
-
 
     public void Generate() {
         if(mesh == null) {

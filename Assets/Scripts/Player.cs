@@ -36,7 +36,7 @@ public class Player : MonoBehaviour {
     }
 
     void GameStartSetActive() {
-        if(GameController.instance.playing == false) {
+        if(GameController.Instance.Playing == false) {
             gameObject.SetActive(false);
         }
     }
@@ -112,7 +112,6 @@ public class Player : MonoBehaviour {
     }
 
     void DoPlatformActions(Platform platform) {
-        Debug.Log("Starting Platform Action Coroutine.");
         platformActionCoroutine = StartCoroutine(DoPlatformActionsCoroutine(platform));
     }
 
@@ -148,9 +147,7 @@ public class Player : MonoBehaviour {
 
         while (GetHasLandedOnPlatformAndStopped() == false) {
             yield return new WaitForSecondsRealtime(.1f);
-            Debug.Log("Landed but not still. Waiting.");
         }
-        Debug.Log("Finally still.");
 
 
         CameraController.Instance.MoveToPlayerExact();
@@ -166,8 +163,8 @@ public class Player : MonoBehaviour {
         Vector3 pos = currentPlatform.transform.position;
         CameraController.Instance.MoveToInstant(currentPlatform.transform);
         yield return new WaitUntil (() => Camera.main.transform.position.x == pos.x);
-        pos.y = GameController.instance.respawnHeight;
-        Vector2 velocity = new Vector2 (0, -GameController.instance.fallSpeed);
+        pos.y = GameController.Instance.RespawnHeight;
+        Vector2 velocity = new Vector2 (0, -GameController.Instance.FallSpeed);
         RigidBody.velocity = velocity;
         transform.position = pos;
         doingPlatformActionsCoroutine = false;

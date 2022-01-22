@@ -10,13 +10,31 @@ TextureImporter:
     second: sprites_retry
   - first:
       213: -6110656803992641779
-    second: sprites_ball
+    second: sprites_platform
   - first:
       213: 8553092956536608252
     second: sprites_platform
   - first:
       213: 6708733205153277002
+    second: sprites_menu
+  - first:
+      213: -2423230811885516303
+    second: sprites_divider-liine
+  - first:
+      213: 6813553822765877458
     second: sprites_score
+  - first:
+      213: -5082647686934749709
+    second: sprites_toggle_on
+  - first:
+      213: 6155212226941906339
+    second: sprites_toggle_off
+  - first:
+      213: 1211998406744890917
+    second: sprites_menu-cross
+  - first:
+      213: -2950032572879587788
+    second: sprites_divider-circle
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -122,7 +140,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 185
+        y: 747
         width: 714
         height: 715
       alignment: 0
@@ -143,7 +161,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 717
-        y: 185
+        y: 747
         width: 715
         height: 715
       alignment: 0
@@ -160,13 +178,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sprites_ball
+      name: sprites_platform
       rect:
         serializedVersion: 2
-        x: 1435
-        y: 407
-        width: 270
-        height: 271
+        x: 120
+        y: 608
+        width: 1189
+        height: 113
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,13 +199,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sprites_platform
+      name: sprites_ball
       rect:
         serializedVersion: 2
-        x: 120
-        y: 46
-        width: 1189
-        height: 113
+        x: 2
+        y: 316
+        width: 270
+        height: 271
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,13 +220,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sprites_score
+      name: sprites_menu
       rect:
         serializedVersion: 2
-        x: 1456
-        y: 107
-        width: 228
-        height: 218
+        x: 278
+        y: 340
+        width: 296
+        height: 227
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -218,6 +236,132 @@ TextureImporter:
       bones: []
       spriteID: a4467024e453a1d50800000000000000
       internalID: 6708733205153277002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sprites_score
+      rect:
+        serializedVersion: 2
+        x: 591
+        y: 342
+        width: 228
+        height: 218
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d807ff1a1b9e8e50800000000000000
+      internalID: 6813553822765877458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sprites_toggle_on
+      rect:
+        serializedVersion: 2
+        x: 836
+        y: 338
+        width: 501
+        height: 239
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3fd1bc59bdec679b0800000000000000
+      internalID: -5082647686934749709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sprites_toggle_off
+      rect:
+        serializedVersion: 2
+        x: 835
+        y: 74
+        width: 501
+        height: 239
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ad6300a8e4bb6550800000000000000
+      internalID: 6155212226941906339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sprites_divider-liine
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 278
+        width: 253
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f948c85a64fe5ed0800000000000000
+      internalID: -2423230811885516303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sprites_menu-cross
+      rect:
+        serializedVersion: 2
+        x: 579
+        y: 62
+        width: 241
+        height: 240
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52e5e562122e1d010800000000000000
+      internalID: 1211998406744890917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sprites_divider-circle
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 89
+        width: 102
+        height: 103
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4363ea141016f07d0800000000000000
+      internalID: -2950032572879587788
       vertices: []
       indices: 
       edges: []
