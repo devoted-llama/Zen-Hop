@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-using UnityEditor;
-using System.Collections.Generic;   
+﻿using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer)), ExecuteAlways]
 public class CircleGenerator : MonoBehaviour {
