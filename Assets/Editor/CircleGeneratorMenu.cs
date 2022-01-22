@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-public class CircleGeneratorMenu : ScriptableObject
-{
+public class CircleGeneratorMenu {
     [MenuItem("GameObject/2D Object/Circle", false, 1000)]
     static void CreateCustomGameObject(MenuCommand menuCommand)
     {

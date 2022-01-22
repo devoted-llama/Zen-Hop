@@ -2,53 +2,36 @@
 using UnityEngine;
 using UnityEngine.UI;
 public class GameController : MonoBehaviour {
-    public static GameController instance = null;
-
-    public float timescale;
-    public int randomSeed;
-    public float respawnTime;
-    public float respawnHeight;
-    public float fallSpeed;
-    public float timeBetweenAds;
+    public static GameController Instance = null;
 
     [SerializeField]
+    float timescale;
+    [SerializeField]
+    int randomSeed;
+    [SerializeField]
+    float respawnHeight;
+    public float RespawnHeight { get { return respawnHeight; } }
+    [SerializeField]
+    float fallSpeed;
+    public float FallSpeed { get { return fallSpeed; } }
+    [SerializeField]
+    float timeBetweenAds;
     float timeSinceAd = 0;
     public float TimeSinceAd { get { return timeSinceAd; } }
-
-    [SerializeField]
     int score = 0;
     public int Score { get { return score; } }
-    [SerializeField]
     int lives = 1;
     public int Lives { get { return lives; } }
-    [SerializeField]
     int highScore = 0;
-    public bool playing { get; set; } = false;
-
-
-    public Text scoreText;
-    public Text highScoreText;
-
-    public GameObject gameoverPanel;
-    public Text gameoverScoreText;
-    public Button retryButton;
-
-    public GameObject gamePanel;
-    public GameObject gameStartPanel;
-    public GameObject aboutPanel;
-
-    public Text versionText;
+    public bool Playing { get; private set; } = false;
     public VersionInfo versionInfo;
 
     Random.State randomState;
 
-
-
-
     void Awake () {
-        if (instance == null) {
-            instance = this;
-        } else if (instance != this) {
+        if (Instance == null) {
+            Instance = this;
+        } else if (Instance != this) {
             Destroy (gameObject);
         }
 
@@ -62,7 +45,7 @@ public class GameController : MonoBehaviour {
         timeSinceAd = Time.unscaledTime;
         GetHighScore();
         UpdateUI();
-        SetBuildNumber();
+        SetVersionText();
         Player.Instance.OnPlatformLanded += DoPlayerPlatformLandedActions;
     }
 
@@ -101,28 +84,28 @@ public class GameController : MonoBehaviour {
     }
 
     void SetScoreText() {
-        gameoverScoreText.text = score.ToString();
-        highScoreText.text = highScore.ToString();
+        UIController.Instance.SetGameoverScoreText(score.ToString());
+        UIController.Instance.SetGameoverHighScoreText(highScore.ToString());
     }
 
     void ShowGameoverPanel() {
-        gamePanel.SetActive(false);
-        gameoverPanel.SetActive(true);
+        UIController.Instance.SetGamePanelActive(false);
+        UIController.Instance.SetGameOverPanelActive(true);
     }
 
     void UpdateUI() {
-        scoreText.text = score.ToString ();
+        UIController.Instance.SetScoreText(score.ToString());
     }
 
 
 
     public void RebootWithAds() {
-        if (AdInterstitial.instance == null || Time.unscaledTime - TimeSinceAd < timeBetweenAds) {
+        if (AdInterstitial.Instance == null || Time.unscaledTime - TimeSinceAd < timeBetweenAds) {
             Reboot();
         } else {
-            AdInterstitial.instance.AdFinished += Reboot;
-            AdInterstitial.instance.LoadAd();
-            AdInterstitial.instance.ShowAd();
+            AdInterstitial.Instance.AdFinished += Reboot;
+            AdInterstitial.Instance.LoadAd();
+            AdInterstitial.Instance.ShowAd();
             timeSinceAd = Time.unscaledTime;
         }
     }
@@ -135,10 +118,10 @@ public class GameController : MonoBehaviour {
         PlatformController.Instance.PositionStartingPlatforms();
         Player.Instance.gameObject.SetActive(true);
         Player.Instance.Respawn();
-        gameoverPanel.SetActive(false);
-        gamePanel.SetActive(true);
-        if (AdInterstitial.instance != null) {
-            AdInterstitial.instance.AdFinished -= Reboot;
+        UIController.Instance.SetGameOverPanelActive(false);
+        UIController.Instance.SetGamePanelActive(true);
+        if (AdInterstitial.Instance != null) {
+            AdInterstitial.Instance.AdFinished -= Reboot;
         }
     }
 
@@ -147,18 +130,18 @@ public class GameController : MonoBehaviour {
     }
 
     IEnumerator ResetToTitleScreenCoroutine() {
-        playing = false;
+        Playing = false;
         ResetScore();
         ResetLives();
         UpdateUI();
-        gameoverPanel.SetActive(false);
-        gamePanel.SetActive(false);
+        UIController.Instance.SetGameOverPanelActive(false);
+        UIController.Instance.SetGamePanelActive(false);
         CameraController.Instance.MoveToTitleScreenPosition();
         Player.Instance.ResetToStartPosition();
         Random.state = randomState;
         PlatformController.Instance.PositionStartingPlatforms();
         yield return new WaitUntil(() => Camera.main.transform.position.x == CameraController.Instance.TitleScreenPosition);
-        gameStartPanel.SetActive(true);
+        UIController.Instance.SetTitlePanelActive(true);
     }
 
     void SaveHighScore() {
@@ -183,27 +166,15 @@ public class GameController : MonoBehaviour {
         lives = 1;
     }
 
-    public void PlayButtonClick() {
-        SetPlayActive();
-        gameStartPanel.SetActive(false);
-
-    }
-
-    void SetPlayActive() {
+    public void SetPlayActive() {
+        UIController.Instance.SetGamePanelActive(true);
+        UIController.Instance.SetTitlePanelActive(false);
+        MusicController.Instance.PlayIfHasPreference();
         Player.Instance.gameObject.SetActive(true);
-        gamePanel.SetActive(true);
-        playing = true;
+        Playing = true;
     }
 
-    public void ShowAboutScreen() {
-        aboutPanel.SetActive(true);
-    }
-
-    public void HideAboutScreen() {
-        aboutPanel.SetActive(false);
-    }
-
-    void SetBuildNumber() {
-        versionText.text = $"Version {versionInfo.version}.{versionInfo.buildNumber}";
+    void SetVersionText() {
+        UIController.Instance.SetVersionText($"Version {versionInfo.version}.{versionInfo.buildNumber}");
     }
 }
