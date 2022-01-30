@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 113e6a114accd4c32a5713ce478f6d37, type: 3}
   m_Name: VersionInfo
   m_EditorClassIdentifier: 
-  version: 0.0.1
-  buildNumber: 6
-  dateTime: 08/01/2022 21:34:13
+  version: 1.0.0
+  buildNumber: 13
+  dateTime: 28/01/2022 08:39:31
