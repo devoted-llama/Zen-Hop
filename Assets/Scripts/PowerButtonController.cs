@@ -37,6 +37,8 @@ public class PowerButtonController : MonoBehaviour
         if (Player.Instance.IsReady() && GetPressStart() && !showing) {
             originPos = GetPressPosition();
             if (GetPressPlayer()) {
+                SetAngleZero();
+                SetPowerZero();
                 Show(Player.Instance.transform.position);
             }
         }
@@ -112,6 +114,12 @@ public class PowerButtonController : MonoBehaviour
         Player.Instance.SetPower(power);
     }
 
+    void SetPowerZero() {
+        powerRing.Completion = 0;
+        powerRing.Generate();
+        Player.Instance.SetPower(0);
+    }
+
     void SetAngle() {
         float adjacent = currentPos.x - originPos.x;
         float opposite = currentPos.y - originPos.y;
@@ -130,6 +138,11 @@ public class PowerButtonController : MonoBehaviour
         SetLineAngle(angle, modifier);
 
         Player.Instance.SetJumpAngle(angle, modifier);
+    }
+
+    void SetAngleZero() {
+        SetLineAngle(0, 0);
+        Player.Instance.SetJumpAngle(0, 0);
     }
 
     void SetLineAngle(float angle, float modifier) {
