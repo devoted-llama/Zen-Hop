@@ -16,13 +16,13 @@ PlayerSettings:
   productName: Zen Hop
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
-  m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
+  m_SplashScreenBackgroundColor: {r: 0.9490196, g: 0.9490196, b: 0.9490196, a: 1}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
   m_SplashScreenOverlayOpacity: 1
   m_SplashScreenAnimation: 1
-  m_SplashScreenLogoStyle: 1
-  m_SplashScreenDrawMode: 0
+  m_SplashScreenLogoStyle: 0
+  m_SplashScreenDrawMode: 1
   m_SplashScreenBackgroundAnimationZoom: 1
   m_SplashScreenLogoAnimationZoom: 1
   m_SplashScreenBackgroundLandscapeAspect: 1
@@ -39,9 +39,12 @@ PlayerSettings:
     y: 0
     width: 1
     height: 1
-  m_SplashScreenLogos: []
-  m_VirtualRealitySplashScreen: {fileID: 2800000, guid: 4972d22a0bb71436e9a6a6e7cc2c39cd,
-    type: 3}
+  m_SplashScreenLogos:
+  - logo: {fileID: 21300000, guid: 6dca8651f093c4ba5a009797d19aea3c, type: 3}
+    duration: 5
+  - logo: {fileID: 10404, guid: 0000000000000000e000000000000000, type: 0}
+    duration: 2
+  m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1024
   defaultScreenHeight: 768
@@ -135,7 +138,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.0.1
+  bundleVersion: 1.0.0
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -155,7 +158,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Standalone: com.Company.ProductName
-    iPhone: com.DevotedLlama.PlatformJump
+    iPhone: com.DevotedLlama.ZenHop
   buildNumber:
     Standalone: 0
     iPhone: 0
@@ -197,14 +200,14 @@ PlayerSettings:
   tvOSTopShelfImageLayers2x: []
   tvOSTopShelfImageWideLayers: []
   tvOSTopShelfImageWideLayers2x: []
-  iOSLaunchScreenType: 0
+  iOSLaunchScreenType: 4
   iOSLaunchScreenPortrait: {fileID: 0}
   iOSLaunchScreenLandscape: {fileID: 0}
   iOSLaunchScreenBackgroundColor:
     serializedVersion: 2
     rgba: 0
   iOSLaunchScreenFillPct: 100
-  iOSLaunchScreenSize: 100
+  iOSLaunchScreenSize: 10
   iOSLaunchScreenCustomXibPath: 
   iOSLaunchScreeniPadType: 0
   iOSLaunchScreeniPadImage: {fileID: 0}
@@ -280,7 +283,7 @@ PlayerSettings:
   - m_BuildTarget: iPhone
     m_Icons:
     - m_Textures:
-      - {fileID: 2800000, guid: 8af4a8e86b7db40d79bd673be603134b, type: 3}
+      - {fileID: 2800000, guid: 3eff1cfbb31e64d64ae39738d2c5cc43, type: 3}
       m_Width: 180
       m_Height: 180
       m_Kind: 0
@@ -292,7 +295,7 @@ PlayerSettings:
       m_Kind: 0
       m_SubKind: iPhone
     - m_Textures:
-      - {fileID: 2800000, guid: 8af4a8e86b7db40d79bd673be603134b, type: 3}
+      - {fileID: 2800000, guid: 3eff1cfbb31e64d64ae39738d2c5cc43, type: 3}
       m_Width: 167
       m_Height: 167
       m_Kind: 0
@@ -310,7 +313,7 @@ PlayerSettings:
       m_Kind: 0
       m_SubKind: iPad
     - m_Textures:
-      - {fileID: 2800000, guid: 8af4a8e86b7db40d79bd673be603134b, type: 3}
+      - {fileID: 2800000, guid: 3eff1cfbb31e64d64ae39738d2c5cc43, type: 3}
       m_Width: 120
       m_Height: 120
       m_Kind: 3
@@ -322,7 +325,7 @@ PlayerSettings:
       m_Kind: 3
       m_SubKind: iPhone
     - m_Textures:
-      - {fileID: 2800000, guid: 8af4a8e86b7db40d79bd673be603134b, type: 3}
+      - {fileID: 2800000, guid: 3eff1cfbb31e64d64ae39738d2c5cc43, type: 3}
       m_Width: 80
       m_Height: 80
       m_Kind: 3
@@ -334,7 +337,7 @@ PlayerSettings:
       m_Kind: 3
       m_SubKind: iPad
     - m_Textures:
-      - {fileID: 2800000, guid: 8af4a8e86b7db40d79bd673be603134b, type: 3}
+      - {fileID: 2800000, guid: 3eff1cfbb31e64d64ae39738d2c5cc43, type: 3}
       m_Width: 87
       m_Height: 87
       m_Kind: 1
@@ -352,7 +355,7 @@ PlayerSettings:
       m_Kind: 1
       m_SubKind: iPhone
     - m_Textures:
-      - {fileID: 2800000, guid: 8af4a8e86b7db40d79bd673be603134b, type: 3}
+      - {fileID: 2800000, guid: 3eff1cfbb31e64d64ae39738d2c5cc43, type: 3}
       m_Width: 58
       m_Height: 58
       m_Kind: 1
@@ -364,7 +367,7 @@ PlayerSettings:
       m_Kind: 1
       m_SubKind: iPad
     - m_Textures:
-      - {fileID: 2800000, guid: 8af4a8e86b7db40d79bd673be603134b, type: 3}
+      - {fileID: 2800000, guid: 3eff1cfbb31e64d64ae39738d2c5cc43, type: 3}
       m_Width: 60
       m_Height: 60
       m_Kind: 2
@@ -376,7 +379,7 @@ PlayerSettings:
       m_Kind: 2
       m_SubKind: iPhone
     - m_Textures:
-      - {fileID: 2800000, guid: 8af4a8e86b7db40d79bd673be603134b, type: 3}
+      - {fileID: 2800000, guid: 3eff1cfbb31e64d64ae39738d2c5cc43, type: 3}
       m_Width: 40
       m_Height: 40
       m_Kind: 2
@@ -388,7 +391,7 @@ PlayerSettings:
       m_Kind: 2
       m_SubKind: iPad
     - m_Textures:
-      - {fileID: 2800000, guid: 4972d22a0bb71436e9a6a6e7cc2c39cd, type: 3}
+      - {fileID: 2800000, guid: 3eff1cfbb31e64d64ae39738d2c5cc43, type: 3}
       m_Width: 1024
       m_Height: 1024
       m_Kind: 4
@@ -447,7 +450,7 @@ PlayerSettings:
   actionOnDotNetUnhandledException: 1
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 1
-  enableCrashReportAPI: 0
+  enableCrashReportAPI: 1
   cameraUsageDescription: 
   locationUsageDescription: 
   microphoneUsageDescription: 
