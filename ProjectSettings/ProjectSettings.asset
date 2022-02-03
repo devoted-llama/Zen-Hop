@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Lucid Llama
+  companyName: Proud Llama
   productName: Zen Hop
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -138,7 +138,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.0.0
+  bundleVersion: 1.0.1
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -158,10 +158,10 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Standalone: com.Company.ProductName
-    iPhone: com.LucidLlama.ZenHop
+    iPhone: com.ProudLlama.ZenHop
   buildNumber:
     Standalone: 0
-    iPhone: 0
+    iPhone: 20
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
   AndroidBundleVersionCode: 1
@@ -227,12 +227,12 @@ PlayerSettings:
   metalAPIValidation: 1
   iOSRenderExtraFrameOnPause: 0
   iosCopyPluginsCodeInsteadOfSymlink: 0
-  appleDeveloperTeamID: 
+  appleDeveloperTeamID: QVFC8G93P7
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 
   iOSManualSigningProvisioningProfileType: 0
   tvOSManualSigningProvisioningProfileType: 0
-  appleEnableAutomaticSigning: 0
+  appleEnableAutomaticSigning: 1
   iOSRequireARKit: 0
   iOSAutomaticallyDetectAndAddCapabilities: 1
   appleEnableProMotion: 0
@@ -783,7 +783,7 @@ PlayerSettings:
   cloudProjectId: 80ad7092-9323-4507-8e78-00b4753c2df6
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Jump!
+  projectName: Zen Hop
   organizationId: danlevy
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 1
