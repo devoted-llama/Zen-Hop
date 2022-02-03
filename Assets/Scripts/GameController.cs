@@ -175,6 +175,6 @@ public class GameController : MonoBehaviour {
     }
 
     void SetVersionText() {
-        UIController.Instance.SetVersionText($"Version {versionInfo.version}.{versionInfo.buildNumber}");
+        UIController.Instance.SetVersionText($"v{versionInfo.version} b{versionInfo.buildNumber}");
     }
 }
