@@ -38,6 +38,7 @@ public class BuildPreprocessor : IPreprocessBuildWithReport {
         versionInfo.buildNumber++;
         versionInfo.dateTime = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
         versionInfo.version = PlayerSettings.bundleVersion;
+        PlayerSettings.iOS.buildNumber = versionInfo.buildNumber.ToString();
 
         EditorUtility.SetDirty(versionInfo);
     }
