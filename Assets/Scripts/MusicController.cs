@@ -39,10 +39,9 @@ public class MusicController : MonoBehaviour {
         }
     }
 
-    public void SetMusicPreference(bool preference) {
+    void SetMusicPreference(bool preference) {
         PlayerPrefs.SetInt("musicPreference", preference == false ? 0 : 1);
         PlayerPrefs.Save();
-
     }
 
 
