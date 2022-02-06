@@ -155,5 +155,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scaleShiftMultiplier: 1.1
   scaleShiftTime: 30
-  shiftGravityTime: 30
+  ShiftForceTime: 30
   forceVariation: 0.1

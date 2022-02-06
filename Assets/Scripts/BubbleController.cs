@@ -4,7 +4,6 @@ using UnityEngine;
 public class BubbleController : MonoBehaviour {
     public static BubbleController Instance { get; private set; } = null;
     [SerializeField] GameObject bubblePrefab;
-    [SerializeField] float bubbleSizeVariation;
     [SerializeField] int quantity;
     [SerializeField] float boundarySize;
     [SerializeField] int boundaryEdges;
@@ -53,11 +52,6 @@ public class BubbleController : MonoBehaviour {
             bubble.transform.position = new Vector3(
                 Random.Range(-positionVariation, positionVariation),
                 Random.Range(-positionVariation, positionVariation), 0);
-            Vector3 scale = bubble.transform.localScale;
-            float scaleVariation = Random.Range(1 - bubbleSizeVariation, 1 + bubbleSizeVariation);
-            scale.x *= scaleVariation;
-            scale.y *= scaleVariation;
-            bubble.transform.localScale = scale;
         }
     }
 

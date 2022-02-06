@@ -12,17 +12,27 @@ public class Bubble : MonoBehaviour {
     [SerializeField] float scaleShiftTime = 30f;
     [SerializeField]float ShiftForceTime = 30f;
     [SerializeField] float forceVariation = 0.1f;
+    [SerializeField] float scaleVariation = 0.1f;
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
     }
     void Start() {
-        originalScale = transform.localScale;
-        currentScale = originalScale;
         Initialise();
     }
 
+    void SetScale() {
+        Vector3 scale = transform.localScale;
+        float randomScaleVariation = Random.Range(1 - scaleVariation, 1 + scaleVariation);
+        scale.x *= randomScaleVariation;
+        scale.y *= randomScaleVariation;
+        transform.localScale = scale;
+        originalScale = transform.localScale;
+        currentScale = originalScale;
+    }
+
     void Initialise()  {
+        SetScale();
         SetForce();
         StartCoroutine(ShiftForce());
         StartCoroutine(ShiftScale());
