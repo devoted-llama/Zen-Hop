@@ -18,7 +18,7 @@ public class BubbleController : MonoBehaviour {
             Destroy(gameObject);
         }
 
-        LoadMusicPreference();
+        LoadBackgroundPreference();
     }
 
     private void Start() {
@@ -65,7 +65,7 @@ public class BubbleController : MonoBehaviour {
         }
     }
 
-    void LoadMusicPreference() {
+    void LoadBackgroundPreference() {
         if (PlayerPrefs.HasKey("backgroundPreference")) {
             BackgroundPreference = PlayerPrefs.GetInt("backgroundPreference") == 0 ? false : true;
         }
