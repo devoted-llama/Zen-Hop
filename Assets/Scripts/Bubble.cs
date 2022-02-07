@@ -12,7 +12,7 @@ public class Bubble : MonoBehaviour {
     [SerializeField] float scaleShiftTime = 30f;
     [SerializeField]float ShiftForceTime = 30f;
     [SerializeField] float forceVariation = 0.1f;
-    [SerializeField] float initialScaleVariation = 4f;
+    [SerializeField] float initialScaleVariation = 1.5f;
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
