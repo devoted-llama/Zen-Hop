@@ -161,7 +161,7 @@ PlayerSettings:
     iPhone: com.DevotedLlama.ZenHop
   buildNumber:
     Standalone: 0
-    iPhone: 20
+    iPhone: 27
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
   AndroidBundleVersionCode: 1
