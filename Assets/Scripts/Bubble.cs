@@ -12,30 +12,13 @@ public class Bubble : MonoBehaviour {
     [SerializeField] float scaleShiftTime = 30f;
     [SerializeField]float ShiftForceTime = 30f;
     [SerializeField] float forceVariation = 0.1f;
-    [SerializeField] float scaleVariation = 0.1f;
+    [SerializeField] float initialScaleVariation = 0.1f;
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
     }
     void Start() {
         Initialise();
-    }
-
-    void SetScale() {
-        Vector3 scale = transform.localScale;
-        float randomScaleVariation = Random.Range(1 - scaleVariation, 1 + scaleVariation);
-        scale.x *= randomScaleVariation;
-        scale.y *= randomScaleVariation;
-        transform.localScale = scale;
-        originalScale = transform.localScale;
-        currentScale = originalScale;
-    }
-
-    void Initialise()  {
-        SetScale();
-        SetForce();
-        StartCoroutine(ShiftForce());
-        StartCoroutine(ShiftScale());
     }
 
     private void OnEnable() {
@@ -46,13 +29,31 @@ public class Bubble : MonoBehaviour {
         StopAllCoroutines();
     }
 
+    void Initialise() {
+        SetScale();
+        SetForce();
+        StartCoroutine(ShiftForce());
+        StartCoroutine(ShiftScale());
+    }
+
+    void SetScale() {
+        Vector3 scale = transform.localScale;
+        float randomScaleVariation = Random.Range(1 - initialScaleVariation, 1 + initialScaleVariation);
+        scale.x *= randomScaleVariation;
+        scale.y *= randomScaleVariation;
+        transform.localScale = scale;
+        originalScale = transform.localScale;
+        currentScale = originalScale;
+    }
+
     private void Update() {
         LerpScale();
     }
 
-    void SetForce() {
-        Vector2 force = new Vector2(Random.Range(-forceVariation, forceVariation), Random.Range(-forceVariation, forceVariation));
-        rb.AddForce(force);
+    void LerpScale() {
+        float timeDif = Time.time - startTime;
+        float t = timeDif / scaleShiftTime;
+        transform.localScale = Vector3.Lerp(currentScale, newScale, t);
     }
 
     /* This is in case the bubble gets stuck somewhere */
@@ -65,7 +66,6 @@ public class Bubble : MonoBehaviour {
 
     IEnumerator ShiftScale() {
         while (true) {
-            
             float randomScale = Random.Range(1, scaleShiftMultiplier);
             newScale.x = originalScale.x * randomScale;
             newScale.y = originalScale.y * randomScale;
@@ -75,10 +75,8 @@ public class Bubble : MonoBehaviour {
         }
     }
 
-    void LerpScale() {
-        float timeDif = Time.time - startTime;
-        float t = timeDif / scaleShiftTime;
-        transform.localScale = Vector3.Lerp(currentScale, newScale, t);
+    void SetForce() {
+        Vector2 force = new Vector2(Random.Range(-forceVariation, forceVariation), Random.Range(-forceVariation, forceVariation));
+        rb.AddForce(force);
     }
-
 }
