@@ -4,24 +4,16 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour {
     public static UIController Instance { get; private set; } = null;
 
-    [SerializeField]
-    GameObject gamePanel;
-    [SerializeField]
-    GameObject titlePanel;
-    [SerializeField]
-    Text versionText;
-    [SerializeField]
-    Text scoreText;
-    [SerializeField]
-    Text gameoverHighScoreText;
-    [SerializeField]
-    Text gameoverScoreText;
-    [SerializeField]
-    GameObject gameoverPanel;
-    [SerializeField]
-    GameObject menuPanel;
-    [SerializeField]
-    Toggle musicPreferenceToggle;
+    [SerializeField] GameObject gamePanel;
+    [SerializeField] GameObject titlePanel;
+    [SerializeField] Text versionText;
+    [SerializeField] Text scoreText;
+    [SerializeField] Text gameoverHighScoreText;
+    [SerializeField] Text gameoverScoreText;
+    [SerializeField] GameObject gameoverPanel;
+    [SerializeField] GameObject menuPanel;
+    [SerializeField] Toggle musicPreferenceToggle;
+    [SerializeField] Toggle backgroundPreferenceToggle;
 
     void Awake() {
         if (Instance == null) {
@@ -33,6 +25,7 @@ public class UIController : MonoBehaviour {
 
     void Start() {
         SetMusicPreferenceToggle();
+        SetBackgroundPreferenceToggle();
     }
 
     public void PlayButtonClick() {
@@ -85,5 +78,13 @@ public class UIController : MonoBehaviour {
 
     void SetMusicPreferenceToggle() {
         musicPreferenceToggle.SetIsOnWithoutNotify(MusicController.Instance.MusicPreference);
+    }
+
+    public void ClickBackgroundToggle() {
+        BubbleController.Instance.ChangeBackgroundStateAndSetPreference();
+    }
+
+    void SetBackgroundPreferenceToggle() {
+        backgroundPreferenceToggle.SetIsOnWithoutNotify(BubbleController.Instance.BackgroundPreference);
     }
 }
