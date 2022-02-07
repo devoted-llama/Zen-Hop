@@ -157,4 +157,4 @@ MonoBehaviour:
   scaleShiftTime: 30
   ShiftForceTime: 30
   forceVariation: 0.1
-  scaleVariation: 0.1
+  initialScaleVariation: 1.5
