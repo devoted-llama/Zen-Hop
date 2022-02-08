@@ -14,6 +14,7 @@ public class UIController : MonoBehaviour {
     [SerializeField] GameObject menuPanel;
     [SerializeField] Toggle musicPreferenceToggle;
     [SerializeField] Toggle backgroundPreferenceToggle;
+    [SerializeField] Toggle playerPressPreferenceToggle;
 
     void Awake() {
         if (Instance == null) {
@@ -26,6 +27,7 @@ public class UIController : MonoBehaviour {
     void Start() {
         SetMusicPreferenceToggle();
         SetBackgroundPreferenceToggle();
+        SetPlayerPressPreferenceToggle();
     }
 
     public void PlayButtonClick() {
@@ -86,5 +88,13 @@ public class UIController : MonoBehaviour {
 
     void SetBackgroundPreferenceToggle() {
         backgroundPreferenceToggle.SetIsOnWithoutNotify(BubbleController.Instance.BackgroundPreference);
+    }
+
+    public void ClickPlayerPressToggle() {
+        PowerButtonController.Instance.ChangePlayerPressStateAndSetPreference();
+    }
+
+    void SetPlayerPressPreferenceToggle() {
+        playerPressPreferenceToggle.SetIsOnWithoutNotify(PowerButtonController.Instance.PlayerPressPreference);
     }
 }
