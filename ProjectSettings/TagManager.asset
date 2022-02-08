@@ -43,9 +43,6 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Frog
-    uniqueID: 1897676901
-    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
