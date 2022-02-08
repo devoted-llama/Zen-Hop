@@ -1,23 +1,41 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
-public class PowerButtonController : MonoBehaviour
-{
+public class PowerButtonController : MonoBehaviour {
+    public static PowerButtonController Instance { get; private set; } = null;
     bool showing = false;
     bool handheld = false;
     Touch touch;
     Vector3 originPos;
     Vector3 currentPos;
 
-    [SerializeField]
-    CircleGenerator outerRing;
-    [SerializeField]
-    CircleGenerator powerRing;
-    [SerializeField]
-    LineRenderer line;
-    [SerializeField]
-    float powerAreaMultiplier = 2f;
+    [SerializeField] CircleGenerator outerRing;
+    [SerializeField] CircleGenerator powerRing;
+    [SerializeField] LineRenderer line;
+    [SerializeField] float powerAreaMultiplier = 2f;
+
+    GraphicRaycaster raycaster;
+    EventSystem eventSystem;
+
+    /* True for press anywhere, false for press player/ball */
+    public bool PlayerPressPreference { get; private set; } = true;
+
+    void Awake() {
+        if (Instance == null) {
+            Instance = this;
+        } else if (Instance != this) {
+            Destroy(gameObject);
+        }
+
+        LoadPlayerPressPreference();
+    }
 
     private void Start() {
+        raycaster = FindObjectOfType<GraphicRaycaster>();
+        eventSystem = FindObjectOfType<EventSystem>();
+
         SetIsHandHeld();
         Hide();
     }
@@ -55,6 +73,39 @@ public class PowerButtonController : MonoBehaviour
         }
     }
 
+    bool GetPressPlayer() {
+        if(GetTouchedUI()) {
+            return false;
+        }
+        if (!PlayerPressPreference) {
+            Vector3 pos = GetPressPosition();
+            RaycastHit2D hit = Physics2D.Raycast(pos, -Vector3.forward);
+            if (hit.collider != null && hit.transform.CompareTag("Player")) {
+                return true;
+            }
+            return false;
+        } 
+        return true;
+    }
+
+    bool GetTouchedUI() {
+        PointerEventData pointerEventData = new PointerEventData(eventSystem);
+        pointerEventData.position = GetPressPositionRaw();
+        List<RaycastResult> results = new List<RaycastResult>();
+        raycaster.Raycast(pointerEventData, results);
+        foreach (RaycastResult result in results) {
+            return true;
+        }
+        return false;
+    }
+
+    Vector3 GetPressPositionRaw() {
+        if (handheld) {
+            return touch.position;
+        }
+        return Input.mousePosition;
+    }
+
     Vector3 GetPressPosition() {
         if (handheld) {
             return Camera.main.ScreenToWorldPoint(touch.position);
@@ -63,24 +114,13 @@ public class PowerButtonController : MonoBehaviour
     }
 
     bool GetPressStart() {
-        if(handheld) {
+        if (handheld) {
             return touch.phase == TouchPhase.Began;
         }
         return Input.GetButtonDown("Fire1");
 
-        
-    }
 
-    bool GetPressPlayer() {
-        Vector3 pos = GetPressPosition();
-        RaycastHit2D hit = Physics2D.Raycast(pos, -Vector3.forward);
-        
-        if(hit.collider != null && hit.transform.CompareTag("Player")) {
-            return true;
-        }
-        return false;
     }
-
 
     bool GetPressHold() {
         if (handheld) {
@@ -170,6 +210,27 @@ public class PowerButtonController : MonoBehaviour
         scale.y = 0;
         transform.localScale = scale;
         showing = false;
+    }
+
+    public void ChangePlayerPressStateAndSetPreference() {
+        if (PlayerPressPreference != true) {
+            PlayerPressPreference = true;
+            SetPlayerPressPreference(true);
+        } else {
+            PlayerPressPreference = false;
+            SetPlayerPressPreference(false);
+        }
+    }
+
+    void LoadPlayerPressPreference() {
+        if (PlayerPrefs.HasKey("playerPressPreference")) {
+            PlayerPressPreference = PlayerPrefs.GetInt("playerPressPreference") == 0 ? false : true;
+        }
+    }
+
+    void SetPlayerPressPreference(bool preference) {
+        PlayerPrefs.SetInt("playerPressPreference", preference == false ? 0 : 1);
+        PlayerPrefs.Save();
     }
 
 
