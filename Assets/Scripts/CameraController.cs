@@ -11,8 +11,8 @@ public class CameraController : MonoBehaviour {
     float startTime;
     float journeyLength;
     float lerpTime = 2f;
-
     bool moving = false;
+    [SerializeField] GameObject followObject;
 
     public delegate void moveEvent();
     public event moveEvent finishMoving;
@@ -28,7 +28,7 @@ public class CameraController : MonoBehaviour {
     }
 
     private void Start() {
-        Player.Instance.OnPlatformLanded += MoveToPlayerExact;
+        Player.Instance.OnPlatformLanded += MoveToFollowObjectExact;
     }
 
     public void MoveToTitleScreenPosition() {
@@ -39,27 +39,19 @@ public class CameraController : MonoBehaviour {
         }
     } 
 
-    void MoveToPlayerExact(int platformId) {
-        Vector3 end = Player.Instance.transform.position;
-        Vector3 pos = transform.position;
-        pos.x = end.x;
-        pos.y = end.y;
-        Move(pos);
-    }
+    void MoveToFollowObjectExact(int platformId) {
+        SetEndMarkerToFollowObject();
 
-    void Move(Vector3 end) {
         startMarker = transform.position;
-        endMarker = end;
+
         startTime = Time.time;
         journeyLength = Vector3.Distance(startMarker, endMarker);
         moving = true;
     }
-
     
-
     void Update() {
         LerpToNewPosition();
-        FollowPlayer();
+        MoveToFollowObject();
     }
 
     void LerpToNewPosition() {
@@ -71,10 +63,7 @@ public class CameraController : MonoBehaviour {
             transform.position = Vector3.Lerp(startMarker, endMarker, interpolant);
 
 
-            if (endMarker.x != Player.Instance.transform.position.x || endMarker.y != Player.Instance.transform.position.y) {
-                endMarker.x = Player.Instance.transform.position.x;
-                endMarker.y = Player.Instance.transform.position.y;
-            }
+            ResetEndMarkerIfDifferentToFollowObjectPosition();
 
             if (transform.position == endMarker) {
                 moving = false;
@@ -84,35 +73,41 @@ public class CameraController : MonoBehaviour {
         }
     }
 
+    void ResetEndMarkerIfDifferentToFollowObjectPosition() {
+        if (endMarker.x != followObject.transform.position.x || endMarker.y != followObject.transform.position.y) {
+            SetEndMarkerToFollowObject();
+        }
+    }
+
+    void SetEndMarkerToFollowObject() {
+        endMarker = transform.position;
+        endMarker.x = followObject.transform.position.x;
+        endMarker.y = followObject.transform.position.y;
+    }
+
     float ParametricBlend(float t) {
         float alpha = 2.1f;
         float sqt = t * t;
         return sqt / (alpha * (sqt - t) + 1.0f);
     }
 
-    void FollowPlayer() {
-        if (GetCameraNotMovingAndPlayerIsAlive()) {
-            Vector3 playerPos = Player.Instance.transform.position;
+    void MoveToFollowObject() {
+        if (GetCameraNotMovingPlayingAndFollowObjectIsActive()) {
+            Vector3 followObjectPos = followObject.transform.position;
             Vector3 pos = transform.position;
-            pos.x = playerPos.x;
+            pos.x = followObjectPos.x;
             transform.position = pos;
         }
     }
 
-    bool GetCameraNotMovingAndPlayerIsAlive() {
-        return moving == false && GameController.Instance.Playing == true && Player.Instance.gameObject.activeSelf == true;
+    bool GetCameraNotMovingPlayingAndFollowObjectIsActive() {
+        return moving == false && GameController.Instance.Playing == true && followObject.activeSelf == true;
     }
 
     void OnTriggerExit2D(Collider2D collider) {
         if (collider.gameObject.CompareTag ("Player")) {
             GameController.Instance.Die ();
         }
-    }
-
-    public void MoveTo(Transform t) {
-        Vector3 pos = transform.position;
-        pos.x = t.position.x;
-        Move (pos);
     }
 
     public void MoveToInstant(Transform t) {
