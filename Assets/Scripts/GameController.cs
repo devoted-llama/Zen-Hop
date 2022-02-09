@@ -51,7 +51,6 @@ public class GameController : MonoBehaviour {
 
     void DoPlayerPlatformLandedActions(int platformId) {
         UpdateScoreBasedOnPlatformId(platformId);
-        CameraController.Instance.MoveToPlayerExact();
     }
 
     void UpdateScoreBasedOnPlatformId(int platformId) {

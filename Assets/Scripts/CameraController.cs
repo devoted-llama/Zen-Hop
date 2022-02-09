@@ -8,12 +8,11 @@ public class CameraController : MonoBehaviour {
     Vector3 endMarker;
     float titleScreenPosition = -12f;
     public float TitleScreenPosition { get { return titleScreenPosition; } }
-    [SerializeField]
     float startTime;
     float journeyLength;
     float lerpTime = 2f;
-
     bool moving = false;
+    [SerializeField] GameObject followObject;
 
     public delegate void moveEvent();
     public event moveEvent finishMoving;
@@ -25,31 +24,34 @@ public class CameraController : MonoBehaviour {
             Destroy(gameObject);
         }
 
-        MoveToTitleScreenPosition();
-        
+        MoveToTitleScreenPosition();   
     }
+
+    private void Start() {
+        Player.Instance.OnPlatformLanded += MoveToFollowObjectExact;
+    }
+
     public void MoveToTitleScreenPosition() {
         if (GameController.Instance.Playing == false) {
             Vector3 pos = transform.position;
             pos.x = titleScreenPosition;
             transform.position = pos;
         }
-    }
+    } 
 
-    public void Move(Vector3 end) {
+    void MoveToFollowObjectExact(int platformId) {
+        SetEndMarkerToFollowObject();
+
         startMarker = transform.position;
-        endMarker = end;
+
         startTime = Time.time;
-        journeyLength = Vector3.Distance (startMarker, endMarker);
+        journeyLength = Vector3.Distance(startMarker, endMarker);
         moving = true;
     }
-
-    public void MoveToPlayerExact() {
-        Vector3 end = Player.Instance.transform.position;
-        Vector3 pos = transform.position;
-        pos.x = end.x;
-        pos.y = end.y;
-        Move(pos);
+    
+    void Update() {
+        LerpToNewPosition();
+        MoveToFollowObject();
     }
 
     void LerpToNewPosition() {
@@ -57,15 +59,31 @@ public class CameraController : MonoBehaviour {
             float timeDif = Time.time - startTime;
             float t = timeDif / lerpTime;
             float interpolant = ParametricBlend(t);
-            
+
             transform.position = Vector3.Lerp(startMarker, endMarker, interpolant);
+
+
+            ResetEndMarkerIfDifferentToFollowObjectPosition();
+
             if (transform.position == endMarker) {
                 moving = false;
                 finishMoving?.Invoke();
             }
+            
         }
     }
 
+    void ResetEndMarkerIfDifferentToFollowObjectPosition() {
+        if (endMarker.x != followObject.transform.position.x || endMarker.y != followObject.transform.position.y) {
+            SetEndMarkerToFollowObject();
+        }
+    }
+
+    void SetEndMarkerToFollowObject() {
+        endMarker = transform.position;
+        endMarker.x = followObject.transform.position.x;
+        endMarker.y = followObject.transform.position.y;
+    }
 
     float ParametricBlend(float t) {
         float alpha = 2.1f;
@@ -73,35 +91,23 @@ public class CameraController : MonoBehaviour {
         return sqt / (alpha * (sqt - t) + 1.0f);
     }
 
-    
-
-    bool GetCameraNotMovingAndPlayerIsAlive() {
-        return moving == false && GameController.Instance.Playing == true && Player.Instance.gameObject.activeSelf == true;
-    }
-
-    void FollowPlayer() {
-        if (GetCameraNotMovingAndPlayerIsAlive()) {
+    void MoveToFollowObject() {
+        if (GetCameraNotMovingPlayingAndFollowObjectIsActive()) {
+            Vector3 followObjectPos = followObject.transform.position;
             Vector3 pos = transform.position;
-            pos.x = Player.Instance.transform.position.x;
+            pos.x = followObjectPos.x;
             transform.position = pos;
         }
     }
 
-    void Update() {
-        LerpToNewPosition();
-        FollowPlayer();
+    bool GetCameraNotMovingPlayingAndFollowObjectIsActive() {
+        return moving == false && GameController.Instance.Playing == true && followObject.activeSelf == true;
     }
 
     void OnTriggerExit2D(Collider2D collider) {
         if (collider.gameObject.CompareTag ("Player")) {
             GameController.Instance.Die ();
         }
-    }
-
-    public void MoveTo(Transform t) {
-        Vector3 pos = transform.position;
-        pos.x = t.position.x;
-        Move (pos);
     }
 
     public void MoveToInstant(Transform t) {

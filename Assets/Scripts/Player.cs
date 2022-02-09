@@ -149,9 +149,6 @@ public class Player : MonoBehaviour {
             yield return new WaitForSecondsRealtime(.1f);
         }
 
-
-        CameraController.Instance.MoveToPlayerExact();
-
         currentPlatformId = platform.Id;
         OnPlatformLanded(currentPlatformId);
 
