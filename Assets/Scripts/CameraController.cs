@@ -8,7 +8,6 @@ public class CameraController : MonoBehaviour {
     Vector3 endMarker;
     float titleScreenPosition = -12f;
     public float TitleScreenPosition { get { return titleScreenPosition; } }
-    [SerializeField]
     float startTime;
     float journeyLength;
     float lerpTime = 2f;
@@ -25,26 +24,22 @@ public class CameraController : MonoBehaviour {
             Destroy(gameObject);
         }
 
-        MoveToTitleScreenPosition();
-        
+        MoveToTitleScreenPosition();   
     }
+
+    private void Start() {
+        Player.Instance.OnPlatformLanded += MoveToPlayerExact;
+    }
+
     public void MoveToTitleScreenPosition() {
         if (GameController.Instance.Playing == false) {
             Vector3 pos = transform.position;
             pos.x = titleScreenPosition;
             transform.position = pos;
         }
-    }
+    } 
 
-    public void Move(Vector3 end) {
-        startMarker = transform.position;
-        endMarker = end;
-        startTime = Time.time;
-        journeyLength = Vector3.Distance (startMarker, endMarker);
-        moving = true;
-    }
-
-    public void MoveToPlayerExact() {
+    void MoveToPlayerExact(int platformId) {
         Vector3 end = Player.Instance.transform.position;
         Vector3 pos = transform.position;
         pos.x = end.x;
@@ -52,20 +47,42 @@ public class CameraController : MonoBehaviour {
         Move(pos);
     }
 
+    void Move(Vector3 end) {
+        startMarker = transform.position;
+        endMarker = end;
+        startTime = Time.time;
+        journeyLength = Vector3.Distance(startMarker, endMarker);
+        moving = true;
+    }
+
+    
+
+    void Update() {
+        LerpToNewPosition();
+        FollowPlayer();
+    }
+
     void LerpToNewPosition() {
         if (moving == true) {
             float timeDif = Time.time - startTime;
             float t = timeDif / lerpTime;
             float interpolant = ParametricBlend(t);
-            
+
             transform.position = Vector3.Lerp(startMarker, endMarker, interpolant);
+
+
+            if (endMarker.x != Player.Instance.transform.position.x || endMarker.y != Player.Instance.transform.position.y) {
+                endMarker.x = Player.Instance.transform.position.x;
+                endMarker.y = Player.Instance.transform.position.y;
+            }
+
             if (transform.position == endMarker) {
                 moving = false;
                 finishMoving?.Invoke();
             }
+            
         }
     }
-
 
     float ParametricBlend(float t) {
         float alpha = 2.1f;
@@ -73,23 +90,17 @@ public class CameraController : MonoBehaviour {
         return sqt / (alpha * (sqt - t) + 1.0f);
     }
 
-    
-
-    bool GetCameraNotMovingAndPlayerIsAlive() {
-        return moving == false && GameController.Instance.Playing == true && Player.Instance.gameObject.activeSelf == true;
-    }
-
     void FollowPlayer() {
         if (GetCameraNotMovingAndPlayerIsAlive()) {
+            Vector3 playerPos = Player.Instance.transform.position;
             Vector3 pos = transform.position;
-            pos.x = Player.Instance.transform.position.x;
+            pos.x = playerPos.x;
             transform.position = pos;
         }
     }
 
-    void Update() {
-        LerpToNewPosition();
-        FollowPlayer();
+    bool GetCameraNotMovingAndPlayerIsAlive() {
+        return moving == false && GameController.Instance.Playing == true && Player.Instance.gameObject.activeSelf == true;
     }
 
     void OnTriggerExit2D(Collider2D collider) {
