@@ -100,9 +100,3 @@ public class UIController : MonoBehaviour {
         gameoverHighScoreText.text = text;
     }
 }
-
-
-
-
-
-
