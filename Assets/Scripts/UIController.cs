@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
-using System.Collections.Generic;
 
 public class UIController : MonoBehaviour {
     public static UIController Instance { get; private set; } = null;
@@ -96,22 +94,6 @@ public class UIController : MonoBehaviour {
     public void SetGameoverHighScoreText(string text) {
         gameoverHighScoreText.text = text;
     }
-
-    //public void ClickBackgroundToggle() {
-    //    BubbleController.Instance.ChangeBackgroundStateAndSetPreference();
-    //}
-
-    //void SetBackgroundPreferenceToggle() {
-    //    backgroundPreferenceToggle.SetIsOnWithoutNotify(BubbleController.Instance.BackgroundPreference);
-    //}
-
-    //public void ClickPlayerPressToggle() {
-    //    PowerButtonController.Instance.ChangePlayerPressStateAndSetPreference();
-    //}
-
-    //void SetPlayerPressPreferenceToggle() {
-    //    playerPressPreferenceToggle.SetIsOnWithoutNotify(PowerButtonController.Instance.PlayerPressPreference);
-    //}
 }
 
 
