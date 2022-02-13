@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BubbleController : MonoBehaviour {
+public class BubbleController : SettingsListener {
     public static BubbleController Instance { get; private set; } = null;
     [SerializeField] GameObject bubblePrefab;
     [SerializeField] int quantity;
@@ -12,24 +12,22 @@ public class BubbleController : MonoBehaviour {
     public bool BackgroundPreference { get; private set; } = true;
 
     void Awake() {
+        InitialiseSingleton();
+    }
+
+    void InitialiseSingleton() {
         if (Instance == null) {
             Instance = this;
         } else if (Instance != this) {
             Destroy(gameObject);
         }
-
-        LoadBackgroundPreference();
     }
 
-    private void Start() {
+    protected void Start() {
+        base.Start();
         ec = GetComponent<EdgeCollider2D>();
         SetUpColliderCircle();
         InstantiateBubbles();
-        SetStateDependingOnPreference();
-    }
-
-    void SetStateDependingOnPreference() {
-        gameObject.SetActive(BackgroundPreference);
     }
 
     void SetUpColliderCircle() {
@@ -55,24 +53,8 @@ public class BubbleController : MonoBehaviour {
         }
     }
 
-    public void ChangeBackgroundStateAndSetPreference() {
-        if (gameObject.activeSelf != true) {
-            gameObject.SetActive(true);
-            SetBackgroundPreference(true);
-        } else {
-            gameObject.SetActive(false);
-            SetBackgroundPreference(false);
-        }
+    protected override void RegisterSettings() {
+        gameObject.SetActive(SettingsState);
     }
 
-    void LoadBackgroundPreference() {
-        if (PlayerPrefs.HasKey("backgroundPreference")) {
-            BackgroundPreference = PlayerPrefs.GetInt("backgroundPreference") == 0 ? false : true;
-        }
-    }
-
-    void SetBackgroundPreference(bool preference) {
-        PlayerPrefs.SetInt("backgroundPreference", preference == false ? 0 : 1);
-        PlayerPrefs.Save();
-    }
 }

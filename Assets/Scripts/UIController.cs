@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
+using System.Collections.Generic;
 
 public class UIController : MonoBehaviour {
     public static UIController Instance { get; private set; } = null;
@@ -12,11 +14,14 @@ public class UIController : MonoBehaviour {
     [SerializeField] Text gameoverScoreText;
     [SerializeField] GameObject gameoverPanel;
     [SerializeField] GameObject menuPanel;
-    [SerializeField] Toggle musicPreferenceToggle;
-    [SerializeField] Toggle backgroundPreferenceToggle;
-    [SerializeField] Toggle playerPressPreferenceToggle;
+    [SerializeField] SettingsToggle[] settingsToggles;
+
 
     void Awake() {
+        InitialiseSingleton();
+    }
+
+    void InitialiseSingleton() {
         if (Instance == null) {
             Instance = this;
         } else if (Instance != this) {
@@ -25,10 +30,28 @@ public class UIController : MonoBehaviour {
     }
 
     void Start() {
-        SetMusicPreferenceToggle();
-        SetBackgroundPreferenceToggle();
-        SetPlayerPressPreferenceToggle();
+        DoSettingsToggleStuff();
     }
+
+    void DoSettingsToggleStuff() {
+        for (int i = 0; i < settingsToggles.Length; i++) {
+            SettingsToggle t = settingsToggles[i];
+            
+            settingsToggles[i].onValueChanged.AddListener(delegate {
+                ToggleAction(t);
+            });
+            try {
+                settingsToggles[i].SetIsOnWithoutNotify(Settings.Load(t.SettingsKey));
+            } catch (UnityException) {
+                Debug.LogError($"Unable to load key '{t.SettingsKey}'.");
+            }
+        }
+    }
+
+    void ToggleAction(SettingsToggle t) {
+        Settings.Save(t.SettingsKey, t.isOn);
+    }
+
 
     public void PlayButtonClick() {
         GameController.Instance.SetPlayActive();
@@ -74,27 +97,25 @@ public class UIController : MonoBehaviour {
         gameoverHighScoreText.text = text;
     }
 
-    public void ClickMusicToggle() {
-        MusicController.Instance.ChangeMusicStateAndSetPreference();
-    }
+    //public void ClickBackgroundToggle() {
+    //    BubbleController.Instance.ChangeBackgroundStateAndSetPreference();
+    //}
 
-    void SetMusicPreferenceToggle() {
-        musicPreferenceToggle.SetIsOnWithoutNotify(MusicController.Instance.MusicPreference);
-    }
+    //void SetBackgroundPreferenceToggle() {
+    //    backgroundPreferenceToggle.SetIsOnWithoutNotify(BubbleController.Instance.BackgroundPreference);
+    //}
 
-    public void ClickBackgroundToggle() {
-        BubbleController.Instance.ChangeBackgroundStateAndSetPreference();
-    }
+    //public void ClickPlayerPressToggle() {
+    //    PowerButtonController.Instance.ChangePlayerPressStateAndSetPreference();
+    //}
 
-    void SetBackgroundPreferenceToggle() {
-        backgroundPreferenceToggle.SetIsOnWithoutNotify(BubbleController.Instance.BackgroundPreference);
-    }
-
-    public void ClickPlayerPressToggle() {
-        PowerButtonController.Instance.ChangePlayerPressStateAndSetPreference();
-    }
-
-    void SetPlayerPressPreferenceToggle() {
-        playerPressPreferenceToggle.SetIsOnWithoutNotify(PowerButtonController.Instance.PlayerPressPreference);
-    }
+    //void SetPlayerPressPreferenceToggle() {
+    //    playerPressPreferenceToggle.SetIsOnWithoutNotify(PowerButtonController.Instance.PlayerPressPreference);
+    //}
 }
+
+
+
+
+
+
