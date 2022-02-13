@@ -21,7 +21,6 @@ public class Settings : MonoBehaviour {
             Destroy(gameObject);
         }
     }
-
     
     void SetupEvents() {
         foreach (var item in settingsKeys.settingKeyValues) {
