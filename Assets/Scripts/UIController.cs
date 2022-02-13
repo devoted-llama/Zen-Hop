@@ -28,26 +28,31 @@ public class UIController : MonoBehaviour {
     }
 
     void Start() {
-        DoSettingsToggleStuff();
+        DoSettingsToggleActions();
     }
 
-    void DoSettingsToggleStuff() {
+    void DoSettingsToggleActions() {
         for (int i = 0; i < settingsToggles.Length; i++) {
             SettingsToggle t = settingsToggles[i];
             
-            settingsToggles[i].onValueChanged.AddListener(delegate {
+            t.onValueChanged.AddListener(delegate {
                 ToggleAction(t);
             });
-            try {
-                settingsToggles[i].SetIsOnWithoutNotify(Settings.Load(t.SettingsKey));
-            } catch (UnityException) {
-                Debug.LogError($"Unable to load key '{t.SettingsKey}'.");
-            }
+
+            SetToggleInitialiseState(t);
         }
     }
 
     void ToggleAction(SettingsToggle t) {
         Settings.Save(t.SettingsKey, t.isOn);
+    }
+
+    void SetToggleInitialiseState(SettingsToggle t) {
+        try {
+            t.SetIsOnWithoutNotify(Settings.Load(t.SettingsKey));
+        } catch (UnityException) {
+            Debug.LogError($"Unable to load key '{t.SettingsKey}'.");
+        }
     }
 
 
