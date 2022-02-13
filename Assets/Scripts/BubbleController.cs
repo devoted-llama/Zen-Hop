@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BubbleController : SettingsListener {
+public class BubbleController : SettingsRequester {
     public static BubbleController Instance { get; private set; } = null;
     [SerializeField] GameObject bubblePrefab;
     [SerializeField] int quantity;

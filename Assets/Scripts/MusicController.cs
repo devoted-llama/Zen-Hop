@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MusicController : SettingsListener {
+public class MusicController : SettingsRequester {
     public static MusicController Instance { get; private set; } = null;
 
     AudioSource _audioSource;

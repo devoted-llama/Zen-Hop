@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-public class PowerButtonController : SettingsListener {
+public class PowerButtonController : SettingsRequester {
     public static PowerButtonController Instance { get; private set; } = null;
     bool showing = false;
     bool handheld = false;

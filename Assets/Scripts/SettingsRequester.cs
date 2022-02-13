@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class SettingsListener : MonoBehaviour, ISettingsKey {
+public abstract class SettingsRequester : MonoBehaviour, ISettingsKey {
     [SerializeField] string _settingsKey;
     public string SettingsKey { get { return _settingsKey; } set { _settingsKey = value; } }
     protected bool SettingsState;
