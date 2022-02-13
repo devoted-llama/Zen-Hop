@@ -9,8 +9,6 @@ public class BubbleController : SettingsListener {
     [SerializeField] int boundaryEdges;
     EdgeCollider2D ec;
 
-    public bool BackgroundPreference { get; private set; } = true;
-
     void Awake() {
         InitialiseSingleton();
     }
@@ -23,7 +21,7 @@ public class BubbleController : SettingsListener {
         }
     }
 
-    protected void Start() {
+    new void Start() {
         base.Start();
         ec = GetComponent<EdgeCollider2D>();
         SetUpColliderCircle();

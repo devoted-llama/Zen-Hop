@@ -33,7 +33,7 @@ public class PowerButtonController : SettingsListener {
             Destroy(gameObject);
         }
     }
-    protected void Start() {
+    new void Start() {
         base.Start();
         raycaster = FindObjectOfType<GraphicRaycaster>();
         eventSystem = FindObjectOfType<EventSystem>();
