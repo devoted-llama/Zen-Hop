@@ -8,11 +8,11 @@ public abstract class SettingsRequester : MonoBehaviour, ISettingsKey {
 
     protected void Start() {
         SettingsEvent e = Settings.Subscribe(SettingsKey);
-        e.AddListener(SetSettingState);
+        e.AddListener(OnSettingsEventTrigger);
         GetInitialSettingsState();
     }
 
-    void SetSettingState(bool isOn) {
+    void OnSettingsEventTrigger(bool isOn) {
         SettingsState = isOn;
         RegisterSettings();
     }

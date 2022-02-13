@@ -39,7 +39,7 @@ public class UIController : MonoBehaviour {
                 ToggleAction(t);
             });
 
-            SetToggleInitialiseState(t);
+            SetToggleInitialState(t);
         }
     }
 
@@ -47,7 +47,7 @@ public class UIController : MonoBehaviour {
         Settings.Save(t.SettingsKey, t.isOn);
     }
 
-    void SetToggleInitialiseState(SettingsToggle t) {
+    void SetToggleInitialState(SettingsToggle t) {
         try {
             t.SetIsOnWithoutNotify(Settings.Load(t.SettingsKey));
         } catch (UnityException) {
