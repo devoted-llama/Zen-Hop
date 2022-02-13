@@ -62,10 +62,10 @@ public class CameraController : MonoBehaviour {
 
             transform.position = Vector3.Lerp(startMarker, endMarker, interpolant);
 
-
             ResetEndMarkerIfDifferentToFollowObjectPosition();
 
-            if (transform.position == endMarker) {
+            /* End if t >= 1 in case we 'miss the mark' */
+            if (transform.position == endMarker || t >= 1) {
                 moving = false;
                 finishMoving?.Invoke();
             }

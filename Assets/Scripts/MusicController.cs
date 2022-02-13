@@ -1,48 +1,38 @@
 using UnityEngine;
 
-public class MusicController : MonoBehaviour {
+public class MusicController : SettingsRequester {
     public static MusicController Instance { get; private set; } = null;
 
-    AudioSource audioSource;
-    public bool MusicPreference { get; private set; } = true;
+    AudioSource _audioSource;
 
     void Awake() {
+        InitialiseSingleton();
+        _audioSource = GetComponent<AudioSource>();
+    }
+
+    void InitialiseSingleton() {
         if (Instance == null) {
             Instance = this;
         } else if (Instance != this) {
             Destroy(gameObject);
         }
-
-        audioSource = GetComponent<AudioSource>();
-        LoadMusicPreference();
     }
 
     public void PlayIfHasPreference() {
-        if (MusicPreference == true) {
-            audioSource.Play();
+        if (SettingsState == true && !_audioSource.isPlaying) {
+            _audioSource.Play();
         }
     }
 
-    public void ChangeMusicStateAndSetPreference() {
-        if(audioSource.isPlaying != true) {
-            audioSource.Play();
-            SetMusicPreference(true);
+    protected override void RegisterSettings() {
+        if (SettingsState == true) {
+            _audioSource.Play();
         } else {
-            audioSource.Stop();
-            SetMusicPreference(false);
+            _audioSource.Stop();
         }
     }
 
-    void LoadMusicPreference() {
-        if (PlayerPrefs.HasKey("musicPreference")) {
-            MusicPreference = PlayerPrefs.GetInt("musicPreference") == 0 ? false : true;
-        }
-    }
 
-    void SetMusicPreference(bool preference) {
-        PlayerPrefs.SetInt("musicPreference", preference == false ? 0 : 1);
-        PlayerPrefs.Save();
-    }
 
 
 }
