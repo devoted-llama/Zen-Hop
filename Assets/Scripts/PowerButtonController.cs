@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-public class PowerButtonController : MonoBehaviour {
+public class PowerButtonController : SettingsRequester {
     public static PowerButtonController Instance { get; private set; } = null;
     bool showing = false;
     bool handheld = false;
@@ -23,16 +23,18 @@ public class PowerButtonController : MonoBehaviour {
     public bool PlayerPressPreference { get; private set; } = true;
 
     void Awake() {
+        InitialiseSingleton();
+    }
+
+    void InitialiseSingleton() {
         if (Instance == null) {
             Instance = this;
         } else if (Instance != this) {
             Destroy(gameObject);
         }
-
-        LoadPlayerPressPreference();
     }
-
-    private void Start() {
+    new void Start() {
+        base.Start();
         raycaster = FindObjectOfType<GraphicRaycaster>();
         eventSystem = FindObjectOfType<EventSystem>();
 
@@ -151,12 +153,14 @@ public class PowerButtonController : MonoBehaviour {
         powerRing.Completion = (int)(360 * power);
         powerRing.Generate();
 
+        /* Don't reference player!! */
         Player.Instance.SetPower(power);
     }
 
     void SetPowerZero() {
         powerRing.Completion = 0;
         powerRing.Generate();
+        /* Don't reference Player!! */
         Player.Instance.SetPower(0);
     }
 
@@ -182,6 +186,7 @@ public class PowerButtonController : MonoBehaviour {
 
     void SetAngleZero() {
         SetLineAngle(0, 0);
+        /* Don't reference player!! */
         Player.Instance.SetJumpAngle(0, 0);
     }
 
@@ -212,26 +217,7 @@ public class PowerButtonController : MonoBehaviour {
         showing = false;
     }
 
-    public void ChangePlayerPressStateAndSetPreference() {
-        if (PlayerPressPreference != true) {
-            PlayerPressPreference = true;
-            SetPlayerPressPreference(true);
-        } else {
-            PlayerPressPreference = false;
-            SetPlayerPressPreference(false);
-        }
+    protected override void RegisterSettings() {
+        PlayerPressPreference = SettingsState;
     }
-
-    void LoadPlayerPressPreference() {
-        if (PlayerPrefs.HasKey("playerPressPreference")) {
-            PlayerPressPreference = PlayerPrefs.GetInt("playerPressPreference") == 0 ? false : true;
-        }
-    }
-
-    void SetPlayerPressPreference(bool preference) {
-        PlayerPrefs.SetInt("playerPressPreference", preference == false ? 0 : 1);
-        PlayerPrefs.Save();
-    }
-
-
 }

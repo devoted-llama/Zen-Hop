@@ -9,9 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79595974be6c74db1aa16c5a875a8c46, type: 3}
-  m_Name: VersionInfo
+  m_Script: {fileID: 11500000, guid: b385254cefe17460a96eb9977d571d75, type: 3}
+  m_Name: SettingsKeys
   m_EditorClassIdentifier: 
-  version: 1.0.1
-  buildNumber: 30
-  dateTime: 07/02/2022 23:18:38
+  settingKeyValues:
+  - key: sound
+    value: 1
+  - key: background
+    value: 1
+  - key: playerPressAnywhere
+    value: 1

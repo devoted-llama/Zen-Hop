@@ -6,10 +6,8 @@ public class Player : MonoBehaviour {
     public Rigidbody2D RigidBody { get; private set; }
     float PowerWithMultiplier { get { return powerAmount * powerForceMultiplier; } }
 
-    [SerializeField]
-    float powerForceMultiplier = 1000f;
+    [SerializeField] float powerForceMultiplier = 1000f;
     float powerAmount = 0;
-
     int currentPlatformId = 0;
     Vector3 startPosition;
     float jumpAngle = 0;
@@ -101,7 +99,7 @@ public class Player : MonoBehaviour {
         powerAmount = power > 1 ? 1 : power;
     }
 
-
+    /* PLatforms should care something lands on them, the player shouldn't care */
     void OnCollisionEnter2D(Collision2D collision) {
 
         Platform platform = collision.gameObject.GetComponent<Platform>();
@@ -151,6 +149,7 @@ public class Player : MonoBehaviour {
 
         currentPlatformId = platform.Id;
         OnPlatformLanded(currentPlatformId);
+        /* The game controller should be the one consulted about the state of the current platform */
 
         doingPlatformActionsCoroutine = false;
     }
@@ -158,6 +157,7 @@ public class Player : MonoBehaviour {
     IEnumerator RespawnCoroutine() {
         Platform currentPlatform = PlatformController.Instance.GetPlatformById(0);
         Vector3 pos = currentPlatform.transform.position;
+        /* Why are we telling the Camera where to go? */
         CameraController.Instance.MoveToInstant(currentPlatform.transform);
         yield return new WaitUntil (() => Camera.main.transform.position.x == pos.x);
         pos.y = GameController.Instance.RespawnHeight;

@@ -12,11 +12,14 @@ public class UIController : MonoBehaviour {
     [SerializeField] Text gameoverScoreText;
     [SerializeField] GameObject gameoverPanel;
     [SerializeField] GameObject menuPanel;
-    [SerializeField] Toggle musicPreferenceToggle;
-    [SerializeField] Toggle backgroundPreferenceToggle;
-    [SerializeField] Toggle playerPressPreferenceToggle;
+    [SerializeField] SettingsToggle[] settingsToggles;
+
 
     void Awake() {
+        InitialiseSingleton();
+    }
+
+    void InitialiseSingleton() {
         if (Instance == null) {
             Instance = this;
         } else if (Instance != this) {
@@ -25,10 +28,33 @@ public class UIController : MonoBehaviour {
     }
 
     void Start() {
-        SetMusicPreferenceToggle();
-        SetBackgroundPreferenceToggle();
-        SetPlayerPressPreferenceToggle();
+        DoSettingsToggleActions();
     }
+
+    void DoSettingsToggleActions() {
+        for (int i = 0; i < settingsToggles.Length; i++) {
+            SettingsToggle t = settingsToggles[i];
+            
+            t.onValueChanged.AddListener(delegate {
+                ToggleAction(t);
+            });
+
+            SetToggleInitialState(t);
+        }
+    }
+
+    void ToggleAction(SettingsToggle t) {
+        Settings.Save(t.SettingsKey, t.isOn);
+    }
+
+    void SetToggleInitialState(SettingsToggle t) {
+        try {
+            t.SetIsOnWithoutNotify(Settings.Load(t.SettingsKey));
+        } catch (UnityException) {
+            Debug.LogError($"Unable to load key '{t.SettingsKey}'.");
+        }
+    }
+
 
     public void PlayButtonClick() {
         GameController.Instance.SetPlayActive();
@@ -72,29 +98,5 @@ public class UIController : MonoBehaviour {
 
     public void SetGameoverHighScoreText(string text) {
         gameoverHighScoreText.text = text;
-    }
-
-    public void ClickMusicToggle() {
-        MusicController.Instance.ChangeMusicStateAndSetPreference();
-    }
-
-    void SetMusicPreferenceToggle() {
-        musicPreferenceToggle.SetIsOnWithoutNotify(MusicController.Instance.MusicPreference);
-    }
-
-    public void ClickBackgroundToggle() {
-        BubbleController.Instance.ChangeBackgroundStateAndSetPreference();
-    }
-
-    void SetBackgroundPreferenceToggle() {
-        backgroundPreferenceToggle.SetIsOnWithoutNotify(BubbleController.Instance.BackgroundPreference);
-    }
-
-    public void ClickPlayerPressToggle() {
-        PowerButtonController.Instance.ChangePlayerPressStateAndSetPreference();
-    }
-
-    void SetPlayerPressPreferenceToggle() {
-        playerPressPreferenceToggle.SetIsOnWithoutNotify(PowerButtonController.Instance.PlayerPressPreference);
     }
 }
