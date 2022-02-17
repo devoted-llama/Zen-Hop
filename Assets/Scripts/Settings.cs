@@ -31,7 +31,9 @@ public class Settings : MonoBehaviour {
 
     public static bool Load(string key) {
         if(Instance.settingsKeys.settingKeyValues.Find(item => item.key == key) is SettingKeyValue s) {
+            
             return PlayerPrefs.GetInt(key, s.value ? 1 : 0) == 0 ? false : true;
+            
         } else {
             throw new UnityException("You're trying to load a key which doesn't exist.");
         }
@@ -39,6 +41,7 @@ public class Settings : MonoBehaviour {
 
     public static void Save(string key, bool preference) {
         PlayerPrefs.SetInt(key, preference ? 1 : 0);
+        
         PlayerPrefs.Save();
         SettingsEvent e;
         if (s_events.TryGetValue(key, out e)) {
