@@ -6,8 +6,7 @@ public class SettingsToggle : Toggle, IChangeableSettingsElement {
     [SerializeField] string _settingsKey;
     public string SettingsKey { get { return _settingsKey; } set { _settingsKey = value; } }
 
-    UnityEvent _onChange = new UnityEvent();
-    public UnityEvent OnChange { get { return _onChange; } private set { _onChange = value; } }
+    public UnityEvent OnChange { get; } = new UnityEvent();
 
     public dynamic Value { get { return isOn; } }
 

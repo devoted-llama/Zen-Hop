@@ -51,7 +51,6 @@ public class UIController : MonoBehaviour {
     }
 
     void SetElementState(IChangeableSettingsElement element) {
-        Debug.Log(element);
         dynamic val = element.Value;
         SettingsController.Instance.Save(element.SettingsKey, val);
     }
