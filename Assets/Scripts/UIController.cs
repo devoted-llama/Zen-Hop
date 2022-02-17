@@ -13,14 +13,14 @@ public class UIController : MonoBehaviour {
     [SerializeField] Text gameoverScoreText;
     [SerializeField] GameObject gameoverPanel;
     [SerializeField] GameObject menuPanel;
-    [SerializeField, RestrictToType(typeof(IChangeableSettingsElement))] List<Object> _cse;
-    List<IChangeableSettingsElement> _changeableSettingsElement {
+    [SerializeField, RestrictToType(typeof(IChangeableSettingsElement))] List<Object> _changeableSettingsElement;
+    List<IChangeableSettingsElement> _iChangeableSettingsElement {
         get {
-            List<IChangeableSettingsElement> c = new List<IChangeableSettingsElement>();
-            foreach (var e in _cse) {
-                c.Add(e as IChangeableSettingsElement);
+            List<IChangeableSettingsElement> i = new List<IChangeableSettingsElement>();
+            foreach (var o in _changeableSettingsElement) {
+                i.Add(o as IChangeableSettingsElement);
             }
-            return c;
+            return i;
         }
     }
 
@@ -41,25 +41,24 @@ public class UIController : MonoBehaviour {
     }
 
     void DoSettingsElementActions() {
-        Debug.Log(_changeableSettingsElement);
-        foreach (IChangeableSettingsElement item in _changeableSettingsElement) {
-            item.OnChange.AddListener(delegate {
-                SetElementState(item);
+        foreach (IChangeableSettingsElement element in _iChangeableSettingsElement) {
+            element.OnChange.AddListener(delegate {
+                SetElementState(element);
             });
 
-            SetElementInitialState(item);
+            SetElementInitialState(element);
         }
     }
 
     void SetElementState(IChangeableSettingsElement element) {
+        Debug.Log(element);
         dynamic val = element.Value;
-        Settings.Save(element.SettingsKey, val);
+        SettingsController.Instance.Save(element.SettingsKey, val);
     }
 
     void SetElementInitialState(IChangeableSettingsElement element) {
         try {
-
-            element.SetValue(Settings.Load(element.SettingsKey));
+            element.SetValue(SettingsController.Instance.Load(element.SettingsKey));
             
         } catch (UnityException) {
             Debug.LogError($"Unable to load key '{element.SettingsKey}'.");

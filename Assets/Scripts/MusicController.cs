@@ -1,9 +1,13 @@
 using UnityEngine;
 
-public class MusicController : SettingsRequester {
+public class MusicController : MonoBehaviour, ISettable {
     public static MusicController Instance { get; private set; } = null;
 
     AudioSource _audioSource;
+    bool _settingsState;
+
+    [SerializeField] string _settingsKey = "sound";
+    public string SettingsKey { get { return _settingsKey; } set { _settingsKey = value; } }
 
     void Awake() {
         InitialiseSingleton();
@@ -19,17 +23,22 @@ public class MusicController : SettingsRequester {
     }
 
     public void PlayIfHasPreference() {
-        if (SettingsState == true && !_audioSource.isPlaying) {
+        if (_settingsState == true && !_audioSource.isPlaying) {
             _audioSource.Play();
         }
     }
 
-    protected override void RegisterSettings() {
-        if (SettingsState == true) {
+    void SetMusicBasedOnState() {
+        if (_settingsState == true) {
             _audioSource.Play();
         } else {
             _audioSource.Stop();
         }
+    }
+
+    public void RegisterSettings(dynamic state) {
+        _settingsState = (bool)state;
+        SetMusicBasedOnState();
     }
 
 

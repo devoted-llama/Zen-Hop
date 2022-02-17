@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
-public class SettingsEvent : UnityEvent <bool> { }
-public class Settings : MonoBehaviour {
-    public static Settings Instance { get; private set; } = null;
+public class SettingsEvent : UnityEvent <dynamic> { }
+public class SettingsController : MonoBehaviour {
+    public static SettingsController Instance { get; private set; } = null;
 
     static IDictionary<string, SettingsEvent> s_events = new Dictionary<string, SettingsEvent>();
 
@@ -29,7 +29,7 @@ public class Settings : MonoBehaviour {
         }
     }
 
-    public static bool Load(string key) {
+    public bool Load(string key) {
         if(Instance.settingsKeys.settingKeyValues.Find(item => item.key == key) is SettingKeyValue s) {
             
             return PlayerPrefs.GetInt(key, s.value ? 1 : 0) == 0 ? false : true;
@@ -39,7 +39,7 @@ public class Settings : MonoBehaviour {
         }
     }
 
-    public static void Save(string key, bool preference) {
+    public void Save(string key, bool preference) {
         PlayerPrefs.SetInt(key, preference ? 1 : 0);
         
         PlayerPrefs.Save();
@@ -49,7 +49,7 @@ public class Settings : MonoBehaviour {
         }
     }
 
-    public static SettingsEvent Subscribe(string key) {
+    public SettingsEvent Subscribe(string key) {
         SettingsEvent ev;
         if (s_events.TryGetValue(key, out ev)) {
             return ev;
