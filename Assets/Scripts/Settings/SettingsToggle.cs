@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class SettingsToggle : Toggle, IChangeableSettingsElement {
     [SerializeField] string _settingsKey;
-    public string SettingsKey { get { return _settingsKey; } set { _settingsKey = value; } }
+    public string SettingsKey { get { return _settingsKey; } }
 
     public UnityEvent OnChange { get; } = new UnityEvent();
 
