@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingKeyValues:
   - key: sound
-    value: 1
+    data:
+      _bool: 1
   - key: background
-    value: 1
+    data:
+      _bool: 1
   - key: playerPressAnywhere
-    value: 1
+    data:
+      _bool: 1

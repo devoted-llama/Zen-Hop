@@ -1,57 +1,48 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
-public class SettingsEvent : UnityEvent <dynamic> { }
-public class SettingsController : MonoBehaviour {
-    public static SettingsController Instance { get; private set; } = null;
-
-    static IDictionary<string, SettingsEvent> s_events = new Dictionary<string, SettingsEvent>();
+public class SettingsController : MonoBehaviour, ISettingsController {
+    IDictionary<string, UnityEvent<SettingsData>> events = new Dictionary<string, UnityEvent<SettingsData>>();
 
     [SerializeField] SettingsKeys settingsKeys;
 
     void Awake() {
-        InitialiseSingleton();
-        SetupEvents();
+        SetupBoolEvents();
     }
 
-    void InitialiseSingleton() {
-        if (Instance == null) {
-            Instance = this;
-        } else if (Instance != this) {
-            Destroy(gameObject);
-        }
-    }
     
-    void SetupEvents() {
+    void SetupBoolEvents() {
         foreach (var item in settingsKeys.settingKeyValues) {
-            SettingsEvent ev = new SettingsEvent();
-            s_events.Add(item.key, ev);
+            UnityEvent<SettingsData> ev = new UnityEvent<SettingsData>();
+            events.Add(item.key, ev);
         }
     }
 
-    public bool Load(string key) {
-        if(Instance.settingsKeys.settingKeyValues.Find(item => item.key == key) is SettingKeyValue s) {
-            
-            return PlayerPrefs.GetInt(key, s.value ? 1 : 0) == 0 ? false : true;
+    public SettingsData Load(string key) {
+        if(settingsKeys.settingKeyValues.Find(item => item.key == key) is SettingKeyValue s) {
+            SettingsData sd = new SettingsData();
+            bool value = PlayerPrefs.GetInt(key, s.data.Bool ? 1 : 0) == 0 ? false : true;
+            sd.Set(value);
+            return sd;
             
         } else {
             throw new UnityException("You're trying to load a key which doesn't exist.");
         }
     }
 
-    public void Save(string key, bool preference) {
-        PlayerPrefs.SetInt(key, preference ? 1 : 0);
+    public void Save(string key, SettingsData data) {
+        PlayerPrefs.SetInt(key, data.Bool ? 1 : 0);
         
         PlayerPrefs.Save();
-        SettingsEvent e;
-        if (s_events.TryGetValue(key, out e)) {
-            e.Invoke(preference);
+        UnityEvent<SettingsData> e;
+        if (events.TryGetValue(key, out e)) {
+            e.Invoke(data);
         }
     }
 
-    public SettingsEvent Subscribe(string key) {
-        SettingsEvent ev;
-        if (s_events.TryGetValue(key, out ev)) {
+    public UnityEvent<SettingsData> Subscribe(string key) {
+        UnityEvent<SettingsData> ev;
+        if (events.TryGetValue(key, out ev)) {
             return ev;
         }
         throw new UnityException($"No such event with key '{key}'");

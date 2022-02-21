@@ -6,19 +6,37 @@ public class SettingsToggle : Toggle, IChangeableSettingsElement {
     [SerializeField] string _settingsKey;
     public string SettingsKey { get { return _settingsKey; } }
 
-    public UnityEvent OnChange { get; } = new UnityEvent();
+    public SettingsData SettingsData { get; private set; }
 
-    public dynamic Value { get { return isOn; } }
+    UnityAction<SettingsData> delegateEvent;
 
     new void Start() {
         base.Start();
-        onValueChanged.AddListener(delegate {
-            OnChange.Invoke();
-        });
+        onValueChanged.AddListener(OnChange);
     }
 
-    public void SetValue(dynamic value) {
-        SetIsOnWithoutNotify(value);
+    public void SetSettingsData(SettingsData settingsData) {
+
+        
+        Set(settingsData);
     }
+
+    void Set(SettingsData settingsData) {
+        SettingsData = settingsData;
+        SetIsOnWithoutNotify(SettingsData.Bool);
+    }
+
+    public void AddListener(UnityAction<SettingsData> call) {
+        delegateEvent += call;
+        onValueChanged.AddListener(OnChange);
+    }
+
+    void OnChange(bool value) {
+        SettingsData sd = SettingsData;
+        sd.Set(value);
+        SettingsData = sd;
+        delegateEvent(SettingsData);
+    }
+
 }
 

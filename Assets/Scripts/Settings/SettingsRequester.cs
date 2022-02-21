@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class SettingsRequester : MonoBehaviour {
     public static SettingsRequester Instance { get; private set; } = null;
-
+    [SerializeField, RestrictToType(typeof(ISettingsController))] Object _iSettingsControllerObj;
+    ISettingsController _iSettingsController { get { return _iSettingsControllerObj as ISettingsController; } }
     [SerializeField, RestrictToType(typeof(ISettable))] List<Object> _settable;
     List<ISettable> _iSettable {
         get {
@@ -34,15 +36,15 @@ public class SettingsRequester : MonoBehaviour {
 
     void DoSettingRequestActions() {
         foreach (ISettable item in _iSettable) {
-            SettingsEvent e = SettingsController.Instance.Subscribe(item.SettingsKey);
+            UnityEvent<SettingsData> e = _iSettingsController.Subscribe(item.SettingsKey);
             e.AddListener(item.RegisterSettings);
             SetItemInitialState(item);
         }
     }
 
     void SetItemInitialState(ISettable item) {
-        bool state = SettingsController.Instance.Load(item.SettingsKey);
-        item.RegisterSettings(state);
+        SettingsData sd = _iSettingsController.Load(item.SettingsKey);
+        item.RegisterSettings(sd);
     }
 
 }

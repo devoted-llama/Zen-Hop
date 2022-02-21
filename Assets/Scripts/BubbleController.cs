@@ -52,8 +52,8 @@ public class BubbleController : MonoBehaviour, ISettable {
         }
     }
 
-    public void RegisterSettings(dynamic state) {
-        gameObject.SetActive((bool)state);
+    public void RegisterSettings(SettingsData sd) {
+        gameObject.SetActive(sd.Bool);
     }
 
 }

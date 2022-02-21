@@ -36,8 +36,8 @@ public class MusicController : MonoBehaviour, ISettable {
         }
     }
 
-    public void RegisterSettings(dynamic state) {
-        _settingsState = (bool)state;
+    public void RegisterSettings(SettingsData sd) {
+        _settingsState = sd.Bool;
         SetMusicBasedOnState();
     }
 

@@ -2,8 +2,8 @@
 
 
 public interface IChangeableSettingsElement {
-    public UnityEvent OnChange { get; }
-    public dynamic Value { get; }
+    public SettingsData SettingsData { get; }
     public string SettingsKey { get; }
-    public void SetValue(dynamic value);
+    public void SetSettingsData(SettingsData settingsData);
+    public void AddListener(UnityAction<SettingsData> call);
 }

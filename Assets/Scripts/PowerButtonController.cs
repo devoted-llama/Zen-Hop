@@ -219,7 +219,7 @@ public class PowerButtonController : MonoBehaviour, ISettable {
         _showing = false;
     }
 
-    public void RegisterSettings(dynamic state) {
-        _playerPressAnywhere = (bool)state;
+    public void RegisterSettings(SettingsData sd) {
+        _playerPressAnywhere = sd.Bool;
     }
 }
