@@ -10,5 +10,5 @@ public class SettingsKeys : ScriptableObject
 [System.Serializable]
 public class SettingKeyValue {
     public string key;
-    public SettingsData data;
+    public bool value;
 } 

@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 
 public interface ISettingsController {
-    public SettingsData Load(string key);
-    public void Save(string key, SettingsData preference);
-    public UnityEvent<SettingsData> Subscribe(string settingsKey);
+    public bool LoadBool(string key);
+    public void Save(string key, bool value);
+    public UnityEvent<bool> SubscribeToBool(string settingsKey);
 }

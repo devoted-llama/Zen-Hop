@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BubbleController : MonoBehaviour, ISettable {
+public class BubbleController : MonoBehaviour, ISettable<bool> {
     public static BubbleController Instance { get; private set; } = null;
     [SerializeField] GameObject _bubblePrefab;
     [SerializeField] int _quantity = 8;
@@ -52,8 +52,8 @@ public class BubbleController : MonoBehaviour, ISettable {
         }
     }
 
-    public void RegisterSettings(SettingsData sd) {
-        gameObject.SetActive(sd.Bool);
+    public void RegisterSettings(bool value) {
+        gameObject.SetActive(value);
     }
 
 }

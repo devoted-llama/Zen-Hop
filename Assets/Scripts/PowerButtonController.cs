@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-public class PowerButtonController : MonoBehaviour, ISettable {
+public class PowerButtonController : MonoBehaviour, ISettable<bool> {
     public static PowerButtonController Instance { get; private set; } = null;
     bool _showing = false;
     bool _handheld = false;
@@ -219,7 +219,7 @@ public class PowerButtonController : MonoBehaviour, ISettable {
         _showing = false;
     }
 
-    public void RegisterSettings(SettingsData sd) {
-        _playerPressAnywhere = sd.Bool;
+    public void RegisterSettings(bool value) {
+        _playerPressAnywhere = value;
     }
 }

@@ -1,4 +1,4 @@
-﻿public interface ISettable {
+﻿public interface ISettable<T> {
     public string SettingsKey { get; set; }
-    public void RegisterSettings(SettingsData state);
+    public void RegisterSettings(T value);
 }

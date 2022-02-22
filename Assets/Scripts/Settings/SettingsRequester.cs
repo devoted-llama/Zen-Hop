@@ -4,14 +4,15 @@ using UnityEngine.Events;
 
 public class SettingsRequester : MonoBehaviour {
     public static SettingsRequester Instance { get; private set; } = null;
+
     [SerializeField, RestrictToType(typeof(ISettingsController))] Object _iSettingsControllerObj;
     ISettingsController _iSettingsController { get { return _iSettingsControllerObj as ISettingsController; } }
-    [SerializeField, RestrictToType(typeof(ISettable))] List<Object> _settable;
-    List<ISettable> _iSettable {
+    [SerializeField, RestrictToType(typeof(ISettable<bool>))] List<Object> _settable;
+    List<ISettable<bool>> _iSettable {
         get {
-            List<ISettable> i = new List<ISettable>();
+            List<ISettable<bool>> i = new List<ISettable<bool>>();
             foreach (var o in _settable) {
-                i.Add(o as ISettable);
+                i.Add(o as ISettable<bool>);
             }
             return i;
         }
@@ -31,20 +32,20 @@ public class SettingsRequester : MonoBehaviour {
     }
 
     void Start() {
-        DoSettingRequestActions();
+        DoBoolSettingRequestActions();
     }
 
-    void DoSettingRequestActions() {
-        foreach (ISettable item in _iSettable) {
-            UnityEvent<SettingsData> e = _iSettingsController.Subscribe(item.SettingsKey);
+    void DoBoolSettingRequestActions() {
+        foreach (ISettable<bool> item in _iSettable) {
+            UnityEvent<bool> e = _iSettingsController.SubscribeToBool(item.SettingsKey);
             e.AddListener(item.RegisterSettings);
             SetItemInitialState(item);
         }
     }
 
-    void SetItemInitialState(ISettable item) {
-        SettingsData sd = _iSettingsController.Load(item.SettingsKey);
-        item.RegisterSettings(sd);
+    void SetItemInitialState(ISettable<bool> item) {
+        bool value = _iSettingsController.LoadBool(item.SettingsKey);
+        item.RegisterSettings(value);
     }
 
 }

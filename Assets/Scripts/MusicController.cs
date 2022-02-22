@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MusicController : MonoBehaviour, ISettable {
+public class MusicController : MonoBehaviour, ISettable<bool> {
     public static MusicController Instance { get; private set; } = null;
 
     AudioSource _audioSource;
@@ -36,8 +36,8 @@ public class MusicController : MonoBehaviour, ISettable {
         }
     }
 
-    public void RegisterSettings(SettingsData sd) {
-        _settingsState = sd.Bool;
+    public void RegisterSettings(bool value) {
+        _settingsState = value;
         SetMusicBasedOnState();
     }
 

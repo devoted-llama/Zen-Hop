@@ -2,40 +2,33 @@
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-public class SettingsToggle : Toggle, IChangeableSettingsElement {
+public class SettingsToggle : Toggle, IChangeableSettingsElement<bool> {
     [SerializeField] string _settingsKey;
     public string SettingsKey { get { return _settingsKey; } }
 
-    public SettingsData SettingsData { get; private set; }
+    public bool Value { get; private set; }
 
-    UnityAction<SettingsData> delegateEvent;
+    UnityAction<bool> delegateEvent;
 
     new void Start() {
         base.Start();
-        onValueChanged.AddListener(OnChange);
+        onValueChanged.AddListener(DoChangeAction);
     }
 
-    public void SetSettingsData(SettingsData settingsData) {
-
-        
-        Set(settingsData);
+    public void SetValue(bool value) {
+        Value = value;
+        SetIsOnWithoutNotify(value);
     }
 
-    void Set(SettingsData settingsData) {
-        SettingsData = settingsData;
-        SetIsOnWithoutNotify(SettingsData.Bool);
-    }
-
-    public void AddListener(UnityAction<SettingsData> call) {
+    public void AddListener(UnityAction<bool> call) {
         delegateEvent += call;
-        onValueChanged.AddListener(OnChange);
     }
 
-    void OnChange(bool value) {
-        SettingsData sd = SettingsData;
-        sd.Set(value);
-        SettingsData = sd;
-        delegateEvent(SettingsData);
+    void DoChangeAction(bool value) {
+        Value = value;
+        if (delegateEvent != null) {
+            delegateEvent(Value);
+        }
     }
 
 }

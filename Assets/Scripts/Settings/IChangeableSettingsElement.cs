@@ -1,9 +1,8 @@
 ﻿using UnityEngine.Events;
 
-
-public interface IChangeableSettingsElement {
-    public SettingsData SettingsData { get; }
+public interface IChangeableSettingsElement<T> {
+    public T Value { get; }
     public string SettingsKey { get; }
-    public void SetSettingsData(SettingsData settingsData);
-    public void AddListener(UnityAction<SettingsData> call);
+    public void SetValue(T value);
+    public void AddListener(UnityAction<T> call);
 }
