@@ -1,6 +1,4 @@
-﻿
-using UnityEngine.Events;
-
+﻿using UnityEngine.Events;
 
 public interface ISettingsController {
     public bool LoadBool(string key);

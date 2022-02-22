@@ -30,6 +30,4 @@ public class SettingsToggle : Toggle, IChangeableSettingsElement<bool> {
             delegateEvent(Value);
         }
     }
-
 }
-
