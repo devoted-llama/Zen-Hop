@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class UIController : MonoBehaviour {
     public static UIController Instance { get; private set; } = null;
@@ -12,8 +13,16 @@ public class UIController : MonoBehaviour {
     [SerializeField] Text gameoverScoreText;
     [SerializeField] GameObject gameoverPanel;
     [SerializeField] GameObject menuPanel;
-    [SerializeField] SettingsToggle[] settingsToggles;
-
+    [SerializeField, RestrictToType(typeof(ISettingsController))] Object _iSettingsControllerObj;
+    ISettingsController _iSettingsController { get { return _iSettingsControllerObj as ISettingsController; } }
+    [SerializeField, RestrictToType(typeof(IChangeableSettingsElement<bool>))] List<Object> _changeableSettingsElementObj;
+    List<IChangeableSettingsElement<bool>> _changeableSettingsElement {
+        get {
+            List<IChangeableSettingsElement<bool>> i = new List<IChangeableSettingsElement<bool>>();
+            foreach (var o in _changeableSettingsElementObj) i.Add(o as IChangeableSettingsElement <bool>);
+            return i;
+        }
+    }
 
     void Awake() {
         InitialiseSingleton();
@@ -28,30 +37,25 @@ public class UIController : MonoBehaviour {
     }
 
     void Start() {
-        DoSettingsToggleActions();
+        DoBoolSettingsElementActions();
     }
 
-    void DoSettingsToggleActions() {
-        for (int i = 0; i < settingsToggles.Length; i++) {
-            SettingsToggle t = settingsToggles[i];
-            
-            t.onValueChanged.AddListener(delegate {
-                ToggleAction(t);
-            });
-
-            SetToggleInitialState(t);
+    void DoBoolSettingsElementActions() {
+        foreach (IChangeableSettingsElement<bool> element in _changeableSettingsElement) {
+            element.AddListener(delegate {SetElementState(element);});
+            SetElementInitialState(element);
         }
     }
 
-    void ToggleAction(SettingsToggle t) {
-        Settings.Save(t.SettingsKey, t.isOn);
+    void SetElementState(IChangeableSettingsElement<bool> element) {
+        _iSettingsController.Save(element.SettingsKey, element.Value);
     }
 
-    void SetToggleInitialState(SettingsToggle t) {
+    void SetElementInitialState(IChangeableSettingsElement<bool> element) {
         try {
-            t.SetIsOnWithoutNotify(Settings.Load(t.SettingsKey));
+            element.SetValue(_iSettingsController.LoadBool(element.SettingsKey));
         } catch (UnityException) {
-            Debug.LogError($"Unable to load key '{t.SettingsKey}'.");
+            Debug.LogError($"Unable to load key '{element.SettingsKey}'.");
         }
     }
 
