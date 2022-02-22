@@ -32,6 +32,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -55,6 +56,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -94,16 +96,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2986049657994324913}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d7bf53e037623843870023024758e52, type: 3}
+  m_Script: {fileID: 11500000, guid: d0fcd0716895248999246318fcb7fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 10
-  thickness: 0.73
-  completion: 360
-  angle: 90
-  polygons: 15
-  keepPolygonAmountConsistentForCompletionAmount: 0
-  type: 2
+  _size: 10
+  _thickness: 0.73
+  _completion: 360
+  _angle: 90
+  _polygons: 15
+  _keepPolygonAmountConsistentForCompletionAmount: 0
+  _type: 2
 --- !u!50 &7385983574843783320
 Rigidbody2D:
   serializedVersion: 4

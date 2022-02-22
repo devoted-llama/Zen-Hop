@@ -3,24 +3,26 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-public class PowerButtonController : SettingsRequester {
+public class PowerButtonController : MonoBehaviour, ISettable<bool> {
     public static PowerButtonController Instance { get; private set; } = null;
-    bool showing = false;
-    bool handheld = false;
-    Touch touch;
-    Vector3 originPos;
-    Vector3 currentPos;
+    bool _showing = false;
+    bool _handheld = false;
+    Touch _touch;
+    Vector3 _originPos;
+    Vector3 _currentPos;
 
-    [SerializeField] CircleGenerator outerRing;
-    [SerializeField] CircleGenerator powerRing;
-    [SerializeField] LineRenderer line;
-    [SerializeField] float powerAreaMultiplier = 2f;
+    [SerializeField] CircleGenerator _outerRing;
+    [SerializeField] CircleGenerator _powerRing;
+    [SerializeField] LineRenderer _line;
+    [SerializeField] float _powerAreaMultiplier = 2.7f;
 
-    GraphicRaycaster raycaster;
-    EventSystem eventSystem;
+    GraphicRaycaster _raycaster;
+    EventSystem _eventSystem;
 
-    /* True for press anywhere, false for press player/ball */
-    public bool PlayerPressPreference { get; private set; } = true;
+    [SerializeField] string _settingsKey = "playerPressAnywhere";
+    public string SettingsKey { get { return _settingsKey; } set { _settingsKey = value; } }
+
+    bool _playerPressAnywhere;
 
     void Awake() {
         InitialiseSingleton();
@@ -33,29 +35,29 @@ public class PowerButtonController : SettingsRequester {
             Destroy(gameObject);
         }
     }
-    new void Start() {
-        base.Start();
-        raycaster = FindObjectOfType<GraphicRaycaster>();
-        eventSystem = FindObjectOfType<EventSystem>();
+
+    void Start() {
+        _raycaster = FindObjectOfType<GraphicRaycaster>();
+        _eventSystem = FindObjectOfType<EventSystem>();
 
         SetIsHandHeld();
         Hide();
     }
 
     void Update() {
-        if (handheld && Input.touchCount > 0) {
-            touch = Input.GetTouch(0);
+        if (_handheld && Input.touchCount > 0) {
+            _touch = Input.GetTouch(0);
         }
         DoAction();
     }
 
     void SetIsHandHeld() {
-        handheld = SystemInfo.deviceType == DeviceType.Handheld;
+        _handheld = SystemInfo.deviceType == DeviceType.Handheld;
     }
 
     void DoAction() {
-        if (Player.Instance.IsReady() && GetPressStart() && !showing) {
-            originPos = GetPressPosition();
+        if (Player.Instance.IsReady() && GetPressStart() && !_showing) {
+            _originPos = GetPressPosition();
             if (GetPressPlayer()) {
                 SetAngleZero();
                 SetPowerZero();
@@ -63,13 +65,13 @@ public class PowerButtonController : SettingsRequester {
             }
         }
 
-        if (GetPressHold() && showing) {
-            currentPos = GetPressPosition();
+        if (GetPressHold() && _showing) {
+            _currentPos = GetPressPosition();
             SetAngle();
             SetPower();
         }
 
-        if (GetPressEnd() && showing) {
+        if (GetPressEnd() && _showing) {
             Hide();
             Player.Instance.Jump();
         }
@@ -79,7 +81,7 @@ public class PowerButtonController : SettingsRequester {
         if(GetTouchedUI()) {
             return false;
         }
-        if (!PlayerPressPreference) {
+        if (!_playerPressAnywhere) {
             Vector3 pos = GetPressPosition();
             RaycastHit2D hit = Physics2D.Raycast(pos, -Vector3.forward);
             if (hit.collider != null && hit.transform.CompareTag("Player")) {
@@ -91,10 +93,10 @@ public class PowerButtonController : SettingsRequester {
     }
 
     bool GetTouchedUI() {
-        PointerEventData pointerEventData = new PointerEventData(eventSystem);
+        PointerEventData pointerEventData = new PointerEventData(_eventSystem);
         pointerEventData.position = GetPressPositionRaw();
         List<RaycastResult> results = new List<RaycastResult>();
-        raycaster.Raycast(pointerEventData, results);
+        _raycaster.Raycast(pointerEventData, results);
         foreach (RaycastResult result in results) {
             return true;
         }
@@ -102,22 +104,22 @@ public class PowerButtonController : SettingsRequester {
     }
 
     Vector3 GetPressPositionRaw() {
-        if (handheld) {
-            return touch.position;
+        if (_handheld) {
+            return _touch.position;
         }
         return Input.mousePosition;
     }
 
     Vector3 GetPressPosition() {
-        if (handheld) {
-            return Camera.main.ScreenToWorldPoint(touch.position);
+        if (_handheld) {
+            return Camera.main.ScreenToWorldPoint(_touch.position);
         }
         return Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
     bool GetPressStart() {
-        if (handheld) {
-            return touch.phase == TouchPhase.Began;
+        if (_handheld) {
+            return _touch.phase == TouchPhase.Began;
         }
         return Input.GetButtonDown("Fire1");
 
@@ -125,48 +127,48 @@ public class PowerButtonController : SettingsRequester {
     }
 
     bool GetPressHold() {
-        if (handheld) {
-            return touch.phase == TouchPhase.Moved;
+        if (_handheld) {
+            return _touch.phase == TouchPhase.Moved;
         }
         return Input.GetButton("Fire1");
     }
 
     bool GetPressEnd() {
-        if (handheld) {
-            return touch.phase == TouchPhase.Ended;
+        if (_handheld) {
+            return _touch.phase == TouchPhase.Ended;
         }
         return Input.GetButtonUp("Fire1");
     }
 
 
     void SetPower() {
-        Vector2 point1 = currentPos;
-        Vector2 point2 = originPos;
+        Vector2 point1 = _currentPos;
+        Vector2 point2 = _originPos;
 
         float distance = Vector2.Distance(point1, point2);
 
-        float size = outerRing.Size * powerAreaMultiplier;
+        float size = _outerRing.Size * _powerAreaMultiplier;
 
         float power = distance / size;
         power = power > 1 ? 1 : power;
 
-        powerRing.Completion = (int)(360 * power);
-        powerRing.Generate();
+        _powerRing.Completion = (int)(360 * power);
+        _powerRing.Generate();
 
         /* Don't reference player!! */
         Player.Instance.SetPower(power);
     }
 
     void SetPowerZero() {
-        powerRing.Completion = 0;
-        powerRing.Generate();
+        _powerRing.Completion = 0;
+        _powerRing.Generate();
         /* Don't reference Player!! */
         Player.Instance.SetPower(0);
     }
 
     void SetAngle() {
-        float adjacent = currentPos.x - originPos.x;
-        float opposite = currentPos.y - originPos.y;
+        float adjacent = _currentPos.x - _originPos.x;
+        float opposite = _currentPos.y - _originPos.y;
         float angle = Mathf.Rad2Deg * Mathf.Atan(adjacent / opposite);
 
         float modifier = 0;
@@ -194,7 +196,7 @@ public class PowerButtonController : SettingsRequester {
         if (!float.IsNaN(angle)) {
             angle = modifier + angle;
             Vector3 eulerAngle = new Vector3(0, 0, angle);
-            line.transform.eulerAngles = -eulerAngle;
+            _line.transform.eulerAngles = -eulerAngle;
         }
     }
 
@@ -206,7 +208,7 @@ public class PowerButtonController : SettingsRequester {
         scale.x = 1;
         scale.y = 1;
         transform.localScale = scale;
-        showing = true;
+        _showing = true;
     }
 
     void Hide() {
@@ -214,10 +216,10 @@ public class PowerButtonController : SettingsRequester {
         scale.x = 0;
         scale.y = 0;
         transform.localScale = scale;
-        showing = false;
+        _showing = false;
     }
 
-    protected override void RegisterSettings() {
-        PlayerPressPreference = SettingsState;
+    public void RegisterSettings(bool value) {
+        _playerPressAnywhere = value;
     }
 }
