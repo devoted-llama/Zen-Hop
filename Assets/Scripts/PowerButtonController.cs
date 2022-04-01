@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using ProudLlama.CircleGenerator;
 
 public class PowerButtonController : MonoBehaviour, ISettable<bool> {
     public static PowerButtonController Instance { get; private set; } = null;
@@ -11,8 +12,8 @@ public class PowerButtonController : MonoBehaviour, ISettable<bool> {
     Vector3 _originPos;
     Vector3 _currentPos;
 
-    [SerializeField] CircleGenerator _outerRing;
-    [SerializeField] CircleGenerator _powerRing;
+    [SerializeField] DashCircleGenerator _outerRing;
+    [SerializeField] StrokeCircleGenerator _powerRing;
     [SerializeField] LineRenderer _line;
     [SerializeField] float _powerAreaMultiplier = 2.7f;
 
@@ -78,7 +79,7 @@ public class PowerButtonController : MonoBehaviour, ISettable<bool> {
     }
 
     bool GetPressPlayer() {
-        if(GetTouchedUI()) {
+        if (GetTouchedUI()) {
             return false;
         }
         if (!_playerPressAnywhere) {
@@ -88,7 +89,7 @@ public class PowerButtonController : MonoBehaviour, ISettable<bool> {
                 return true;
             }
             return false;
-        } 
+        }
         return true;
     }
 
@@ -147,12 +148,14 @@ public class PowerButtonController : MonoBehaviour, ISettable<bool> {
 
         float distance = Vector2.Distance(point1, point2);
 
-        float size = _outerRing.Size * _powerAreaMultiplier;
+        float size = _outerRing.CircleData.Radius * _powerAreaMultiplier;
 
         float power = distance / size;
         power = power > 1 ? 1 : power;
 
-        _powerRing.Completion = (int)(360 * power);
+        CircleData cd = _powerRing.CircleData;
+        cd.Completion = (int)(360 * power);
+        _powerRing.CircleData = cd;
         _powerRing.Generate();
 
         /* Don't reference player!! */
@@ -160,7 +163,9 @@ public class PowerButtonController : MonoBehaviour, ISettable<bool> {
     }
 
     void SetPowerZero() {
-        _powerRing.Completion = 0;
+        CircleData cd = _powerRing.CircleData;
+        cd.Completion = 0;
+        _powerRing.CircleData = cd;
         _powerRing.Generate();
         /* Don't reference Player!! */
         Player.Instance.SetPower(0);

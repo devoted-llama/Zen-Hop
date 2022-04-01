@@ -96,16 +96,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2986049657994324913}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0fcd0716895248999246318fcb7fc4d, type: 3}
+  m_Script: {fileID: 11500000, guid: d62ff24650fc34d14be5d3ec6095beb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _size: 10
-  _thickness: 0.73
-  _completion: 360
-  _angle: 90
-  _polygons: 15
-  _keepPolygonAmountConsistentForCompletionAmount: 0
-  _type: 2
+  _circleData:
+    _radius: 7
+    _completion: 360
+    _angle: 0
+    _polygonQuantity: 32
+    _keepPolygonQuantityConsistent: 1
 --- !u!50 &7385983574843783320
 Rigidbody2D:
   serializedVersion: 4
@@ -142,7 +141,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 7.3
+  m_Radius: 7
 --- !u!114 &-4999244877372064597
 MonoBehaviour:
   m_ObjectHideFlags: 0
