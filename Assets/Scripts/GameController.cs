@@ -28,18 +28,18 @@ public class GameController : MonoBehaviour {
 
     Random.State randomState;
 
-    void Awake () {
+    void Awake() {
         if (Instance == null) {
             Instance = this;
         } else if (Instance != this) {
-            Destroy (gameObject);
+            Destroy(gameObject);
         }
 
         Time.timeScale = timescale;
-        Random.InitState (randomSeed);
+        Random.InitState(randomSeed);
         randomState = Random.state;
 
-	}
+    }
 
     void Start() {
         timeSinceAd = Time.unscaledTime;
@@ -59,10 +59,10 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    
+
     void SetScore(int score) {
         this.score = score;
-        UpdateUI ();
+        UpdateUI();
     }
 
     public void Die() {
@@ -144,7 +144,7 @@ public class GameController : MonoBehaviour {
     }
 
     void SaveHighScore() {
-        if(score > highScore) {
+        if (score > highScore) {
             highScore = score;
             PlayerPrefs.SetInt("highScore", highScore);
             PlayerPrefs.Save();
@@ -152,7 +152,7 @@ public class GameController : MonoBehaviour {
     }
 
     void GetHighScore() {
-        if(PlayerPrefs.HasKey("highScore")) {
+        if (PlayerPrefs.HasKey("highScore")) {
             highScore = PlayerPrefs.GetInt("highScore");
         }
     }
