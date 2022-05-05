@@ -19,7 +19,7 @@ public class UIController : MonoBehaviour {
     List<IChangeableSettingsElement<bool>> _changeableSettingsElement {
         get {
             List<IChangeableSettingsElement<bool>> i = new List<IChangeableSettingsElement<bool>>();
-            foreach (var o in _changeableSettingsElementObj) i.Add(o as IChangeableSettingsElement <bool>);
+            foreach (var o in _changeableSettingsElementObj) i.Add(o as IChangeableSettingsElement<bool>);
             return i;
         }
     }
@@ -42,7 +42,7 @@ public class UIController : MonoBehaviour {
 
     void DoBoolSettingsElementActions() {
         foreach (IChangeableSettingsElement<bool> element in _changeableSettingsElement) {
-            element.AddListener(delegate {SetElementState(element);});
+            element.AddListener(delegate { SetElementState(element); });
             SetElementInitialState(element);
         }
     }
