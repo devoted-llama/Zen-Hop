@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor;
 namespace ProudLlama.CircleGenerator {
     public class FillCircleGeneratorMenu {
@@ -12,3 +13,4 @@ namespace ProudLlama.CircleGenerator {
         }
     }
 }
+#endif
