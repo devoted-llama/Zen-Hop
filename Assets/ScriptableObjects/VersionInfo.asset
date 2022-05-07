@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: VersionInfo
   m_EditorClassIdentifier: 
   version: 1.1.0
-  buildNumber: 35
-  dateTime: 07/05/2022 21:53:02
+  buildNumber: 37
+  dateTime: 07/05/2022 22:27:36
