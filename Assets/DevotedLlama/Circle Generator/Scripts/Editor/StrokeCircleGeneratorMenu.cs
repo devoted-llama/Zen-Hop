@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor;
 namespace DevotedLlama.CircleGenerator {
     public class StrokeCircleGeneratorMenu {
@@ -12,3 +13,4 @@ namespace DevotedLlama.CircleGenerator {
         }
     }
 }
+#endif
