@@ -114,15 +114,15 @@ public class Player : MonoBehaviour {
     }
 
     bool GetRigidBodyVelocityEquals(float velocity) {
-        return RigidBody.velocity.x == velocity &&
-            RigidBody.velocity.y == velocity;
+        return RigidBody.linearVelocity.x == velocity &&
+            RigidBody.linearVelocity.y == velocity;
     }
 
     bool GetRigidBodyVelocityLessThan(float velocity) {
-        return RigidBody.velocity.x < velocity && 
-            RigidBody.velocity.y < velocity && 
-            RigidBody.velocity.x > -velocity && 
-            RigidBody.velocity.y > -velocity;
+        return RigidBody.linearVelocity.x < velocity && 
+            RigidBody.linearVelocity.y < velocity && 
+            RigidBody.linearVelocity.x > -velocity && 
+            RigidBody.linearVelocity.y > -velocity;
     }
 
     bool GetHasLandedOnPlatform() {
@@ -162,7 +162,7 @@ public class Player : MonoBehaviour {
         yield return new WaitUntil (() => Camera.main.transform.position.x == pos.x);
         pos.y = GameController.Instance.RespawnHeight;
         Vector2 velocity = new Vector2 (0, -GameController.Instance.FallSpeed);
-        RigidBody.velocity = velocity;
+        RigidBody.linearVelocity = velocity;
         transform.position = pos;
         doingPlatformActionsCoroutine = false;
         if (platformActionCoroutine != null) {
@@ -176,7 +176,7 @@ public class Player : MonoBehaviour {
 
     public bool IsReady() {
         if (gameObject != null && RigidBody != null) {
-            return (gameObject.activeSelf && RigidBody.velocity.x == 0 && RigidBody.velocity.y == 0);
+            return (gameObject.activeSelf && RigidBody.linearVelocity.x == 0 && RigidBody.linearVelocity.y == 0);
         }
         return false;
     }
